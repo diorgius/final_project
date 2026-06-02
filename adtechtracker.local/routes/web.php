@@ -18,3 +18,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::get('/test-memcached', function () {
+    Cache::put('test_key', 'test_value', 10); // Хранение значения в кэше на 10 минут
+    $value = Cache::get('test_key');
+    return $value;
+});
