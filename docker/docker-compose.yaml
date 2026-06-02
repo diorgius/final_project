@@ -1,0 +1,74 @@
+name: adtechtracker
+services:
+  adtechtracker-nginx:
+    image: nginx:latest
+    container_name: adtechtracker-nginx
+    restart: unless-stopped
+    volumes:
+      - ../adtechtracker.local:/var/www/adtechtracker.local
+      - ./nginx/conf/hosts/adtechtracker.local.conf:/etc/nginx/conf.d/adtechtracker.local.conf
+    ports:
+      - "80:80"
+    networks:
+      - www-network
+    depends_on:
+      - adtechtracker-php
+      - adtechtracker-mysql
+
+  adtechtracker-php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    image: adtechtracker-php
+    container_name: adtechtracker-php
+    restart: unless-stopped
+    volumes:
+      - ../adtechtracker.local:/var/www/adtechtracker.local
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    networks:
+      - www-network
+
+  adtechtracker-mysql:
+    image: mysql:latest
+    container_name: adtechtracker-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./mysql/dbdata:/var/lib/mysql
+      - ./mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    networks:
+      - www-network
+
+  adtechtracker-memcached:
+    image: memcached:latest
+    container_name: adtechtracker-memcached
+    restart: unless-stopped
+    ports:
+      - "11211:11211"
+    networks:
+      - www-network
+
+  adtechtracker-phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: adtechtracker-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=adtechtracker-mysql
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "81:80"
+    depends_on:
+      - adtechtracker-mysql
+    networks:
+      - www-network
+
+networks:
+  www-network:
+    driver: bridge
