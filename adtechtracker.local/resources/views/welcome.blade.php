@@ -49,9 +49,10 @@
         </header>
         <main class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
             <!-- <div class="flex max-w-[500px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row"> -->
-                <div class="flex max-w-[300px] flex-col lg:p-20 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                <!-- <div class="flex max-w-[300px] flex-col lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-lg"> -->
-                    <h1 class="m-8 text-xl font-semibold">Приложение SF-AdTech</h1>
+                <!-- <div class="flex max-w-[500px] flex-col lg:p-20 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg"> -->
+                <div class="flex max-w flex-col lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] 
+                    shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-lg">
+                    <h1 class="m-4 text-3xl text-[#706fff] font-semibold">Приложение SF-AdTech</h1>
                     <p class="m-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">Для работы в системе необходимо авторизоваться</p>
                 </div>
 
