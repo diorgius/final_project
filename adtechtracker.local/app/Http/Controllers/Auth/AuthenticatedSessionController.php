@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
+use App\Models\UserRole;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,11 +26,31 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // dd($request);
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // $roleId = User::where('email', $request->email)->first('role_id');
+
+        $role = User::with('role')->where('email', $request->email)->first('role_id');
+
+        // dd($role);
+
+        switch ($role->role->role) {
+            case 'Администратор':
+                return redirect()->intended(route('dashboards.admin', absolute: false));
+                break;
+            case 'Рекламодатель':
+                return redirect()->intended(route('dashboards.advertiser', absolute: false));
+                break;
+            case 'Вебмастер':
+                return redirect()->intended(route('dashboards.webmaster', absolute: false));
+                break;
+            default:
+                return redirect()->intended(route('/404', absolute: false));
+                break;
+        }
     }
 
     /**
