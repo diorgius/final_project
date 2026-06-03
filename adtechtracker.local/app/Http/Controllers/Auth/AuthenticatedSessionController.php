@@ -39,13 +39,13 @@ class AuthenticatedSessionController extends Controller
 
         switch ($role->role->role) {
             case 'Администратор':
-                return redirect()->intended(route('dashboards.admin', absolute: false));
+                return redirect()->intended(route('admin.dashboard', absolute: false));
                 break;
             case 'Рекламодатель':
-                return redirect()->intended(route('dashboards.advertiser', absolute: false));
+                return redirect()->intended(route('advertiser.dashboard', absolute: false));
                 break;
             case 'Вебмастер':
-                return redirect()->intended(route('dashboards.webmaster', absolute: false));
+                return redirect()->intended(route('webmaster.dashboard', absolute: false));
                 break;
             default:
                 return redirect()->intended(route('/404', absolute: false));

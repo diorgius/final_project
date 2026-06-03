@@ -8,6 +8,6 @@ class WebmasterController extends Controller
 {
     public function index()
     {
-        return view('dashboards.webmaster');
+        return view('webmaster.dashboard');
     }
 }

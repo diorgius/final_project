@@ -8,6 +8,6 @@ class AdvertiserController extends Controller
 {
     public function index()
     {
-        return view('dashboards.advertiser');
+        return view('advertiser.dashboard');
     }
 }

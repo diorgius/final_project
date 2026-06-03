@@ -22,24 +22,22 @@
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     @auth
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
+                        <a href="{{ url('/dashboard') }}"
+                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] 
+                            border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
                             Dashboard
                         </a>
                     @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
+                        <a href="{{ route('login') }}"
+                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent 
+                            hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal">
                             Вход
                         </a>
 
                         @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
+                            <a href="{{ route('register') }}"
+                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] 
+                                border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
                                 Регистрация
                             </a>
                         @endif
@@ -48,15 +46,11 @@
             @endif
         </header>
         <main class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <!-- <div class="flex max-w-[500px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row"> -->
-                <!-- <div class="flex max-w-[500px] flex-col lg:p-20 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg"> -->
                 <div class="flex max-w flex-col lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] 
                     shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-lg">
                     <h1 class="m-4 text-3xl text-indigo-600 font-semibold">Приложение SF-AdTech</h1>
                     <p class="m-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">Для работы в системе необходимо авторизоваться</p>
                 </div>
-
-            <!-- </div> -->
         </main>
 
         @if (Route::has('login'))

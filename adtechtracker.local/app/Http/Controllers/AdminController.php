@@ -8,6 +8,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('dashboards.admin');
+        $role = 'admin';
+        return view('admin.dashboard', compact('role'));
     }
 }

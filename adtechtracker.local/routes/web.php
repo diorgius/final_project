@@ -12,13 +12,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboards.admin');
-Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboards.advertiser');
-Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboards.webmaster');
+Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'verified'])->name('advertiser.dashboard');
+Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'verified'])->name('webmaster.dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
