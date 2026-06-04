@@ -18,7 +18,7 @@
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
 
             <!-- Navigation -->
-            @include('admin.navigation')
+            @include(Auth::user()->role . '.navigation')
 
             <!-- Header -->
             <header class="bg-white dark:bg-gray-800 shadow">

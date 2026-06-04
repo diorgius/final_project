@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\User;
-use App\Models\UserRole;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -31,24 +30,25 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // $roleId = User::where('email', $request->email)->first('role_id');
+        $role = User::where('email', $request->email)->first('role');
 
-        $role = User::with('role')->where('email', $request->email)->first('role_id');
+        // $role = User::with('role')->where('email', $request->email)->first('role_id');
 
         // dd($role);
 
-        switch ($role->role->role) {
-            case 'Администратор':
+        // switch ($role->role->role) {
+        switch ($role->role) {
+            case 'admin':
                 return redirect()->intended(route('admin.dashboard', absolute: false));
                 break;
-            case 'Рекламодатель':
+            case 'advertiser':
                 return redirect()->intended(route('advertiser.dashboard', absolute: false));
                 break;
-            case 'Вебмастер':
+            case 'webmaster':
                 return redirect()->intended(route('webmaster.dashboard', absolute: false));
                 break;
             default:
-                return redirect()->intended(route('/404', absolute: false));
+                abort(404, 'Запрашиваемая страница не найдена');
                 break;
         }
     }

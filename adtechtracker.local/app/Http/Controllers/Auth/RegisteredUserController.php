@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,8 +20,10 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        $roles = UserRole::where('role', '!=', 'Администратор')->get()->toArray();
-        return view('auth.register', compact('roles'));
+        // $roles = UserRole::where('role', '!=', 'Администратор')->get()->toArray();
+        // return view('auth.register', compact('roles'));
+        // $roles = UserRole::where('role', '!=', 'Администратор')->get()->toArray();
+        return view('auth.register');
     }
 
     /**
@@ -43,13 +44,14 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => intval($request->role)
+            'role' => ($request->role),
+            'status' => 1
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route($request->role . '.dashboard', absolute: false));
     }
 }
