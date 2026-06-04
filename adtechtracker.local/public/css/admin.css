@@ -1,0 +1,16 @@
+.table-users {
+    margin-top: 1rem;
+    width: 70%;
+    border: .1rem solid #cccccc;
+    font-size: 1rem;
+    border-collapse: collapse;
+}
+
+.table-users td, th {
+    border: .1rem solid #868686;
+    color: #666666;
+    text-align: center;
+    height: 1.5rem;
+    vertical-align: middle;
+    cursor: pointer;
+}

@@ -38,10 +38,8 @@
                         <!-- Role -->
                         <div class="mt-4">
                             <x-input-label for="role" :value="__('Роль')" />
-                            {{-- <x-select-input id="role" class='block mt-1 w-full' name="role" :roles="$roles" required>
-                                --}}
-                                <x-select-input id="role" class='block mt-1 w-full' name="role" required>
-                                </x-select-input>
+                            <x-select-input id="role" class='block mt-1 w-full' name="role" required>
+                            </x-select-input>
                         </div>
 
                         <!-- Password -->
@@ -63,69 +61,15 @@
                     <h3 class="font-semibold text-gray-700 text-xl">Текущие пользователи:</h3>
                     <h4 class="font-semibold text-gray-700 p-3">Рекламодатели:</h4>
                 </div>
-                <table class="table-auto mx-auto w-11/12 text-sm text-left text-gray-500 dark:text-gray-400 border"
-                    id="table-users">
-                    <tr>
-                        <th class="p-2">Имя</th>
-                        <th class="p-2">E-mail</th>
-                        <th class="p-2">Статус</th>
-                        {{-- <th class="p-2">Роль</th> --}}
-                    </tr>
-                    <tbody>
-                        @foreach ($advertisers as $advertiser)
-                            <tr class="table-users__tr relative" id="{{$advertiser->id}}">
-                                <td class="p-2">{{$advertiser->name}}</td>
-                                <td class="p-2">{{$advertiser->email}}</td>
-                                <td class="p-2">
-                                    <label class="switch">
-                                        @if ($advertiser->status === 1)
-                                            <input type="checkbox" name="status" class="table-offers__input-status mx-auto"
-                                                title="выключить" checked>
-                                        @else
-                                            <input type="checkbox" name="status" class="table-offers__input-status mx-auto"
-                                                title="включить">
-                                        @endif
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                {{-- <td class="p-2">{{$advertiser->role}}</td> --}}
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+
+                <x-table :users="$advertisers">
+                </x-table>
+
                 <h4 class="font-semibold text-gray-700 p-3">Вебмастера:</h4>
-                <table class="table-auto mx-auto w-11/12 text-sm text-left text-gray-500 dark:text-gray-400 border"
-                    id="table-users">
-                    <tr>
-                        <th class="p-2">Имя</th>
-                        <th class="p-2">E-mail</th>
-                        <th class="p-2">Статус</th>
-                        {{-- <th class="p-2">Роль</th> --}}
-                    </tr>
-                    <tbody>
-                        @foreach ($webmasters as $webmaster)
-                            <tr class="table-users__tr relative" id="{{$webmaster->id}}">
-                                <td class="p-2">{{$webmaster->name}}</td>
-                                <td class="p-2">{{$webmaster->email}}</td>
-                                <td class="p-2">
-                                    <label class="switch">
-                                        @if ($webmaster->status === 1)
-                                            <input type="checkbox" name="status" class="table-offers__input-status mx-auto"
-                                                title="выключить" checked>
-                                        @else
-                                            <input type="checkbox" name="status" class="table-offers__input-status mx-auto"
-                                                title="включить">
-                                        @endif
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                {{-- <td class="p-2">{{$webmaster->role}}</td> --}}
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+
+                <x-table :users="$webmasters">
+                </x-table>
             </div>
         </div>
     </div>
-
 @endsection
