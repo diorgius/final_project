@@ -19,15 +19,15 @@ Route::get('/', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'checkadmin', 'verified'])->group(function () {
+Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::resource('/admin/users', AdminUsersController::class);
 
 });
 
 // Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'checkadmin', 'verified'])->name('admin.dashboard');
-Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'checkadvertiser', 'verified'])->name('advertiser.dashboard');
-Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'checkwebmaster', 'verified'])->name('webmaster.dashboard');
+Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->name('advertiser.dashboard');
+Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->name('webmaster.dashboard');
 
 
 
