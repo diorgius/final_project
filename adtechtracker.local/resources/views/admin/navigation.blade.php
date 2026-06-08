@@ -6,16 +6,16 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Главная') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                         {{ __('Пользователи') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin')">
                         {{ __('Офферы') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin')">
                         {{ __('Статистика') }}
                     </x-nav-link>
                 </div>

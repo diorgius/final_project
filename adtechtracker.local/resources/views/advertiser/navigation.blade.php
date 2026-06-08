@@ -6,13 +6,13 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route(Auth::user()->role . '.dashboard')" :active="request()->routeIs('advertiser.*')">
+                    <x-nav-link :href="route('advertiser.dashboard')" :active="request()->routeIs('advertiser.dashboard')">
                         {{ __('Главная') }}
                     </x-nav-link>
-                    <x-nav-link :href="route(Auth::user()->role . '.dashboard')" :active="request()->routeIs('advertiser.*')">
+                    <x-nav-link :href="route('advertiser.offers')" :active="request()->routeIs('advertiser.offers')">
                         {{ __('Офферы') }}
                     </x-nav-link>
-                    <x-nav-link :href="route(Auth::user()->role . '.dashboard')" :active="request()->routeIs('advertiser.*')">
+                    <x-nav-link :href="route('advertiser.statistics')" :active="request()->routeIs('advertiser.statistics')">
                         {{ __('Статистика') }}
                     </x-nav-link>
                 </div>

@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-indigo-600 dark:text-gray-200 leading-tight">
             {{ __('Панель администрирования') }}
         </h2>
     </div>
@@ -38,7 +38,7 @@
                         <!-- Role -->
                         <div class="mt-4">
                             <x-input-label for="role" :value="__('Роль')" />
-                            <x-select-input id="role" class='block mt-1 w-full' name="role"  :create="true" required>
+                            <x-select-input id="role" class="block mt-1 w-full" name="role"  :create="true" required >
                             </x-select-input>
                         </div>
 
@@ -50,6 +50,7 @@
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
 
+                        <!-- Button -->
                         <div class="flex items-center justify-center mt-4">
                             <x-primary-button class="ms-4">
                                 {{ __('Создать пользователя') }}

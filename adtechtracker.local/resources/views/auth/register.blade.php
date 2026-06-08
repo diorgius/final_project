@@ -21,8 +21,8 @@
         <!-- Role -->
         <div class="mt-4">
             <x-input-label for="role" :value="__('Роль')" />
-            {{-- <x-select-input id="role" class='block mt-1 w-full' name="role" :roles="$roles" required > --}}
-            <x-select-input id="role" class='block mt-1 w-full' name="role" required >
+            {{-- <x-select-input id="role" class="block mt-1 w-full" name="role" :roles="$roles" required > --}}
+            <x-select-input id="role" class="block mt-1 w-full" name="role" required >
             </x-select-input>
         </div>
 
