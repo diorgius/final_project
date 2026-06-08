@@ -9,7 +9,7 @@
                     <x-nav-link :href="route('advertiser.dashboard')" :active="request()->routeIs('advertiser.dashboard')">
                         {{ __('Главная') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('advertiser.offers')" :active="request()->routeIs('advertiser.offers')">
+                    <x-nav-link :href="route('advertiser.offers')" :active="request()->routeIs(['advertiser.offers', 'offers.*', 'themes.index'])">
                         {{ __('Офферы') }}
                     </x-nav-link>
                     <x-nav-link :href="route('advertiser.statistics')" :active="request()->routeIs('advertiser.statistics')">

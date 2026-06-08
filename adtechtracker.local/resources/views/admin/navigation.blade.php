@@ -12,7 +12,7 @@
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                         {{ __('Пользователи') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin')">
+                    <x-nav-link :href="route('admin.offers')" :active="request()->routeIs('admin.offers')">
                         {{ __('Офферы') }}
                     </x-nav-link>
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin')">

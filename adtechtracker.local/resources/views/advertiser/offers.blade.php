@@ -1,11 +1,15 @@
 @extends('layouts.app')
-
+<!-- 
 @section('header')
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <h2 class="font-semibold text-xl text-indigo-600 dark:text-gray-200 leading-tight">
             {{ __('Панель рекламодателя') }}
         </h2>
     </div>
+@endsection -->
+
+@section('js')
+    <script src="/js/status/Status.js" defer></script>
 @endsection
 
 @section('content')
@@ -33,7 +37,7 @@
                             @foreach ($offers as $offer)
                                 @if ($offer->status === 1)
                                     <div id="{{ $offer->id }}"
-                                        class="p-2 relative mb-1 rounded cursor-pointer bg-indigo-100 text-indigo-600 offers__item border-666 active-offers__item"
+                                        class="p-2 relative mb-1 rounded cursor-pointer bg-indigo-100 text-indigo-600 offers__item active-offers__item"
                                         draggable="true">
                                         <form method="POST" action="{{ route("offers.destroy", $offer->id) }}">
                                             @csrf
@@ -60,7 +64,7 @@
                             @foreach ($offers as $offer)
                                 @if ($offer->status === 0)
                                     <div id="{{ $offer->id }}"
-                                        class="p-2 relative mb-1 rounded-lg cursor-pointer bg-gray-100 text-gray-700 offers__item border-666 deactive-offers__item"
+                                        class="p-2 relative mb-1 rounded-lg cursor-pointer bg-gray-100 text-gray-700 offers__item deactive-offers__item"
                                         draggable="true">
                                         <form method="POST" action="{{ route("offers.destroy", $offer->id) }}">
                                             @csrf

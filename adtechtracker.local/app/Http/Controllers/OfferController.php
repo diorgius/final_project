@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\OfferTheme;
 use App\Models\Offer;
@@ -15,10 +16,21 @@ class OfferController extends Controller
      */
     public function index () 
     {
-        $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
+        switch (Auth::user()->role) {
+            case 'admin':
+                $offers = Offer::with('theme')->get();
+                break;
+            case 'advertiser':
+                $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
+                break;
+            case 'webmaster':
+                $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
+                break;
+        }
+        // $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
         $themes = OfferTheme::all();
 
-        return view('advertiser.offers', compact('offers', 'themes')); 
+        return view(Auth::user()->role . '.offers', compact('offers', 'themes')); 
     }
 
     /**

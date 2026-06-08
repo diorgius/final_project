@@ -26,7 +26,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::resource('/admin/users', AdminUserController::class);
-
+    Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
 });
 
 // Advertiser routes

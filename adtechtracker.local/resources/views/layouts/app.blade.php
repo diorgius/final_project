@@ -14,6 +14,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @yield('js')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -23,7 +24,24 @@
 
             <!-- Header -->
             <header class="bg-white dark:bg-gray-800 shadow">
-                @yield('header')
+            
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <h2 class="font-semibold text-xl text-indigo-600 dark:text-gray-200 leading-tight">
+                        @switch (Auth::user()->role)
+                            @case ('admin')
+                                {{ __('Панель администратора') }}
+                            @break
+                            @case ('advertiser')
+                                {{ __('Панель рекламодателя') }}
+                            @break
+                            @case ('webmaster')
+                                {{ __('Панель вебмастера') }}
+                            @break
+                        @endswitch
+
+                    </h2>
+                </div>
+                <!-- @yield('header') -->
             </header>
             
             <!-- Page Content -->
