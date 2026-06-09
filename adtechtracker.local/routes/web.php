@@ -27,6 +27,7 @@ Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(func
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::resource('/admin/users', AdminUserController::class);
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
+    Route::post('/admin/offers/{offer}/status/', [OfferController::class, 'status'])->name('admin.offers.status');
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
 });
 
@@ -37,6 +38,7 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
+    Route::post('/advertiser/offers/{offer}/status/', [OfferController::class, 'status'])->name('advertiser.offers.status');
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');

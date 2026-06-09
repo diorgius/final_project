@@ -26,6 +26,8 @@ services:
       - ../adtechtracker.local:/var/www/adtechtracker.local
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    ports:
+      - "8080:8080"
     networks:
       - www-network
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\OfferTheme;
 use App\Models\Offer;
 use App\Models\User;
+use App\Events\OfferStatusChanged;
 
 
 class OfferController extends Controller
@@ -76,6 +77,29 @@ class OfferController extends Controller
         ]);
 
         return redirect()->route('advertiser.offers');
+    }
+
+    /**
+     * Записываем в БД изменение статуса карточки и отсылаем сообщение
+     * @param Request $request
+     * @param Offer $offer
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function status(Request $request, Offer $offer)
+    {
+        $offer->update([
+            'status' => $request->status
+        ]);
+
+        logger('before broadcast');
+
+        broadcast(new OfferStatusChanged($offer));
+
+        logger('after broadcast');
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     /**

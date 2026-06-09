@@ -6,6 +6,7 @@
 
 @section('css')
     <link rel="stylesheet" href="/css/offers.css">
+    <script src="/js/status/OfferStatusListener.js" defer></script>
 @endsection
 
 @section('content')

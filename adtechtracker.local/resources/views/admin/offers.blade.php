@@ -2,6 +2,7 @@
 
 @section('js')
     <script src="/js/status/Status.js" defer></script>
+    <script src="/js/status/OfferStatusListener.js" defer></script>
 @endsection
 
 @section('css')
