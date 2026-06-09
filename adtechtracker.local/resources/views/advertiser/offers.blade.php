@@ -7,6 +7,9 @@
 @section('css')
     <link rel="stylesheet" href="/css/offers.css">
     <script src="/js/status/OfferStatusListener.js" defer></script>
+    <script>
+        window.userRole = '{{ auth()->user()->role }}';
+    </script>
 @endsection
 
 @section('content')

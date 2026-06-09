@@ -3,6 +3,9 @@
 @section('js')
     <script src="/js/status/Status.js" defer></script>
     <script src="/js/status/OfferStatusListener.js" defer></script>
+    <script>
+        window.userRole = '{{ auth()->user()->role }}';
+    </script>
 @endsection
 
 @section('css')

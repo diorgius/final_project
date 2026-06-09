@@ -9,9 +9,11 @@ class Status {
 
     // Метод записи статуса в БД
     async updateStatus(itemId, status) {
-
+        
+        const role = window.userRole;
+        
         try {
-            const response = await fetch(`/advertiser/offers/${itemId}/status`, {
+            const response = await fetch(`/${role}/offers/${itemId}/status`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,6 +38,17 @@ class Status {
             item.draggable = true;
             item.addEventListener("dragstart", e => {
                 e.dataTransfer.setData("id", item.id);
+
+                // проверяем текущий статус
+                const currentStatus =
+                    item.closest('.active-offers')
+                        ? 'active'
+                        : 'deactive';
+
+                e.dataTransfer.setData(
+                    "oldStatus",
+                    currentStatus
+                );
             });
         });
 
@@ -49,10 +62,22 @@ class Status {
 
                 const itemId = e.dataTransfer.getData("id");
                 const item = document.getElementById(itemId);
+                const oldStatus = e.dataTransfer.getData("oldStatus");
+
 
                 if (!item) return;
-                let status = null;
-                
+
+                // проверяем новый статус
+                const newStatus =
+                    zone.classList.contains('active-offers')
+                        ? 'active'
+                        : 'deactive';
+
+                // ничего не изменилось
+                if (oldStatus === newStatus) {
+                    return;
+                }
+
                 // Убираем стили
                 item.classList.remove("active-offers__item", "deactive-offers__item");
 
