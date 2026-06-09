@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-
+// заполняемые поля
 #[Fillable(['name'])]
 
 /**
- * Summary of OfferTheme
+ * Связь: оферы - тема, один ко многим
  */
 class OfferTheme extends Model
 {

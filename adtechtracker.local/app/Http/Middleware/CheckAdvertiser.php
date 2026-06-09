@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CheckAdvertiser
 {
     /**
-     * Handle an incoming request.
+     * Проверка уровня доступа.
      *
      * @param  Closure(Request): (Response)  $next
      */

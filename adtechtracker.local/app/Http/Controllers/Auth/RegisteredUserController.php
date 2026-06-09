@@ -20,24 +20,21 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        // $roles = UserRole::where('role', '!=', 'Администратор')->get()->toArray();
-        // return view('auth.register', compact('roles'));
-        // $roles = UserRole::where('role', '!=', 'Администратор')->get()->toArray();
         return view('auth.register');
     }
 
     /**
-     * Handle an incoming registration request.
+     * Регистрируем нового пользователя и перенаправляем на страницу в зависимости от роли
      *
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
-        // dd($request);
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required'
         ]);
 
         $user = User::create([

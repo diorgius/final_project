@@ -1,0 +1,17 @@
+.active-offers__item {
+    position: relative;
+    margin-bottom: 1rem; 
+    border-radius: .5rem;
+    background-color: #e0e7ff; 
+    color: #615fff;
+    cursor: pointer;
+}
+
+.deactive-offers__item {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: .5rem;
+    cursor: pointer;
+    background-color: #f3f4f6;
+    color: #364153;
+}

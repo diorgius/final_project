@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class CheckActive
 {
     /**
-     * Handle an incoming request.
+     * Проверка активности учетной записи.
      *
      * @param  Closure(Request): (Response)  $next
      */

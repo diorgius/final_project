@@ -1,12 +1,8 @@
 @extends('layouts.app')
 
-<!-- @section('header')
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h2 class="font-semibold text-xl text-indigo-600 dark:text-gray-200 leading-tight">
-            {{ __('Панель администрирования') }}
-        </h2>
-    </div>
-@endsection -->
+@section('css')
+    <link rel="stylesheet" href="/css/admin.css">
+@endsection
 
 @section('content')
     <div class="py-12">
@@ -24,7 +20,7 @@
                         <div>
                             <x-input-label for="name" :value="__('Имя')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ old('name', $user->name) }}"
-                                required autofocus autocomplete="name" disabled />
+                                required autofocus autocomplete="name" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
@@ -32,7 +28,7 @@
                         <div class="mt-4">
                             <x-input-label for="email" :value="__('Email')" />
                             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
-                                value="{{ old('email', $user->email) }}" required autocomplete="username" disabled />
+                                value="{{ old('email', $user->email) }}" required autocomplete="username" disabled title="email изменить нельзя"/>
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 

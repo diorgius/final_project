@@ -21,22 +21,18 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Перенаправляем пользователя на страницу в зависимости от роли
+     * @param LoginRequest $request
+     * @return RedirectResponse
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // dd($request);
         $request->authenticate();
 
         $request->session()->regenerate();
 
         $role = User::where('email', $request->email)->first('role');
 
-        // $role = User::with('role')->where('email', $request->email)->first('role_id');
-
-        // dd($role);
-
-        // switch ($role->role->role) {
         switch ($role->role) {
             case 'admin':
                 return redirect()->intended(route('admin.dashboard', absolute: false));

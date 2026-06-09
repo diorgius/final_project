@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class CheckAdmin
 {
     /**
-     * Handle an incoming request.
+     * Проверка уровня доступа.
      *
      * @param  Closure(Request): (Response)  $next
      */

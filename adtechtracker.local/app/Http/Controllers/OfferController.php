@@ -6,35 +6,38 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\OfferTheme;
 use App\Models\Offer;
+use App\Models\User;
 
 
 class OfferController extends Controller
 {
     /**
-     * Summary of index
+     * Выводим данные по офферам в зависимости от роли
      * @return \Illuminate\Contracts\View\View
      */
     public function index () 
     {
         switch (Auth::user()->role) {
             case 'admin':
-                $offers = Offer::with('theme')->get();
+                $offers = Offer::with('theme')->with('advertiser')->get();
                 break;
             case 'advertiser':
                 $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
                 break;
             case 'webmaster':
-                $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
+                $offers = Offer::with('theme')->get();
                 break;
         }
-        // $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
-        $themes = OfferTheme::all();
+        // это можно и не отправлять, т.к. работает и без этого
+        // $themes = OfferTheme::get(['id', 'name']);
+        // $users = User::get(['id', 'name']);
 
-        return view(Auth::user()->role . '.offers', compact('offers', 'themes')); 
+        // return view(Auth::user()->role . '.offers', compact('offers', 'themes', 'users')); 
+        return view(Auth::user()->role . '.offers', compact('offers')); 
     }
 
     /**
-     * Summary of create
+     * Создаем новый оффер
      * @return \Illuminate\Contracts\View\View
      */
     public function create()
@@ -45,7 +48,7 @@ class OfferController extends Controller
     }
 
     /**
-     * Summary of store
+     * Сохраняем новый оффер
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -58,7 +61,7 @@ class OfferController extends Controller
             'theme' => 'required'
         ]);
 
-        // убираем get-параметры
+        // убираем get-параметры из url
         $url = $request->url;
         if (mb_stripos($url, '?')) {
             $url = mb_substr($url, 0, mb_stripos($url, '?'));
@@ -76,7 +79,7 @@ class OfferController extends Controller
     }
 
     /**
-     * Summary of destroy
+     * Удаляем оффер
      * @param mixed $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -85,6 +88,6 @@ class OfferController extends Controller
         $offer = Offer::find($id);
         $offer->delete();
 
-        return redirect()->route('advertiser.offers');
+        return redirect()->route(Auth()->user()->role . '.offers');
     }
 }

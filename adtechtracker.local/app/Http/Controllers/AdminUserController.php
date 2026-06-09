@@ -12,7 +12,8 @@ use App\Models\User;
 class AdminUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Выводим страницу пользователей
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -32,7 +33,9 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создаем нового пользователя
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -41,6 +44,7 @@ class AdminUserController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
+            'role' => 'required'
         ]);
 
         $user = User::create([
@@ -65,7 +69,9 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Редактируем пользователя
+     * @param string $id
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit(string $id)
     {
@@ -75,15 +81,16 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Обновляем данные пользователя
+     * @param Request $request
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, string $id)
     {
-
-        // dd($request);
-       
         $request->validate([
-            // 'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            // не даем возможность менять email, т.к. по нему регистрация и по нему вход
             // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
@@ -94,9 +101,9 @@ class AdminUserController extends Controller
         // проверяем статус
         $status = isset($request->status) ? 1 : 0;
 
-        
+        $user->name = $request->name;
         $user->password = $password;
-        $user->role =($request->role);
+        $user->role =$request->role;
         $user->status = $status;
         $user->save();
 
@@ -104,7 +111,9 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удаляем пользователя
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(string $id)
     {

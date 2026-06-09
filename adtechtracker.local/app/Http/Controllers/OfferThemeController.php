@@ -9,7 +9,8 @@ use App\Models\OfferTheme;
 class OfferThemeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Summary of index
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -27,7 +28,9 @@ class OfferThemeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Сохраняем новую тему для офферов
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -35,7 +38,7 @@ class OfferThemeController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:' . OfferTheme::class]
         ]);
 
-        $theme = OfferTheme::create([
+        OfferTheme::create([
             'name' => $request->name
         ]);
 
