@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="py-12">
+    <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
                 class="flex flex-col items-center pb-4 pt-4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -62,7 +62,7 @@
 
                         <!-- Button -->
                         <div class="flex items-center justify-center mt-4">
-                            <x-reset-button class="ms-4" onclick="window.location='{{ route('users.index') }}'">
+                            <x-reset-button onclick="window.location='{{ route('users.index') }}'">
                                 {{ __('Отменить') }}
                             </x-reset-button>
                             <x-primary-button class="ms-4">
@@ -85,5 +85,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection

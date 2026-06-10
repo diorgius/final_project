@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\OfferTheme;
@@ -21,20 +22,25 @@ class OfferController extends Controller
         switch (Auth::user()->role) {
             case 'admin':
                 $offers = Offer::with('theme')->with('advertiser')->get();
+                $percent = null;
                 break;
             case 'advertiser':
                 $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
+                $percent = null;
                 break;
             case 'webmaster':
-                $offers = Offer::with('theme')->get();
+                $offers = Offer::with('theme')->with('advertiser')->where('status', true)->get();
+                $commissions = Commission::get('commission')->value('commission');
+                $percent = round((100 - $commissions) / 100, 2);
                 break;
         }
+
         // это можно и не отправлять, т.к. работает и без этого
         // $themes = OfferTheme::get(['id', 'name']);
         // $users = User::get(['id', 'name']);
-
         // return view(Auth::user()->role . '.offers', compact('offers', 'themes', 'users')); 
-        return view(Auth::user()->role . '.offers', compact('offers')); 
+
+        return view(Auth::user()->role . '.offers', compact('offers', 'percent')); 
     }
 
     /**
@@ -91,15 +97,9 @@ class OfferController extends Controller
             'status' => $request->status
         ]);
 
-        logger('before broadcast');
-
         broadcast(new OfferStatusChanged($offer));
 
-        logger('after broadcast');
-
-        return response()->json([
-            'success' => true
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**

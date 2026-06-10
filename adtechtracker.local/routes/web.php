@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdvertiserController;
 use App\Http\Controllers\WebmasterController;
@@ -18,21 +19,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Admin routes
 Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
     Route::resource('/admin/users', AdminUserController::class);
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
     Route::post('/admin/offers/{offer}/status/', [OfferController::class, 'status'])->name('admin.offers.status');
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
+    Route::get('/admin/statistics', [StatisticController::class, 'index'])->name('admin.statistics');
 });
 
 // Advertiser routes
-// на офферы делаем контроллер, на главном экране выводим все созданные офферыЮ и кнопки создать темы офферов и создать оффер, а на него русурсный контроллер
 Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group(function () {
     Route::get('/advertiser', [AdvertiserController::class, 'index'])->name('advertiser.dashboard');
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
@@ -44,10 +46,16 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
 });
 
-
+// Webmaster routes
+Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(function () {
+    Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
+    Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
+    Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');    
+});
+    
 // Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'checkadmin', 'verified'])->name('admin.dashboard');
 // Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->name('advertiser.dashboard');
-Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->name('webmaster.dashboard');
+// Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->name('webmaster.dashboard');
 
 
 

@@ -6,9 +6,9 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('advertiser.dashboard')" :active="request()->routeIs('advertiser.dashboard')">
+                    {{-- <x-nav-link :href="route('advertiser.dashboard')" :active="request()->routeIs('advertiser.dashboard')">
                         {{ __('Главная') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
                     <x-nav-link :href="route('advertiser.offers')" :active="request()->routeIs(['advertiser.offers', 'offers.*', 'themes.index'])">
                         {{ __('Офферы') }}
                     </x-nav-link>

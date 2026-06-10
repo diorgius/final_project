@@ -1,3 +1,6 @@
+/**
+ * Класс изменения статуса оффера drug and drop
+ */
 class Status {
 
     constructor(itemSelector, zoneSelector) {
@@ -36,8 +39,8 @@ class Status {
     init() {
         this.items.forEach(item => {
             item.draggable = true;
-            item.addEventListener("dragstart", e => {
-                e.dataTransfer.setData("id", item.id);
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('id', item.id);
 
                 // проверяем текущий статус
                 const currentStatus =
@@ -46,49 +49,49 @@ class Status {
                         : 'deactive';
 
                 e.dataTransfer.setData(
-                    "oldStatus",
+                    'oldStatus',
                     currentStatus
                 );
             });
         });
 
         this.zones.forEach(zone => {
-            zone.addEventListener("dragover", e => {
+            zone.addEventListener('dragover', e => {
                 e.preventDefault();
             });
 
-            zone.addEventListener("drop", async e => {
+            zone.addEventListener('drop', async e => {
                 e.preventDefault();
 
-                const itemId = e.dataTransfer.getData("id");
+                const itemId = e.dataTransfer.getData('id');
                 const item = document.getElementById(itemId);
-                const oldStatus = e.dataTransfer.getData("oldStatus");
+                const oldStatus = e.dataTransfer.getData('oldStatus');
 
 
                 if (!item) return;
 
-                // проверяем новый статус
+                // Проверяем новый статус
                 const newStatus =
                     zone.classList.contains('active-offers')
                         ? 'active'
                         : 'deactive';
 
-                // ничего не изменилось
+                // Если ничего не изменилось
                 if (oldStatus === newStatus) {
                     return;
                 }
 
                 // Убираем стили
-                item.classList.remove("active-offers__item", "deactive-offers__item");
+                item.classList.remove('active-offers__item', 'deactive-offers__item');
 
-                if (zone.classList.contains("active-offers")) {
+                if (zone.classList.contains('active-offers')) {
                     status = 1;
-                    item.classList.add("active-offers__item");
+                    item.classList.add('active-offers__item');
                 }
 
-                if (zone.classList.contains("deactive-offers")) {
+                if (zone.classList.contains('deactive-offers')) {
                     status = 0;
-                    item.classList.add("deactive-offers__item");
+                    item.classList.add('deactive-offers__item');
                 }
 
                 // Сохраняем в БД
@@ -106,4 +109,4 @@ class Status {
     }
 }
 
-new Status(".offers__item", ".offers");
+new Status('.offers__item', '.offers');

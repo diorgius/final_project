@@ -2,14 +2,14 @@
 
 @section('js')
     <script src="/js/status/Status.js" defer></script>
-@endsection
-
-@section('css')
-    <link rel="stylesheet" href="/css/offers.css">
     <script src="/js/status/OfferStatusListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
+@endsection
+
+@section('css')
+    <link rel="stylesheet" href="/css/offers.css">
 @endsection
 
 @section('content')

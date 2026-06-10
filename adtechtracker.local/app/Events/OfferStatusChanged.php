@@ -18,9 +18,9 @@ class OfferStatusChanged implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public Offer $offer)
+    public function __construct(public Offer $offer) 
     {
-        
+
     }
 
     /**
@@ -29,11 +29,11 @@ class OfferStatusChanged implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        // return [
-        //     new PrivateChannel('channel-name'),
-        // ];
         return [
-            new Channel('offers'),
+            // new Channel('offers'),
+            new Channel('offers.admin'),
+            new Channel('offers.advertiser'),
+            new Channel('offers.webmaster'),
         ];
     }
 
@@ -52,10 +52,16 @@ class OfferStatusChanged implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
+
+    // return [$this->offer];
         return [
             'id' => $this->offer->id,
+            'name' => $this->offer->name,
+            'url' => $this->offer->url,
+            'price' => $this->offer->price,
+            'theme' => $this->offer->theme->name,
+            'advertiser' => $this->offer->advertiser->name,
             'status' => $this->offer->status,
-            'title' => $this->offer->title,
         ];
     }
 }

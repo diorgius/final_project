@@ -38,10 +38,10 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(route('admin.dashboard', absolute: false));
                 break;
             case 'advertiser':
-                return redirect()->intended(route('advertiser.dashboard', absolute: false));
+                return redirect()->intended(route('advertiser.offers', absolute: false));
                 break;
             case 'webmaster':
-                return redirect()->intended(route('webmaster.dashboard', absolute: false));
+                return redirect()->intended(route('webmaster.offers', absolute: false));
                 break;
             default:
                 abort(404, 'Запрашиваемая страница не найдена');
