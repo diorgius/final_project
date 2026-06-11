@@ -9,10 +9,13 @@ use App\Models\OfferTheme;
 use App\Models\Offer;
 use App\Models\User;
 use App\Events\OfferStatusChanged;
+use App\Events\OfferCreate;
+use App\Events\OfferDelete;
 
 
 class OfferController extends Controller
 {
+
     /**
      * Выводим данные по офферам в зависимости от роли
      * @return \Illuminate\Contracts\View\View
@@ -30,8 +33,8 @@ class OfferController extends Controller
                 break;
             case 'webmaster':
                 $offers = Offer::with('theme')->with('advertiser')->where('status', true)->get();
-                $commissions = Commission::get('commission')->value('commission');
-                $percent = round((100 - $commissions) / 100, 2);
+                $commission = Commission::get('commission')->value('commission');
+                $percent = round((100 - $commission) / 100, 2);
                 break;
         }
 
@@ -74,13 +77,16 @@ class OfferController extends Controller
             $url = mb_substr($url, 0, mb_stripos($url, '?'));
         }
 
-        Offer::create([
+        $offer = Offer::create([
             'name' => $request->name,
             'url' => $url,
             'price' => $request->price,
             'theme_id' => $request->theme,
             'advertiser_id' => auth()->id()
         ]);
+
+        // отправляем сообщение о создании оффера
+        broadcast(new OfferCreate($offer));
 
         return redirect()->route('advertiser.offers');
     }
@@ -97,7 +103,8 @@ class OfferController extends Controller
             'status' => $request->status
         ]);
 
-        broadcast(new OfferStatusChanged($offer));
+        // отправляем сообщение об изменении статуса оффера
+        broadcast(new OfferStatusChanged($offer, auth()->user()->role));
 
         return response()->json(['success' => true]);
     }
@@ -109,8 +116,13 @@ class OfferController extends Controller
      */
     public function destroy(string $id)
     {
-        $offer = Offer::find($id);
+        $offer = Offer::findOrFail($id);
+
+        // отправляем сообщение об удалении оффера
+        broadcast(new OfferDelete($offer->id));
+        
         $offer->delete();
+        
 
         return redirect()->route(Auth()->user()->role . '.offers');
     }

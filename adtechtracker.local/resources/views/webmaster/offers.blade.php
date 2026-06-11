@@ -3,6 +3,7 @@
 @section('js')
     <script src="/js/status/Status.js" defer></script>
     <script src="/js/status/OfferStatusListener.js" defer></script>
+    <script src="/js/status/OfferDeleteListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
@@ -45,7 +46,7 @@
                     </div>
 
                     <!-- доступные активные офферы -->
-                    <div class="w-1/2 inline-block m-0 p-3">
+                    <div class="offers w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Доступные офферы</h4>
                         <div class="offers deactive-offers h-full">
                             @foreach ($offers as $offer)

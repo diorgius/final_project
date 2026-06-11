@@ -3,6 +3,7 @@
 @section('js')
     <script src="/js/status/Status.js" defer></script>
     <script src="/js/status/OfferStatusListener.js" defer></script>
+    <script src="/js/status/OfferDeleteListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
@@ -31,7 +32,7 @@
                 <section class="flex justify-between text-center w-5/6 mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)]
                         dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
                     <!-- активные офферы -->
-                    <div class="w-1/2 inline-block m-0 p-3">
+                    <div class="offers w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Активные офферы</h4>
                         <div class="offers active-offers h-full">
                             @foreach ($offers as $offer)
@@ -48,7 +49,7 @@
                                         <p class="font-semibold">Наименование: {{ $offer->name }}</p>
                                         <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
                                         <p class="font-semibold">URL: {{ $offer->url }}</p>
-                                        <p>Цена: {{ number_format($offer->price, 2) }} р. за переход</p>
+                                        <p>Цена: {{ $offer->price }} р. за переход</p>
                                         {{-- <p class="table-offers__td-link-count">Подписчиков: {{ $offer->links->count() }} </p> --}}
                                     </div>
                                 @endif
@@ -57,7 +58,7 @@
                     </div>
 
                     <!-- неактивные офферы -->
-                    <div class="w-1/2 inline-block m-0 p-3">
+                    <div class="offers w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Неактивные офферы</h4>
                         <div class="offers deactive-offers h-full">
                             @foreach ($offers as $offer)

@@ -10,11 +10,11 @@ class Status {
         this.init();
     }
 
-    // Метод записи статуса в БД
+    // Метод записи статуса в БД и отправки сообщения reverb
     async updateStatus(itemId, status) {
-        
+
         const role = window.userRole;
-        
+
         try {
             const response = await fetch(`/${role}/offers/${itemId}/status`, {
                 method: 'POST',
@@ -36,25 +36,21 @@ class Status {
         }
     }
 
+    // Метод получения элемента в том числе и для вновь созданного через websocket, что все элементы были draggeble
+    setupItem(item) {
+        item.draggable = true;
+        item.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('id', item.id);
+            const currentStatus = item.closest('.active-offers') ? 'active' : 'deactive';
+            e.dataTransfer.setData('oldStatus', currentStatus);
+        });
+    }
+
+    // Метод перемещения элементов
     init() {
         this.items.forEach(item => {
-            item.draggable = true;
-            item.addEventListener('dragstart', e => {
-                e.dataTransfer.setData('id', item.id);
-
-                // проверяем текущий статус
-                const currentStatus =
-                    item.closest('.active-offers')
-                        ? 'active'
-                        : 'deactive';
-
-                e.dataTransfer.setData(
-                    'oldStatus',
-                    currentStatus
-                );
-            });
+            this.setupItem(item);
         });
-
         this.zones.forEach(zone => {
             zone.addEventListener('dragover', e => {
                 e.preventDefault();
@@ -62,19 +58,14 @@ class Status {
 
             zone.addEventListener('drop', async e => {
                 e.preventDefault();
-
                 const itemId = e.dataTransfer.getData('id');
                 const item = document.getElementById(itemId);
                 const oldStatus = e.dataTransfer.getData('oldStatus');
 
-
                 if (!item) return;
 
                 // Проверяем новый статус
-                const newStatus =
-                    zone.classList.contains('active-offers')
-                        ? 'active'
-                        : 'deactive';
+                const newStatus = zone.classList.contains('active-offers') ? 'active' : 'deactive';
 
                 // Если ничего не изменилось
                 if (oldStatus === newStatus) {
@@ -83,14 +74,15 @@ class Status {
 
                 // Убираем стили
                 item.classList.remove('active-offers__item', 'deactive-offers__item');
+                
+                // Устанавливаем статус
+                const status = zone.classList.contains('active-offers') ? 1: 0;
 
                 if (zone.classList.contains('active-offers')) {
-                    status = 1;
                     item.classList.add('active-offers__item');
                 }
 
                 if (zone.classList.contains('deactive-offers')) {
-                    status = 0;
                     item.classList.add('deactive-offers__item');
                 }
 
@@ -109,4 +101,5 @@ class Status {
     }
 }
 
-new Status('.offers__item', '.offers');
+// Глобальный экземпляр класса
+window.offerStatus = new Status('.offers__item', '.offers');
