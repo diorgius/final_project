@@ -22,7 +22,7 @@ class Offer extends Model
     }
 
     /**
-     * Связь: тема - офферы, многие к одному
+     * Связь: тема - оффер
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<OfferTheme, Offer>
      */
     public function theme()
@@ -31,11 +31,29 @@ class Offer extends Model
     }
 
     /**
-     * Связь: рекламодатель - офферы, многие в одному
+     * Связь: рекламодатель - офферы
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Offer>
      */
     public function advertiser()
     {
         return $this->belongsTo(User::class, 'advertiser_id', 'id');
+    }
+
+    // /**
+    //  * Связь: вебмастера - офферы
+    //  * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User, Offer, TPivotModel>
+    //  */
+    // public function webmasters()
+    // {
+    //     return $this->belongsToMany(User::class, 'offer_subscriptions', 'webmaster_id', 'id');
+    // }
+
+    /**
+     * Связь: подписки - офферы
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<OfferSubscription, Offer>
+     */
+    public function subscribe()
+    {
+        return $this->hasMany(OfferSubscription::class, 'offer_id', 'id');
     }
 }

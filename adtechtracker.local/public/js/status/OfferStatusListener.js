@@ -3,9 +3,10 @@
  */
 class OfferStatusListener {
 
-    constructor(activeOffers, deactiveOffers) {
-        this.activeZone = document.querySelector(activeOffers );
+    constructor(activeOffers, deactiveOffers, subscriptions) {
+        this.activeZone = document.querySelector(activeOffers);
         this.deactiveZone = document.querySelector(deactiveOffers);
+        this.subscriptionsZone = document.querySelector(subscriptions);
 
         this.listener();
     }
@@ -25,7 +26,7 @@ class OfferStatusListener {
 
     updateOffer(offer, role) {
         // находим оффер
-        const item = document.getElementById(`${offer.id}`);
+        const item = document.getElementById(offer.id);
         // у админа перемещаем оффер
         if (role === 'admin') {
             if (offer.status === 1) {
@@ -33,7 +34,7 @@ class OfferStatusListener {
                     this.activeZone.appendChild(item);
                     item.classList.remove('deactive-offers__item');
                     item.classList.add('active-offers__item');
-                } 
+                }
                 return;
             } else if (offer.status === 0) {
                 if (item) {
@@ -71,21 +72,27 @@ class OfferStatusListener {
                     // Отображаем оффер
                     const divOffer = document.createElement('div');
                     divOffer.setAttribute('id', `${offer.id}`);
-                    divOffer.className = 'offers__item deactive-offers__item';
                     divOffer.innerHTML =
-                        `<p class="font-semibold">Рекламодатель: ${offer.advertiser}</p>
-                        <p class="font-semibold">Наименование: ${offer.name}</p>
-                        <p class="font-semibold">Тема: ${offer.theme}</p>
-                        <p class="font-semibold">URL: ${offer.url}</p>
-                        <p>Цена: ${offer.price.toFixed(2)} р. за переход</p>`
-                    this.deactiveZone.appendChild(divOffer);
+                    `<p class="font-semibold">Рекламодатель: ${offer.advertiser}</p>
+                    <p class="font-semibold">Наименование: ${offer.name}</p>
+                    <p class="font-semibold">Тема: ${offer.theme}</p>
+                    <p>Цена: ${offer.price.toFixed(2)} р. за переход</p>`
+                    if (offer.subscribe === 0) {
+                        divOffer.className = 'offers__item deactive-offers__item';
+                        this.deactiveZone.appendChild(divOffer);
+                    } else {
+                        divOffer.innerHTML += `<a href=${offer.url} id="url" class="font-semibold text-xl text-blue-600" title=${offer.url} target="_blank">Реферальная ссылка</a>`
+                        divOffer.className = 'offers__item active-offers__item';
+                        this.subscriptionsZone.appendChild(divOffer);
+                    }
                     window.offerStatus.setupItem(divOffer);
                 }
                 return;
                 // если оффер есть и его отключили, то удаляем его
             } else if (offer.status === 0) {
+                console.log(item);
                 if (item) {
-                    this.deactiveZone.removeChild(item);
+                    item.remove();
                 }
                 return;
             }
@@ -93,4 +100,4 @@ class OfferStatusListener {
     }
 }
 
-new OfferStatusListener('.active-offers', '.deactive-offers');
+new OfferStatusListener('.active-offers', '.deactive-offers', '.subscriptions');

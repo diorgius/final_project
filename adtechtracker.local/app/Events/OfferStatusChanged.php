@@ -21,7 +21,7 @@ class OfferStatusChanged implements ShouldBroadcast
      */
     public function __construct(public Offer $offer, public string $senderRole) 
     {
-
+        
     }
 
     /**
@@ -67,6 +67,7 @@ class OfferStatusChanged implements ShouldBroadcast
             'advertiser' => $this->offer->advertiser->name,
             'status' => $this->offer->status,
             'sender_role' => $this->senderRole,
+            'subscribe' => $this->offer->subscribe()->count(),
         ];
     }
 }

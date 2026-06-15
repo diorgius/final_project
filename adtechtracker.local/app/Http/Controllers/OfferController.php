@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commission;
+use App\Models\OfferSubscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\OfferTheme;
@@ -26,15 +27,18 @@ class OfferController extends Controller
             case 'admin':
                 $offers = Offer::with('theme')->with('advertiser')->get();
                 $percent = null;
+                $subscriptions = null;
                 break;
             case 'advertiser':
                 $offers = Offer::with('theme')->where('advertiser_id', auth()->id())->get();
                 $percent = null;
+                $subscriptions = null;
                 break;
             case 'webmaster':
-                $offers = Offer::with('theme')->with('advertiser')->where('status', true)->get();
+                $offers = Offer::with('theme')->with('advertiser')->withCount('subscribe')->where('status', true)->get();
                 $commission = Commission::get('commission')->value('commission');
                 $percent = round((100 - $commission) / 100, 2);
+                $subscriptions = OfferSubscription::with('offer')->where('webmaster_id', auth()->id())->get();
                 break;
         }
 
@@ -43,7 +47,7 @@ class OfferController extends Controller
         // $users = User::get(['id', 'name']);
         // return view(Auth::user()->role . '.offers', compact('offers', 'themes', 'users')); 
 
-        return view(Auth::user()->role . '.offers', compact('offers', 'percent')); 
+        return view(Auth::user()->role . '.offers', compact('offers', 'percent', 'subscriptions')); 
     }
 
     /**

@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('js')
-    <script src="/js/status/Status.js" defer></script>
+    {{-- <script src="/js/status/Status.js" defer></script> --}}
+    <script src="/js/status/Subscription.js" defer></script>
     <script src="/js/status/OfferStatusListener.js" defer></script>
     <script src="/js/status/OfferDeleteListener.js" defer></script>
     <script>
@@ -21,42 +22,38 @@
 
                 <section class="flex justify-between text-center w-5/6 mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)]
                             dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
-                    <!-- активные офферы -->
+                    <!-- подписки -->
                     <div class="w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Подписки</h4>
-                        <div class="offers active-offers h-full">
-                            {{-- @foreach ($offers as $offer)
-                                    <div id="{{ $offer->id }}" class="offers__item active-offers__item" draggable="true">
-                                        <form method="POST" action="{{ route("advertiser.offers.destroy", $offer->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <div class="flex items-center justify-center mt-4">
-                                                <button class="absolute bottom-0 right-0 m-1 text-2xl"
-                                                    title="Удалить">&#10008;</button>
-                                            </div>
-                                        </form>
-                                        <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
-                                        <p class="font-semibold">Наименование: {{ $offer->name }}</p>
-                                        <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
-                                        <p class="font-semibold">URL: {{ $offer->url }}</p>
-                                        <p>Цена: {{ number_format($offer->price, 2) }} р. за переход</p>
+                        <div class="offers subscriptions h-full">
+                            @foreach ($subscriptions as $subscription)
+                                @if ($subscription->offer->status === 1)
+                                    <div id="{{ $subscription->offer->id }}" class="offers__item active-offers__item" draggable="true">
+                                        <p class="font-semibold">Рекламодатель: {{ $subscription->offer->advertiser->name }}</p>
+                                        <p class="font-semibold">Наименование: {{ $subscription->offer->name }}</p>
+                                        <p class="font-semibold">Тема: {{ $subscription->offer->theme->name }}</p>
+                                        <p>Цена: {{ number_format($subscription->offer->price * $percent, 2) }} р. за переход</p>
+                                        <a href={{ $subscription->offer->url }} class="offer-url font-semibold text-xl text-blue-600" title={{ $subscription->offer->url }} target="_blank">Реферальная ссылка</a>
                                     </div>
-                            @endforeach --}}
+                                @endif
+                            @endforeach
                         </div>
                     </div>
 
                     <!-- доступные активные офферы -->
-                    <div class="offers w-1/2 inline-block m-0 p-3">
+                    <div class="w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Доступные офферы</h4>
                         <div class="offers deactive-offers h-full">
                             @foreach ($offers as $offer)
-                                <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
-                                    <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
-                                    <p class="font-semibold">Наименование: {{ $offer->name }}</p>
-                                    <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
-                                    <p class="font-semibold">URL: {{ $offer->url }}</p>
-                                    <p>Цена: {{ number_format($offer->price * $percent, 2) }} р. за переход</p>
-                                </div>
+                                @if ($offer->subscribe_count === 0)
+                                    <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
+                                        <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
+                                        <p class="font-semibold">Наименование: {{ $offer->name }}</p>
+                                        <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
+                                        <a href={{ $offer->url }} class="offer-url hidden__item font-semibold" title={{ $offer->url }} target="_blank">Реферальная ссылка</a>
+                                        <p>Цена: {{ number_format($offer->price * $percent, 2) }} р. за переход</p>
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>

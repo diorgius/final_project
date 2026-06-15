@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 // заполняемые поля
 #[Fillable(['name'])]
 
-/**
- * Связь: оферы - тема, один ко многим
- */
 class OfferTheme extends Model
 {
+    /**
+     * Связь: оферы - тема
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Offer, OfferTheme>
+     */
     public function offers()
     {
         return $this->hasMany(Offer::class, 'theme_id', 'id');
