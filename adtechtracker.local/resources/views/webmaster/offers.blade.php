@@ -7,6 +7,7 @@
     <script src="/js/status/OfferDeleteListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
+        window.userId = '{{ auth()->user()->id }}';
     </script>
 @endsection
 
@@ -50,8 +51,8 @@
                                         <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
                                         <p class="font-semibold">Наименование: {{ $offer->name }}</p>
                                         <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
-                                        <a href={{ $offer->url }} class="offer-url hidden__item font-semibold" title={{ $offer->url }} target="_blank">Реферальная ссылка</a>
                                         <p>Цена: {{ number_format($offer->price * $percent, 2) }} р. за переход</p>
+                                        <a href={{ $offer->url }} class="offer-url hidden__item font-semibold text-xl text-blue-600" title={{ $offer->url }} target="_blank">Реферальная ссылка</a>
                                     </div>
                                 @endif
                             @endforeach

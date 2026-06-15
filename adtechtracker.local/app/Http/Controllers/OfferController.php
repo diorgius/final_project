@@ -96,7 +96,7 @@ class OfferController extends Controller
     }
 
     /**
-     * Записываем в БД изменение статуса карточки и отсылаем сообщение
+     * Записываем в БД изменение статуса оффера и отсылаем сообщение
      * @param Request $request
      * @param Offer $offer
      * @return \Illuminate\Http\JsonResponse
@@ -109,6 +109,24 @@ class OfferController extends Controller
 
         // отправляем сообщение об изменении статуса оффера
         broadcast(new OfferStatusChanged($offer, auth()->user()->role));
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Записываем в БД подписку на оффер и отсылаем сообщение
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function subscription(Request $request)
+    {
+        $subscription = OfferSubscription::create([
+            'offer_id' => $request->offerId,
+            'webmaster_id' => $request->userId,
+        ]);
+
+        // отправляем сообщение об изменении статуса оффера
+        // broadcast(new OfferStatusChanged($offer, auth()->user()->role));
 
         return response()->json(['success' => true]);
     }

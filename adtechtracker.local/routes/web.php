@@ -29,7 +29,7 @@ Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(func
     Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
     Route::resource('/admin/users', AdminUserController::class);
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
-    Route::post('/admin/offers/{offer}/status/', [OfferController::class, 'status'])->name('admin.offers.status');
+    Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status'])->name('admin.offers.status');
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
     Route::get('/admin/statistics', [StatisticController::class, 'index'])->name('admin.statistics');
 });
@@ -40,7 +40,7 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
-    Route::post('/advertiser/offers/{offer}/status/', [OfferController::class, 'status'])->name('advertiser.offers.status');
+    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status'])->name('advertiser.offers.status');
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
@@ -50,7 +50,8 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
 Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(function () {
     Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
-    Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');    
+    Route::post('/webmaster/offers/{offer}/subscription', [OfferController::class, 'subscription'])->name('webmaster.offers.subscription');
+    Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
 });
     
 // Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'checkadmin', 'verified'])->name('admin.dashboard');

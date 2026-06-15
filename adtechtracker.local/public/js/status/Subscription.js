@@ -11,30 +11,36 @@ class Subscription {
     }
 
     // Метод записи подписки в БД и отправки сообщения reverb
-    // async updateStatus(itemId, status) {
+    async updateStatus(itemId) {
 
-    //     const role = window.userRole;
+        const role = window.userRole;
 
-    //     try {
-    //         const response = await fetch(`/${role}/offers/${itemId}/subscription`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'X-CSRF-TOKEN': document
-    //                     .querySelector('meta[name="csrf-token"]')
-    //                     .content
-    //             },
-    //             body: JSON.stringify({
-    //                 status: status
-    //             })
-    //         });
+        try {
+            const userId = window.userId;
+            const response = await fetch(`/${role}/offers/${itemId}/subscription`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document
+                        .querySelector('meta[name="csrf-token"]')
+                        .content
+                },
+                body: JSON.stringify({
+                    offerId: itemId,
+                    userId: userId
+                })
+            });
 
-    //         return await response.json();
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
 
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
+            return await response.json();
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     // Метод получения элемента в том числе и для вновь созданного через websocket, что все элементы были draggeble
     setupItem(item) {
@@ -77,25 +83,31 @@ class Subscription {
                 
                 // Устанавливаем статус
                 const status = zone.classList.contains('subscriptions') ? 1: 0;
+
                 const url = item.querySelector('.offer-url');
-                console.log(url);
+
                 if (zone.classList.contains('subscriptions')) {
-                    url.classList.remove('hidden__items');
+                    // url.classList.remove('hidden__item');
+                    setTimeout(() => {
+                        url.classList.remove('hidden__item');
+                    }, 1500);
                     item.classList.add('active-offers__item');
                 }
 
                 if (zone.classList.contains('deactive-offers')) {
-                    url.classList.add('hidden__items');
+                    url.classList.add('hidden__item');
                     item.classList.add('deactive-offers__item');
                 }
 
                 // Сохраняем в БД
-                // const result = await this.updateStatus(itemId, status);
+                const result = await this.updateStatus(itemId);
 
-                // if (!result?.success) {
-                //     console.log('Ошибка сохранения');
-                //     return;
-                // }
+                console.log('Subscription response:', result);
+
+                if (!result?.success) {
+                    console.log('Ошибка сохранения');
+                    return;
+                }
 
                 // Перемещаем элемент
                 zone.appendChild(item);
