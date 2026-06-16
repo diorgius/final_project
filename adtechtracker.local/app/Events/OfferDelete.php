@@ -37,7 +37,6 @@ class OfferDelete implements ShouldBroadcast
         ];
     }
 
-
     /**
      * Summary of broadcastAs
      * @return string

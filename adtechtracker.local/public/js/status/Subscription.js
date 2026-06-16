@@ -11,13 +11,13 @@ class Subscription {
     }
 
     // Метод записи подписки в БД и отправки сообщения reverb
-    async updateStatus(itemId) {
+    async subscribe(itemId) {
 
         const role = window.userRole;
 
         try {
             const userId = window.userId;
-            const response = await fetch(`/${role}/offers/${itemId}/subscription`, {
+            const response = await fetch(`/${role}/offers/subscribe/${itemId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,8 +26,38 @@ class Subscription {
                         .content
                 },
                 body: JSON.stringify({
-                    offerId: itemId,
-                    userId: userId
+
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Метод записи подписки в БД и отправки сообщения reverb
+    async subscribe(itemId, type) {
+
+        const role = window.userRole;
+
+        try {
+            const userId = window.userId;
+            const response = await fetch(`/${role}/offers/${type}/${itemId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document
+                        .querySelector('meta[name="csrf-token"]')
+                        .content
+                },
+                body: JSON.stringify({
+
                 })
             });
 
@@ -87,30 +117,45 @@ class Subscription {
                 const url = item.querySelector('.offer-url');
 
                 if (zone.classList.contains('subscriptions')) {
-                    // url.classList.remove('hidden__item');
+                    
+                    // таймер появления ссылки
                     setTimeout(() => {
                         url.classList.remove('hidden__item');
                     }, 1500);
                     item.classList.add('active-offers__item');
+
+                    // записываем в БД
+                    let type = 'subscribe'
+                    const result = await this.subscribe(itemId, type);
+  
+                    console.log('Subscription response:', result);
+
+                    if (!result?.success) {
+                        console.log('Ошибка сохранения');
+                        return;
+                    }
                 }
 
                 if (zone.classList.contains('deactive-offers')) {
                     url.classList.add('hidden__item');
                     item.classList.add('deactive-offers__item');
+
+                    // записываем в БД
+                    let type = 'unsubscribe'
+                    const result = await this.subscribe(itemId, type);
+  
+                    console.log('Subscription response:', result);
+                    
+                    if (!result?.success) {
+                        console.log('Ошибка сохранения');
+                        return;
+                    }
                 }
-
-                // Сохраняем в БД
-                const result = await this.updateStatus(itemId);
-
-                console.log('Subscription response:', result);
-
-                if (!result?.success) {
-                    console.log('Ошибка сохранения');
-                    return;
-                }
+                
 
                 // Перемещаем элемент
                 zone.appendChild(item);
+
             });
         });
     }

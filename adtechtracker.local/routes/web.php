@@ -40,7 +40,7 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
-    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status'])->name('advertiser.offers.status');
+    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status'])->name('advertiser.offers.status'); // переделать маршрут
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
@@ -50,7 +50,8 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
 Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(function () {
     Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
-    Route::post('/webmaster/offers/{offer}/subscription', [OfferController::class, 'subscription'])->name('webmaster.offers.subscription');
+    Route::post('/webmaster/offers/subscribe/{offer}', [OfferController::class, 'subscribe'])->name('webmaster.offers.subscribe');
+    Route::post('/webmaster/offers/unsubscribe/{offer}', [OfferController::class, 'unsubscribe'])->name('webmaster.offers.unsubscribe');
     Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
 });
     

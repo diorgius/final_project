@@ -7,7 +7,6 @@
     <script src="/js/status/OfferDeleteListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
-        window.userId = '{{ auth()->user()->id }}';
     </script>
 @endsection
 
@@ -46,7 +45,7 @@
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Доступные офферы</h4>
                         <div class="offers deactive-offers h-full">
                             @foreach ($offers as $offer)
-                                @if ($offer->subscribe_count === 0)
+                                {{-- @if ($offer->subscribe_count === 0) --}}
                                     <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
                                         <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
                                         <p class="font-semibold">Наименование: {{ $offer->name }}</p>
@@ -54,7 +53,7 @@
                                         <p>Цена: {{ number_format($offer->price * $percent, 2) }} р. за переход</p>
                                         <a href={{ $offer->url }} class="offer-url hidden__item font-semibold text-xl text-blue-600" title={{ $offer->url }} target="_blank">Реферальная ссылка</a>
                                     </div>
-                                @endif
+                                {{-- @endif --}}
                             @endforeach
                         </div>
                     </div>

@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Events\OfferStatusChanged;
 use App\Events\OfferCreate;
 use App\Events\OfferDelete;
+use App\Events\OfferSubscribeChanged;
 
 
 class OfferController extends Controller
@@ -35,7 +36,14 @@ class OfferController extends Controller
                 $subscriptions = null;
                 break;
             case 'webmaster':
-                $offers = Offer::with('theme')->with('advertiser')->withCount('subscribe')->where('status', true)->get();
+                // $offers = Offer::with('theme')->with('advertiser')->withCount('subscribe')->where('status', true)->get();
+                $offers = Offer::with('theme')->with('advertiser')->where('status', 1)
+                    ->whereDoesntHave('subscribe', function ($query) {
+                        $query->where(
+                            'webmaster_id',
+                            auth()->id()
+                        );
+                    })->get();
                 $commission = Commission::get('commission')->value('commission');
                 $percent = round((100 - $commission) / 100, 2);
                 $subscriptions = OfferSubscription::with('offer')->where('webmaster_id', auth()->id())->get();
@@ -116,17 +124,36 @@ class OfferController extends Controller
     /**
      * Записываем в БД подписку на оффер и отсылаем сообщение
      * @param Request $request
+     * @param Offer $offer
      * @return \Illuminate\Http\JsonResponse
      */
-    public function subscription(Request $request)
+    
+    public function subscribe(Request $request, Offer $offer)
     {
         $subscription = OfferSubscription::create([
-            'offer_id' => $request->offerId,
-            'webmaster_id' => $request->userId,
+            'offer_id' => $offer->id,
+            'webmaster_id' => auth()->id(),
         ]);
 
-        // отправляем сообщение об изменении статуса оффера
-        // broadcast(new OfferStatusChanged($offer, auth()->user()->role));
+        // отправляем сообщение о подписке на оффер
+        broadcast(new OfferSubscribeChanged($offer, auth()->id(), 'subscribed'));
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Записываем в БД отподписку от оффера и отсылаем сообщение
+     * @param Request $request
+     * @param Offer $offer
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unsubscribe(Request $request, Offer $offer)
+    {
+
+        OfferSubscription::where('offer_id', $offer->id)->where('webmaster_id', auth()->id())->delete();
+
+        // отправляем сообщение об отписке от оффера
+        broadcast(new OfferSubscribeChanged($offer, auth()->id(), 'unsubscribed'));
 
         return response()->json(['success' => true]);
     }
@@ -146,6 +173,6 @@ class OfferController extends Controller
         $offer->delete();
         
 
-        return redirect()->route(Auth()->user()->role . '.offers');
+        return redirect()->route(auth()->user()->role . '.offers');
     }
 }

@@ -5,6 +5,7 @@
     <script src="/js/status/OfferStatusListener.js" defer></script>
     <script src="/js/status/OfferCreateListener.js" defer></script>
     <script src="/js/status/OfferDeleteListener.js" defer></script>
+    <script src="/js/status/OfferSubscribeListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
