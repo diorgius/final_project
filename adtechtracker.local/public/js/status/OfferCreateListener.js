@@ -1,4 +1,4 @@
-/**
+                                            /**
  * Класс добавления оффера у админа, если добавлен новый оффер рекламщиком
  */
 class OfferCreateListener {
@@ -40,7 +40,8 @@ class OfferCreateListener {
                 <p class="font-semibold">Наименование: ${offer.name}</p>
                 <p class="font-semibold">Тема: ${offer.theme}</p>
                 <p class="font-semibold">URL: ${offer.url}</p>
-                <p>Цена: ${offer.price} р. за переход</p>`
+                <p>Цена: ${offer.price} р. за переход</p>
+                <p>Подписчиков: 0</p>`
             this.deactiveZone.appendChild(divOffer);
             window.offerStatus.setupItem(divOffer);
             return;

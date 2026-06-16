@@ -22,7 +22,8 @@
 
                 <section class="flex justify-between text-center w-5/6 mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)]
                             dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
-                    <!-- подписки -->
+
+                    <!-- Подписки -->
                     <div class="w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Подписки</h4>
                         <div class="offers subscriptions h-full">
@@ -40,7 +41,7 @@
                         </div>
                     </div>
 
-                    <!-- доступные активные офферы -->
+                    <!-- Доступные активные офферы -->
                     <div class="w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Доступные офферы</h4>
                         <div class="offers deactive-offers h-full">
@@ -58,6 +59,7 @@
                         </div>
                     </div>
                 </section>
+                
             </div>
         </div>
     </section>

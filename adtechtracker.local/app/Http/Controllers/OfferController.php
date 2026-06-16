@@ -127,7 +127,6 @@ class OfferController extends Controller
      * @param Offer $offer
      * @return \Illuminate\Http\JsonResponse
      */
-    
     public function subscribe(Request $request, Offer $offer)
     {
         $subscription = OfferSubscription::create([

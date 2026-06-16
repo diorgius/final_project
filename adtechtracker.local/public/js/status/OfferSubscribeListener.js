@@ -17,18 +17,18 @@ class OfferSubscribeListener {
             .listen('.offer.subscribe.changed', (event) => {
                 console.log('Subscribe change', event);
                 
-                if (event.action === 'subscribed') {
+                // if (event.action === 'subscribed') {
                     const offer = document.getElementById(event.offer_id);
-                    console.log(offer);
+                    const subscribers = offer.querySelector('.subscribers');
+                    subscribers.innerText = `Подписчиков: ${(event.subscribe_count)}`;
+                // }
 
-                }
-
-                if (event.action === 'unsubscribed') {
-                    console.log('отписка');
-
-
-                }
-
+                // if (event.action === 'unsubscribed') {
+                //     const offer = document.getElementById(event.offer_id);
+                //     const subscribers = offer.querySelector('.subscribers');
+                //     subscribers.innerText = `Подписчиков: ${(event.subscribe_count)}`;
+                // }
+                                        
 
             });
     }
