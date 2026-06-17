@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('webmaster_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreignId('subscription_id')->references('id')->on('offer_subscriptions')->nullOnDelete();
             $table->string('ref_code');
-            $table->decimal('price', 10, 2);                 
             $table->decimal('advertiser_cost', 10, 2);      
             $table->decimal('webmaster_income', 10, 2);     
             $table->decimal('system_commission', 10, 2);

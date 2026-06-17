@@ -51,8 +51,8 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
 Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(function () {
     Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
-    Route::post('/webmaster/offers/subscribe/{offer}', [OfferController::class, 'subscribe'])->name('webmaster.offers.subscribe');
-    Route::post('/webmaster/offers/unsubscribe/{offer}', [OfferController::class, 'unsubscribe'])->name('webmaster.offers.unsubscribe');
+    Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe'])->name('webmaster.offers.subscribe');
+    Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe'])->name('webmaster.offers.unsubscribe');
     Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
     Route::get('/r/{ref}', [RedirectController::class, 'handle']);
 });

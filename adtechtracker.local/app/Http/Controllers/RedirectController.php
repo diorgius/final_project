@@ -6,16 +6,23 @@ use Illuminate\Http\Request;
 use App\Models\OfferSubscription;
 use App\Models\OfferAccessLog;
 use App\Models\OfferClick;
+use App\Models\Commission;
 
 
 class RedirectController extends Controller
 {
     
+    /**
+     * Summary of handle
+     * @param string $ref
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function handle(string $ref)
     {
+        // получаем подписку
         $subscription = OfferSubscription::where('ref_code', $ref)->first();
 
-        // если вообще нет такой ссылки
+        // если вообще нет такой подписки
         if (!$subscription) {
             OfferAccessLog::create([
                 'offer_id' => null,
@@ -26,10 +33,10 @@ class RedirectController extends Controller
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
-
             abort(404, 'Запрашиваемая страница не найдена');
         }
 
+        // получаем оффер и вебмастера
         $offer = $subscription->offer;
         $webmaster = $subscription->webmaster;
 
@@ -49,23 +56,22 @@ class RedirectController extends Controller
         ]);
 
         if (!$allowed) {
-            // return redirect('/'); // или страница "доступ запрещён"
             abort(403, 'Доступ запрещен');
         }
 
-        
+        // получаем коммиссию
+        $commission = Commission::get('commission')->value('commission');
 
-        // 💰 считаем деньги
+        // записываем клик в БД
         OfferClick::create([
             'offer_id' => $offer->id,
             'advertiser_id' => $offer->advertiser_id,
             'webmaster_id' => $webmaster->id,
             'subscription_id' => $subscription->id,
             'ref_code' => $ref,
-            'price' => $offer->price,
             'advertiser_cost' => $offer->price,
-            'webmaster_income' => $offer->price * 0.7,
-            'system_commission' => $offer->price * 0.3,
+            'webmaster_income' => round($offer->price * ((100 - $commission) / 100), 2),
+            'system_commission' => round($offer->price * ($commission / 100), 2),
             'ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);

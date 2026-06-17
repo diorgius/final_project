@@ -10,37 +10,6 @@ class Subscription {
         this.init();
     }
 
-    // // Метод записи подписки в БД и отправки сообщения reverb
-    // async subscribe(itemId) {
-
-    //     const role = window.userRole;
-
-    //     try {
-    //         const userId = window.userId;
-    //         const response = await fetch(`/${role}/offers/subscribe/${itemId}`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'X-CSRF-TOKEN': document
-    //                     .querySelector('meta[name="csrf-token"]')
-    //                     .content
-    //             },
-    //             body: JSON.stringify({
-
-    //             })
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP ${response.status}`);
-    //         }
-
-    //         return await response.json();
-
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-
     // Метод записи подписки в БД и отправки сообщения reverb
     async subscribe(itemId, type) {
 
@@ -48,7 +17,7 @@ class Subscription {
 
         try {
             const userId = window.userId;
-            const response = await fetch(`/${role}/offers/${type}/${itemId}`, {
+            const response = await fetch(`/${role}/offers/${itemId}/${type}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,9 +80,6 @@ class Subscription {
                 // Убираем стили
                 item.classList.remove('active-offers__item', 'deactive-offers__item');
                 
-                // Устанавливаем статус
-                const status = zone.classList.contains('subscriptions') ? 1: 0;
-
                 const url = item.querySelector('.offer-url');
 
                 if (zone.classList.contains('subscriptions')) {
@@ -127,6 +93,8 @@ class Subscription {
                     // записываем в БД
                     let type = 'subscribe'
                     const result = await this.subscribe(itemId, type);
+
+                    // вставляем ссылку
                     url.href = `/r/${result.ref_code}`;
                     
                     console.log('Subscription response:', result);
@@ -152,11 +120,9 @@ class Subscription {
                         return;
                     }
                 }
-                
 
                 // Перемещаем элемент
                 zone.appendChild(item);
-
             });
         });
     }
