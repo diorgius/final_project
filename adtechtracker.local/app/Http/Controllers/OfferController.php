@@ -13,7 +13,7 @@ use App\Events\OfferStatusChanged;
 use App\Events\OfferCreate;
 use App\Events\OfferDelete;
 use App\Events\OfferSubscribeChanged;
-
+use Illuminate\Support\Str;
 
 class OfferController extends Controller
 {
@@ -129,15 +129,38 @@ class OfferController extends Controller
      */
     public function subscribe(Request $request, Offer $offer)
     {
-        $subscription = OfferSubscription::create([
-            'offer_id' => $offer->id,
-            'webmaster_id' => auth()->id(),
-        ]);
+        // проверяем, была ли ранее подписка в удалена
+        $subscription = OfferSubscription::withTrashed()
+            ->where('offer_id', $offer->id)
+            ->where('webmaster_id', auth()->id())
+            ->first();
+
+        // если подписки раньше не было, создаем новую
+        if (!$subscription) {
+            $subscription = OfferSubscription::create([
+                'offer_id' => $offer->id,
+                'webmaster_id' => auth()->id(),
+                'ref_code' => Str::random(16),
+            ]);
+
+            // если была, то востанавливаем
+        } elseif ($subscription->trashed()) {
+            $subscription->restore();
+        }
+
+        // $subscription = OfferSubscription::firstOrCreate([
+        //     'offer_id' => $offer->id,
+        //     'webmaster_id' => auth()->id(),
+        //     'ref_code' => Str::random(16),
+        // ]);
 
         // отправляем сообщение о подписке на оффер
         broadcast(new OfferSubscribeChanged($offer, auth()->id(), 'subscribed'));
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'ref_code' => $subscription->ref_code
+        ]);
     }
 
     /**
@@ -148,7 +171,7 @@ class OfferController extends Controller
      */
     public function unsubscribe(Request $request, Offer $offer)
     {
-
+        // используем мягкое удаление
         OfferSubscription::where('offer_id', $offer->id)->where('webmaster_id', auth()->id())->delete();
 
         // отправляем сообщение об отписке от оффера

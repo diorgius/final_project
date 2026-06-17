@@ -9,6 +9,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OfferThemeController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -53,14 +54,25 @@ Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(
     Route::post('/webmaster/offers/subscribe/{offer}', [OfferController::class, 'subscribe'])->name('webmaster.offers.subscribe');
     Route::post('/webmaster/offers/unsubscribe/{offer}', [OfferController::class, 'unsubscribe'])->name('webmaster.offers.unsubscribe');
     Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
+    Route::get('/r/{ref}', [RedirectController::class, 'handle']);
 });
     
 // Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'checkadmin', 'verified'])->name('admin.dashboard');
 // Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->name('advertiser.dashboard');
 // Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->name('webmaster.dashboard');
 
+// проверка ip
+// Route::get('/ip-test', function () {
 
+//     dd([
+//         'ip' => request()->ip(),
+//         'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? null,
+//         'xff' => request()->header('X-Forwarded-For'),
+//         'xreal' => request()->header('X-Real-IP'),
+//     ]);
+// });
 
+// Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

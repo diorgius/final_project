@@ -10,36 +10,36 @@ class Subscription {
         this.init();
     }
 
-    // Метод записи подписки в БД и отправки сообщения reverb
-    async subscribe(itemId) {
+    // // Метод записи подписки в БД и отправки сообщения reverb
+    // async subscribe(itemId) {
 
-        const role = window.userRole;
+    //     const role = window.userRole;
 
-        try {
-            const userId = window.userId;
-            const response = await fetch(`/${role}/offers/subscribe/${itemId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document
-                        .querySelector('meta[name="csrf-token"]')
-                        .content
-                },
-                body: JSON.stringify({
+    //     try {
+    //         const userId = window.userId;
+    //         const response = await fetch(`/${role}/offers/subscribe/${itemId}`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'X-CSRF-TOKEN': document
+    //                     .querySelector('meta[name="csrf-token"]')
+    //                     .content
+    //             },
+    //             body: JSON.stringify({
 
-                })
-            });
+    //             })
+    //         });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP ${response.status}`);
+    //         }
 
-            return await response.json();
+    //         return await response.json();
 
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 
     // Метод записи подписки в БД и отправки сообщения reverb
     async subscribe(itemId, type) {
@@ -123,11 +123,12 @@ class Subscription {
                         url.classList.remove('hidden__item');
                     }, 1500);
                     item.classList.add('active-offers__item');
-
+                    
                     // записываем в БД
                     let type = 'subscribe'
                     const result = await this.subscribe(itemId, type);
-  
+                    url.href = `/r/${result.ref_code}`;
+                    
                     console.log('Subscription response:', result);
 
                     if (!result?.success) {

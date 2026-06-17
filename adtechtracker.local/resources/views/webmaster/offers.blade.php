@@ -34,7 +34,7 @@
                                         <p class="font-semibold">Наименование: {{ $subscription->offer->name }}</p>
                                         <p class="font-semibold">Тема: {{ $subscription->offer->theme->name }}</p>
                                         <p>Цена: {{ number_format($subscription->offer->price * $percent, 2) }} р. за переход</p>
-                                        <a href={{ $subscription->offer->url }} class="offer-url font-semibold text-xl text-blue-600" title={{ $subscription->offer->url }} target="_blank">Реферальная ссылка</a>
+                                        <a href="/r/{{ $subscription->ref_code }}" class="offer-url font-semibold text-xl text-blue-600" title={{ $subscription->offer->url }} target="_blank">Реферальная ссылка</a>
                                     </div>
                                 @endif
                             @endforeach
@@ -46,20 +46,18 @@
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Доступные офферы</h4>
                         <div class="offers deactive-offers h-full">
                             @foreach ($offers as $offer)
-                                {{-- @if ($offer->subscribe_count === 0) --}}
-                                    <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
-                                        <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
-                                        <p class="font-semibold">Наименование: {{ $offer->name }}</p>
-                                        <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
-                                        <p>Цена: {{ number_format($offer->price * $percent, 2) }} р. за переход</p>
-                                        <a href={{ $offer->url }} class="offer-url hidden__item font-semibold text-xl text-blue-600" title={{ $offer->url }} target="_blank">Реферальная ссылка</a>
-                                    </div>
-                                {{-- @endif --}}
+                                <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
+                                    <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p>
+                                    <p class="font-semibold">Наименование: {{ $offer->name }}</p>
+                                    <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
+                                    <p>Цена: {{ number_format($offer->price * $percent, 2) }} р. за переход</p>
+                                    <a href="#" class="offer-url hidden__item font-semibold text-xl text-blue-600" title={{ $offer->url }} target="_blank">Реферальная ссылка</a>
+                                </div>
                             @endforeach
                         </div>
                     </div>
                 </section>
-                
+
             </div>
         </div>
     </section>

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable(false)->unique();
             $table->string('url')->nullable(false);
             $table->decimal('price', 8, 2)->default(0);
-            $table->foreignId('theme_id')->references('id')->on('offer_themes')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('advertiser_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('theme_id')->references('id')->on('offer_themes')->cascadeOnDelete();
+            $table->foreignId('advertiser_id')->references('id')->on('users')->cascadeOnDelete();
             $table->boolean('status')->default(false);
             $table->timestamps();
         });
