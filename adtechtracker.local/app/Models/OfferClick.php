@@ -22,5 +22,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OfferClick extends Model
 {
+    /**
+     * Связь: оффер - клики
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Offer, OfferClick>
+     */
+    public function offerClick()
+    {
+        return $this->belongsTo(Offer::class, 'offer_id', 'id');
+    }
 
 }

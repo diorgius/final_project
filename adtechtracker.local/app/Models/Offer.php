@@ -39,15 +39,6 @@ class Offer extends Model
         return $this->belongsTo(User::class, 'advertiser_id', 'id');
     }
 
-    // /**
-    //  * Связь: вебмастера - офферы
-    //  * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User, Offer, TPivotModel>
-    //  */
-    // public function webmasters()
-    // {
-    //     return $this->belongsToMany(User::class, 'offer_subscriptions', 'webmaster_id', 'id');
-    // }
-
     /**
      * Связь: подписки - офферы
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<OfferSubscription, Offer>
@@ -55,5 +46,14 @@ class Offer extends Model
     public function subscribe()
     {
         return $this->hasMany(OfferSubscription::class, 'offer_id', 'id');
+    }
+
+    /**
+     * Связь: клики - офферы
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<OfferClick, Offer>
+    */
+    public function click()
+    {
+        return $this->hasMany(OfferClick::class, 'offer_id', 'id');
     }
 }

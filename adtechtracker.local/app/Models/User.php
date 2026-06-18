@@ -42,15 +42,6 @@ class User extends Authenticatable
         return $this->hasMany(Offer::class, 'advertiser_id', 'id');
     }
 
-    // /**
-    //  * Связь: офферы - вебмастера
-    //  * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Offer, User>
-    //  */
-    // public function offersWebmasters()
-    // {
-    //     return $this->belongsToMany(Offer::class, 'webmaster_id', 'id');
-    // }
-
     /**
      * Связь: подписки - вебмастер
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<OfferSubscription, User>
