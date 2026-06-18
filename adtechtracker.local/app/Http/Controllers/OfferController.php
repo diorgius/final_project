@@ -24,7 +24,7 @@ class OfferController extends Controller
      */
     public function index () 
     {
-        switch (Auth::user()->role) {
+        switch (auth()->user()->role) {
             case 'admin':
                 $offers = Offer::with('theme')->with('advertiser')->get();
                 $percent = null;
@@ -41,8 +41,7 @@ class OfferController extends Controller
                     ->whereDoesntHave('subscribe', function ($query) {
                         $query->where(
                             'webmaster_id',
-                            auth()->id()
-                        );
+                            auth()->id());
                     })->get();
                 $commission = Commission::get('commission')->value('commission');
                 $percent = round((100 - $commission) / 100, 2);
@@ -55,7 +54,7 @@ class OfferController extends Controller
         // $users = User::get(['id', 'name']);
         // return view(Auth::user()->role . '.offers', compact('offers', 'themes', 'users')); 
 
-        return view(Auth::user()->role . '.offers', compact('offers', 'percent', 'subscriptions')); 
+        return view(auth()->user()->role . '.offers', compact('offers', 'percent', 'subscriptions')); 
     }
 
     /**
