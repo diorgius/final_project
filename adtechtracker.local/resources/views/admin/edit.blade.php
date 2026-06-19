@@ -77,7 +77,7 @@
                         @method('DELETE')
 
                         <div class="flex items-center justify-center mt-4">
-                            <x-primary-button class="ms-4">
+                            <x-primary-button>
                                 {{ __('Удалить пользователя') }}
                             </x-primary-button>
                         </div>

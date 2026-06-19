@@ -8,7 +8,6 @@ use App\Models\OfferAccessLog;
 use App\Models\OfferClick;
 use App\Models\Commission;
 
-
 class RedirectController extends Controller
 {
     

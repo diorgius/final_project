@@ -4,7 +4,7 @@
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
-                class="flex flex-col items-center pb-6 pt-4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg border-2 border-black">
+                class="flex flex-col items-center pb-6 pt-4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <form method="POST" action="{{ route('themes.store') }}">
                     @csrf
 
@@ -31,7 +31,7 @@
                 <div class="flex justify-center items-center mt-4" >
                     <ol class="list-decimal">    
                         @foreach ($themes as $theme)
-                            <li class="text-gray-600">{{ $theme->name }}</li>
+                            <li class="border-b-2 text-xl text-gray-600">{{ $theme->name }}</li>
                         @endforeach
                     </ol>    
                 </div>    

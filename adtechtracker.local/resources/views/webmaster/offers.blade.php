@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
 @section('js')
-    {{-- <script src="/js/status/Status.js" defer></script> --}}
-    <script src="/js/status/Subscription.js" defer></script>
-    <script src="/js/status/OfferStatusListener.js" defer></script>
-    <script src="/js/status/OfferDeleteListener.js" defer></script>
+    <script src="/js/Subscription.js" defer></script>
+    <script src="/js/OfferStatusListener.js" defer></script>
+    <script src="/js/OfferDeleteListener.js" defer></script>
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>

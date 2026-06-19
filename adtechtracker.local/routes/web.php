@@ -30,9 +30,10 @@ Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(func
     Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
     Route::resource('/admin/users', AdminUserController::class);
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
-    Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status'])->name('admin.offers.status');
+    Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status']);
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
     Route::get('/admin/statistics', [StatisticController::class, 'index'])->name('admin.statistics');
+    Route::get('/admin/statistics/summary', [StatisticController::class, 'summary']);
 });
 
 // Advertiser routes
@@ -41,9 +42,9 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
-    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status'])->name('advertiser.offers.status'); // переделать маршрут
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
+    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status']);
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
 });
 
@@ -51,8 +52,8 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
 Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(function () {
     Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
-    Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe'])->name('webmaster.offers.subscribe');
-    Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe'])->name('webmaster.offers.unsubscribe');
+    Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe']);
+    Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe']);
     Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
     Route::get('/r/{ref}', [RedirectController::class, 'handle']);
 });
