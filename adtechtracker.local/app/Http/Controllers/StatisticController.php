@@ -63,7 +63,7 @@ class StatisticController extends Controller
             'month' => [now()->startOfMonth(), now()->endOfMonth()],
             'year' => [now()->startOfYear(), now()->endOfYear()],
             'all' => [Carbon::create(1970, 1, 1), now()],
-            default => [now()->startOfMonth(), now()->endOfMonth()],
+            default => [Carbon::create(1970, 1, 1), now()],
         };
     }
 
@@ -90,11 +90,16 @@ class StatisticController extends Controller
                 break;
             case 'advertiser':
                 $offers = Offer::query()->where('advertiser_id', auth()->id())
+                    ->whereBetween('created_at', [$start, $end])
                     ->withCount('click')
                     ->withSum('click as advertiser_expenses', 'advertiser_cost')
                     ->orderBy('name')->get();
+                $totalClicks = $offers->sum('click_count');
+                $totalExpenses = $offers->sum('advertiser_expenses');
                 return response()->json([
                     'offers' => $offers,
+                    'totalClicks' => $totalClicks,
+                    'totalExpenses' => $totalExpenses,
                 ]);
                 break;
             case 'webmaster':

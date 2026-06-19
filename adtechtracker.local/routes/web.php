@@ -46,6 +46,7 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
     Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status']);
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
+    Route::get('/advertiser/statistics/summary', [StatisticController::class, 'summary']);
 });
 
 // Webmaster routes
