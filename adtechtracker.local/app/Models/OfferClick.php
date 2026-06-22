@@ -22,11 +22,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class OfferClick extends Model
 {
+
+    /**
+     * Устанавливливаем тип полей
+     * @return array{advertiser_cost: string, system_commission: string, webmaster_income: string}
+     */
+    protected function casts(): array
+    {
+        return [
+            'advertiser_cost' => 'decimal:2',
+            'webmaster_income' => 'decimal:2',
+            'system_commission' => 'decimal:2'
+        ];
+    }
+
     /**
      * Связь: оффер - клики
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Offer, OfferClick>
      */
-    public function offerClick()
+    public function offer()
     {
         return $this->belongsTo(Offer::class, 'offer_id', 'id');
     }

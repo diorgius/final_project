@@ -25,7 +25,7 @@
                             dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] 
                             dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
 
-                    <x-table-statistics :offers="$offers" :totalClicks="$totalClicks" :totalExpenses="$totalExpenses" :role="auth()->user()->role">
+                    <x-table-statistics :offers="$offers" :totalClicks="$totalClicks" :total="$totalExpenses" :role="auth()->user()->role">
 
                     </x-table-statistics>
 

@@ -55,8 +55,9 @@ Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
     Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe']);
     Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe']);
-    Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
     Route::get('/r/{ref}', [RedirectController::class, 'handle']);
+    Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
+    Route::get('/webmaster/statistics/summary', [StatisticController::class, 'summary']);    
 });
     
 // Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'checkadmin', 'verified'])->name('admin.dashboard');

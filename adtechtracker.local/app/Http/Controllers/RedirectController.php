@@ -55,7 +55,7 @@ class RedirectController extends Controller
         ]);
 
         if (!$allowed) {
-            abort(403, 'Доступ запрещен');
+            abort(404, 'Запрашиваемая страница не найдена');
         }
 
         // получаем коммиссию
