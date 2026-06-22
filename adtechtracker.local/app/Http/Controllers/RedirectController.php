@@ -19,14 +19,15 @@ class RedirectController extends Controller
     public function handle(string $ref)
     {
         // получаем подписку
-        $subscription = OfferSubscription::where('ref_code', $ref)->first();
+        $subscription = OfferSubscription::withTrashed()->where('ref_code', $ref)->first();
 
         // если вообще нет такой подписки
         if (!$subscription) {
             OfferAccessLog::create([
                 'offer_id' => null,
-                'webmaster_id' => null,
+                'webmaster_id' => auth()->id(),
                 'ref_code' => $ref,
+                'target_url' => null,
                 'status' => 'rejected',
                 'reason' => 'invalid_ref',
                 'ip' => request()->ip(),
@@ -38,25 +39,51 @@ class RedirectController extends Controller
         // получаем оффер и вебмастера
         $offer = $subscription->offer;
         $webmaster = $subscription->webmaster;
+        
+        // если подписка существует, но вебмастер отписался
+        if ($subscription->trashed()) {
+            OfferAccessLog::create([
+                'offer_id' => $subscription->offer_id,
+                'webmaster_id' => $subscription->webmaster_id,
+                'subscription_id' => $subscription->id,
+                'ref_code' => $ref,
+                'target_url' => $offer->url,
+                'status' => 'rejected',
+                'reason' => 'subscription_inactive',
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+            abort(404, 'Запрашиваемая страница не найдена');
+        }
 
-        // проверка доступа
-        $allowed = $offer && $offer->status === 1;
+        // если оффер отключён
+        if (!$offer || $offer->status !== 1) {
+            OfferAccessLog::create([
+                'offer_id' => $offer?->id,
+                'webmaster_id' => $webmaster?->id,
+                'subscription_id' => $subscription->id,
+                'ref_code' => $ref,
+                'target_url' => $offer->url,
+                'status' => 'rejected',
+                'reason' => 'inactive_offer',
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+            abort(404, 'Запрашиваемая страница не найдена');
+        }
 
-        // логируем доступ
+        // логируем успешный доступ
         OfferAccessLog::create([
             'offer_id' => $offer->id,
             'webmaster_id' => $webmaster->id,
             'subscription_id' => $subscription->id,
             'ref_code' => $ref,
-            'status' => $allowed ? 'allowed' : 'rejected',
-            'reason' => $allowed ? null : 'no_subscription',
+            'target_url' => $offer->url,
+            'status' => 'allowed',
+            'reason' => null,
             'ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
-
-        if (!$allowed) {
-            abort(404, 'Запрашиваемая страница не найдена');
-        }
 
         // получаем коммиссию
         $commission = Commission::get('commission')->value('commission');
@@ -68,6 +95,7 @@ class RedirectController extends Controller
             'webmaster_id' => $webmaster->id,
             'subscription_id' => $subscription->id,
             'ref_code' => $ref,
+            'target_url' => $offer->url,
             'advertiser_cost' => $offer->price,
             'webmaster_income' => round($offer->price * ((100 - $commission) / 100), 2),
             'system_commission' => round($offer->price * ($commission / 100), 2),
@@ -75,6 +103,6 @@ class RedirectController extends Controller
             'user_agent' => request()->userAgent(),
         ]);
 
-        return redirect($offer->url);
+        return redirect()->away($offer->url);
     }
 }

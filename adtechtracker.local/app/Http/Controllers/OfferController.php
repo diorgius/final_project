@@ -39,10 +39,8 @@ class OfferController extends Controller
                 // $offers = Offer::with('theme')->with('advertiser')->withCount('subscribe')->where('status', true)->get();
                 $offers = Offer::with('theme')->with('advertiser')->where('status', 1)
                     ->whereDoesntHave('subscribe', function ($query) {
-                        $query->where(
-                            'webmaster_id',
-                            auth()->id());
-                    })->get();
+                        $query->where('webmaster_id', auth()->id());
+                        })->get();
                 $commission = Commission::get('commission')->value('commission');
                 $percent = round((100 - $commission) / 100, 2);
                 $subscriptions = OfferSubscription::with('offer')->where('webmaster_id', auth()->id())->get();
@@ -83,14 +81,14 @@ class OfferController extends Controller
         ]);
 
         // убираем get-параметры из url
-        $url = $request->url;
-        if (mb_stripos($url, '?')) {
-            $url = mb_substr($url, 0, mb_stripos($url, '?'));
-        }
+        // $url = $request->url;
+        // if (mb_stripos($url, '?')) {
+        //     $url = mb_substr($url, 0, mb_stripos($url, '?'));
+        // }
 
         $offer = Offer::create([
             'name' => $request->name,
-            'url' => $url,
+            'url' =>$request->url,
             'price' => $request->price,
             'theme_id' => $request->theme,
             'advertiser_id' => auth()->id()
