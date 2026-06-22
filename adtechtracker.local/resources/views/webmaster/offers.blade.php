@@ -24,7 +24,7 @@
 
                     <!-- Подписки -->
                     <div class="w-1/2 inline-block m-0 p-3">
-                        <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Подписки</h4>
+                        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Подписки</h4>
                         <div class="offers subscriptions h-full">
                             @foreach ($subscriptions as $subscription)
                                 @if ($subscription->offer->status === 1)
@@ -42,7 +42,7 @@
 
                     <!-- Доступные активные офферы -->
                     <div class="w-1/2 inline-block m-0 p-3">
-                        <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Доступные офферы</h4>
+                        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Доступные офферы</h4>
                         <div class="offers deactive-offers h-full">
                             @foreach ($offers as $offer)
                                 <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">

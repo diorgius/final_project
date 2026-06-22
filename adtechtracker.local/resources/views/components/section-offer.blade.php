@@ -6,7 +6,7 @@
 
     <!-- активные офферы -->
     <div class="w-1/2 inline-block m-0 p-3">
-        <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Активные офферы</h4>
+        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Активные офферы</h4>
         <div class="offers active-offers h-full">
             @foreach ($offers as $offer)
                 @if ($offer->status === 1)
@@ -32,7 +32,7 @@
 
     <!-- неактивные офферы -->
     <div class="w-1/2 inline-block m-0 p-3">
-        <h4 class="font-semibold text-xl mx-auto text-gray-600 mb-4">Неактивные офферы</h4>
+        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Неактивные офферы</h4>
         <div class="offers deactive-offers h-full">
             @foreach ($offers as $offer)
                 @if ($offer->status === 0)

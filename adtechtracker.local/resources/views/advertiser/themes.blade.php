@@ -27,11 +27,11 @@
                     </div>
                 </form>
 
-                <h3 class="font-semibold text-gray-700 mt-8">Текущие темы:</h3>
+                <h3 class="font-semibold text-gray-700 dark:text-gray-200 mt-8">Текущие темы:</h3>
                 <div class="flex justify-center items-center mt-4" >
                     <ol class="list-decimal">    
                         @foreach ($themes as $theme)
-                            <li class="border-b-2 text-xl text-gray-600">{{ $theme->name }}</li>
+                            <li class="border-b-2 text-xl text-gray-600 dark:text-gray-200">{{ $theme->name }}</li>
                         @endforeach
                     </ol>    
                 </div>    

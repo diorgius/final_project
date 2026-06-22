@@ -58,7 +58,7 @@ class Statistics {
                 break;
         }
 
-        document.getElementById('period-date').innerText = `Статистика за ${periodRus} на ` 
+        document.getElementById('period-date').textContent = `Статистика за ${periodRus} на ` 
             + dateTimeCurrent.toLocaleTimeString("ru-RU") + ' ' + dateTimeCurrent.toLocaleDateString("ru-RU");
         
         // если админ
@@ -82,7 +82,7 @@ class Statistics {
             data.offers.forEach(offer => {
                 tbody.insertAdjacentHTML(
                     'beforeend',
-                    `<tr class="border-b border-gray-200 text-xl">
+                    `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                         <td class="py-2">${offer.name}</td>
                         <td class="py-2">${offer.click_count}</td>
                         <td class="py-2">${Number(offer.advertiser_expenses).toFixed(2)}</td>
@@ -100,7 +100,7 @@ class Statistics {
             data.offers.forEach(offer => {
                 tbody.insertAdjacentHTML(
                     'beforeend',
-                    `<tr class="border-b border-gray-200 text-xl">
+                    `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                         <td class="py-2">${offer.name}</td>
                         <td class="py-2">${offer.click_count}</td>
                         <td class="py-2">${Number(offer.webmaster_revenue).toFixed(2)}</td>
