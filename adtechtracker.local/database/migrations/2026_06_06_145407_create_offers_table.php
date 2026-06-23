@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable(false)->unique();
+            $table->string('name')->nullable(false);
             $table->text('url')->nullable(false);
             $table->decimal('price', 8, 2)->default(0);
             $table->foreignId('theme_id')->references('id')->on('offer_themes');

@@ -18,12 +18,12 @@
                                 <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
                             </div>
                         </form>
-                        @if ($role === 'admin') <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p> @endif
-                        <p class="font-semibold">Наименование: {{ $offer->name }}</p>
-                        <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
-                        <p class="font-semibold">URL: {{ $offer->url }}</p>
-                        <p>Цена: {{ $offer->price }} р. за переход</p>
-                        <p class="subscribers font-semibold">Подписчиков: {{ $offer->subscribe->count() }}</p>
+                        @if ($role === 'admin') <p class="font-semibold">Рекламодатель: <span class="font-light">{{ $offer->advertiser->name }}</span></p> @endif
+                        <p class="font-semibold">Наименование: <span class="font-light">{{ $offer->name }}</span></p>
+                        <p class="font-semibold">Тема: <span class="font-light">{{ $offer->theme->name }}</span></p>
+                        <p class="font-semibold">URL: <span class="font-light">{{ $offer->url }}</span></p>
+                        <p class="font-semibold">Цена: <span class="font-light">{{ $offer->price }} р. за переход</span></p>
+                        <p class="subscribers font-semibold">Подписчиков: <span class="font-light">{{ $offer->subscribe->count() }}</span></p>
                     </div>
                 @endif
             @endforeach
@@ -44,12 +44,12 @@
                                 <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
                             </div>
                         </form>
-                        @if ($role === 'admin') <p class="font-semibold">Рекламодатель: {{ $offer->advertiser->name }}</p> @endif
-                        <p class="font-semibold">Наименование: {{ $offer->name }}</p>
-                        <p class="font-semibold">Тема: {{ $offer->theme->name }}</p>
-                        <p class="font-semibold">URL: {{ $offer->url }}</p>
-                        <p>Цена: {{ number_format($offer->price, 2) }} р. за переход</p>
-                        <p class="subscribers font-semibold">Подписчиков: {{ $offer->subscribe->count() }}</p>
+                        @if ($role === 'admin') <p class="font-semibold">Рекламодатель: <span class="font-light">{{ $offer->advertiser->name }}</span></p> @endif
+                        <p class="font-semibold">Наименование: <span class="font-light">{{ $offer->name }}</span></p>
+                        <p class="font-semibold">Тема: <span class="font-light">{{ $offer->theme->name }}</span></p>
+                        <p class="font-semibold">URL: <span class="font-light">{{ $offer->url }}</span></p>
+                        <p class="font-semibold">Цена: <span class="font-light">{{ number_format($offer->price, 2) }} р. за переход</span></p>
+                        <p class="subscribers font-semibold">Подписчиков: <span class="font-light">{{ $offer->subscribe->count() }}</span></p>
                     </div>
                 @endif
             @endforeach

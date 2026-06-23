@@ -29,6 +29,7 @@ return new class extends Migration
             $table->index(['advertiser_id', 'created_at']);         
             $table->index(['webmaster_id', 'created_at']);
             $table->index(['subscription_id', 'created_at']);
+            $table->index('ref_code');
         });
     }
 

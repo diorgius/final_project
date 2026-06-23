@@ -19,12 +19,13 @@ return new class extends Migration
             $table->string('ref_code')->nullable();
             $table->text('target_url')->nullable();
             $table->enum('status', ['allowed', 'rejected']);
-            $table->string('reason')->nullable();
+            $table->string('reason', 50)->nullable();
             $table->ipAddress('ip')->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamps();
             $table->index(['offer_id', 'created_at']);
             $table->index(['webmaster_id', 'created_at']);
+            $table->index('ref_code');
         });
     }
 

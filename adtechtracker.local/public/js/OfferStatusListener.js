@@ -76,7 +76,7 @@ class OfferStatusListener {
                     `<p class="font-semibold">Рекламодатель: ${offer.advertiser}</p>
                     <p class="font-semibold">Наименование: ${offer.name}</p>
                     <p class="font-semibold">Тема: ${offer.theme}</p>
-                    <p>Цена: ${offer.price.toFixed(2)} р. за переход</p>
+                    <p class="font-semibold">Цена: ${offer.price.toFixed(2)} р. за переход</p>
                     <a href="#" class="offer-url hidden__item font-semibold text-xl text-blue-600" title=${offer.url} target="_blank">Реферальная ссылка</a>`
                     if (offer.subscribe === 0) {
                         divOffer.className = 'offers__item deactive-offers__item';

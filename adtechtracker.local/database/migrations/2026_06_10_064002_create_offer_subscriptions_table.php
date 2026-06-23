@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('ref_code')->unique();
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['offer_id', 'webmaster_id']);
         });
     }
 

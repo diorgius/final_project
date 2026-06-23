@@ -36,7 +36,6 @@ class OfferController extends Controller
                 $subscriptions = null;
                 break;
             case 'webmaster':
-                // $offers = Offer::with('theme')->with('advertiser')->withCount('subscribe')->where('status', true)->get();
                 $offers = Offer::with('theme')->with('advertiser')->where('status', 1)
                     ->whereDoesntHave('subscribe', function ($query) {
                         $query->where('webmaster_id', auth()->id());
@@ -74,7 +73,8 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:' . Offer::class],
+            // 'name' => ['required', 'string', 'max:255', 'unique:' . Offer::class],
+            'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255', 'url'],
             'price' => ['required', 'numeric'],
             'theme' => 'required'
@@ -191,7 +191,6 @@ class OfferController extends Controller
         
         $offer->delete();
         
-
         return redirect()->route(auth()->user()->role . '.offers');
     }
 }

@@ -40,8 +40,8 @@ class OfferCreateListener {
                 <p class="font-semibold">Наименование: ${offer.name}</p>
                 <p class="font-semibold">Тема: ${offer.theme}</p>
                 <p class="font-semibold">URL: ${offer.url}</p>
-                <p>Цена: ${offer.price} р. за переход</p>
-                <p>Подписчиков: 0</p>`
+                <p class="font-semibold">Цена: ${offer.price} р. за переход</p>
+                <p class="font-semibold">Подписчиков: 0</p>`
             this.deactiveZone.appendChild(divOffer);
             window.offerStatus.setupItem(divOffer);
             return;

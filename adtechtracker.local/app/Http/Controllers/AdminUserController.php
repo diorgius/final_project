@@ -41,7 +41,8 @@ class AdminUserController extends Controller
     {
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            // 'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
             'role' => 'required'
@@ -89,8 +90,7 @@ class AdminUserController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            // пока отключаю возможность изменять имя
-            // 'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'name' => ['required', 'string', 'max:255'],
             // не даем возможность менять email, т.к. по нему регистрация и по нему вход
             // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
@@ -102,7 +102,7 @@ class AdminUserController extends Controller
         // проверяем статус
         $status = isset($request->status) ? 1 : 0;
 
-        // $user->name = $request->name;
+        $user->name = $request->name;
         $user->password = $password;
         $user->role =$request->role;
         $user->status = $status;
