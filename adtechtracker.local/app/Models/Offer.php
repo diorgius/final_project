@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 // заполняемые поля
 #[Fillable(['name', 'url', 'price', 'status', 'theme_id', 'advertiser_id'])]
 
 class Offer extends Model
 {
+    // используем мягкое удаление
+    use SoftDeletes;
+    
     /**
      * Устанавливливаем тип поля
      * @return array{price: string}

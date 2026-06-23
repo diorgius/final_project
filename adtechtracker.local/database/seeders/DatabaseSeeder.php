@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Offer;
+use App\Models\OfferTheme;
 use App\Models\Commission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,15 +18,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $userSeeder = new UserSeeder();
+        $userSeeder->run();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        OfferTheme::create(['name' => 'IT']);
+        OfferTheme::create(['name' => 'Образование']);
+        OfferTheme::create(['name' => 'Туризм']);
+        OfferTheme::create(['name' => 'Путешествия']);
+        OfferTheme::create(['name' => 'Спорт']);
+        OfferTheme::create(['name' => 'Игры']);
+        OfferTheme::create(['name' => 'Кино']);
+        OfferTheme::create(['name' => 'Музыка']);
 
-        Commission::create([
-            'commission' => 20
-        ]);
+        $offerSeeder = new OfferSeeder();
+        $offerSeeder->run();
+
+        Commission::create(['commission' => 20]);
     }
 }

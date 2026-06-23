@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('offer_access_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->references('id')->on('offers')->cascadeOnDelete()->nullable();
-            $table->foreignId('webmaster_id')->references('id')->on('users')->nullOnDelete()->nullable();
-            $table->foreignId('subscription_id')->references('id')->on('offer_subscriptions')->nullOnDelete()->nullable();
+            $table->foreignId('offer_id')->nullable()->references('id')->on('offers');
+            $table->foreignId('webmaster_id')->nullable()->references('id')->on('users');
+            $table->foreignId('subscription_id')->nullable()->references('id')->on('offer_subscriptions');
             $table->string('ref_code')->nullable();
             $table->text('target_url')->nullable();
             $table->enum('status', ['allowed', 'rejected']);

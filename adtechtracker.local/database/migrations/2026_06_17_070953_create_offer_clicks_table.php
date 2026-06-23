@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('offer_clicks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->references('id')->on('offers')->cascadeOnDelete();
-            $table->foreignId('advertiser_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignId('webmaster_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignId('subscription_id')->references('id')->on('offer_subscriptions')->nullOnDelete();
+            $table->foreignId('offer_id')->references('id')->on('offers');
+            $table->foreignId('advertiser_id')->references('id')->on('users');
+            $table->foreignId('webmaster_id')->references('id')->on('users');
+            $table->foreignId('subscription_id')->references('id')->on('offer_subscriptions');
             $table->string('ref_code');
             $table->text('target_url');
             $table->decimal('advertiser_cost', 10, 2);      

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('offer_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->references('id')->on('offers')->cascadeOnDelete();
-            $table->foreignId('webmaster_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('offer_id')->references('id')->on('offers');
+            $table->foreignId('webmaster_id')->references('id')->on('users');
             $table->string('ref_code')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

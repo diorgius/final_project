@@ -16,10 +16,11 @@ return new class extends Migration
             $table->string('name')->nullable(false)->unique();
             $table->text('url')->nullable(false);
             $table->decimal('price', 8, 2)->default(0);
-            $table->foreignId('theme_id')->references('id')->on('offer_themes')->cascadeOnDelete();
-            $table->foreignId('advertiser_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('theme_id')->references('id')->on('offer_themes');
+            $table->foreignId('advertiser_id')->references('id')->on('users');
             $table->boolean('status')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
