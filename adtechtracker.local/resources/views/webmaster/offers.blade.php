@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('js')
+    <script src="/js/DragItem.js" defer></script>
     <script src="/js/Subscription.js" defer></script>
     <script src="/js/OfferStatusListener.js" defer></script>
     <script src="/js/OfferDeleteListener.js" defer></script>
@@ -43,7 +44,7 @@
                     <!-- Доступные активные офферы -->
                     <div class="w-1/2 inline-block m-0 p-3">
                         <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Доступные офферы</h4>
-                        <div class="offers deactive-offers h-full">
+                        <div class="offers unsubscriptions h-full">
                             @foreach ($offers as $offer)
                                 <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
                                     <p class="font-semibold">Рекламодатель: <span class="font-light">{{ $offer->advertiser->name }}</span></p>
@@ -55,6 +56,7 @@
                             @endforeach
                         </div>
                     </div>
+
                 </section>
 
             </div>

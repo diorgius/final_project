@@ -32,7 +32,6 @@ class OfferSubscribeListener {
 
             });
     }
-
 }
 
 new OfferSubscribeListener();

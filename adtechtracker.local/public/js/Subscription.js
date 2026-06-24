@@ -1,6 +1,8 @@
 /**
  * Класс изменения статуса оффера drug and drop
  */
+// import DragItem from './DragItem.js';
+
 class Subscription {
 
     constructor(itemSelector, zoneSelector) {
@@ -41,20 +43,12 @@ class Subscription {
         }
     }
 
-    // Метод получения элемента в том числе и для вновь созданного через websocket, что все элементы были draggeble
-    setupItem(item) {
-        item.draggable = true;
-        item.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('id', item.id);
-            const currentStatus = item.closest('.subscriptions') ? 'active' : 'deactive';
-            e.dataTransfer.setData('oldStatus', currentStatus);
-        });
-    }
-    
+  
     // Метод перемещения элементов
     init() {
+        console.log('Subscription drop');
         this.items.forEach(item => {
-            this.setupItem(item);
+            DragItem.setupItem(item, '.subscriptions');
         });
         this.zones.forEach(zone => {
             zone.addEventListener('dragover', e => {
@@ -84,18 +78,8 @@ class Subscription {
 
                 if (zone.classList.contains('subscriptions')) {
                     
-                    // таймер появления ссылки
-                    setTimeout(() => {
-                        url.classList.remove('hidden__item');
-                    }, 1500);
-                    item.classList.add('active-offers__item');
-                    
                     // записываем в БД
-                    let type = 'subscribe'
-                    const result = await this.subscribe(itemId, type);
-
-                    // вставляем ссылку
-                    url.href = `/r/${result.ref_code}`;
+                    const result = await this.subscribe(itemId, 'subscribe');
                     
                     console.log('Subscription response:', result);
 
@@ -103,15 +87,23 @@ class Subscription {
                         console.log('Ошибка сохранения');
                         return;
                     }
+
+                    // вставляем ссылку
+                    url.href = `/r/${result.ref_code}`;
+                    
+                    // таймер появления ссылки
+                    setTimeout(() => {
+                        url.classList.remove('hidden__item');
+                    }, 1500);
+
+                    item.classList.add('active-offers__item');
+
                 }
 
-                if (zone.classList.contains('deactive-offers')) {
-                    url.classList.add('hidden__item');
-                    item.classList.add('deactive-offers__item');
+                if (zone.classList.contains('unsubscriptions')) {
 
-                    // записываем в БД
-                    let type = 'unsubscribe'
-                    const result = await this.subscribe(itemId, type);
+                    // Записываем в БД
+                    const result = await this.subscribe(itemId, 'unsubscribe');
   
                     console.log('Subscription response:', result);
                     
@@ -119,6 +111,10 @@ class Subscription {
                         console.log('Ошибка сохранения');
                         return;
                     }
+
+                    url.classList.add('hidden__item');
+                    item.classList.add('deactive-offers__item');
+
                 }
 
                 // Перемещаем элемент
@@ -128,4 +124,4 @@ class Subscription {
     }
 }
 
-new Subscription('.offers__item', '.offers');
+new Subscription('.offers__item', '.subscriptions, .unsubscriptions');

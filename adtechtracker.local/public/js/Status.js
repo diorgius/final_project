@@ -1,6 +1,8 @@
 /**
  * Класс изменения статуса оффера drug and drop
  */
+// import DragItem from './DragItem.js';
+
 class Status {
 
     constructor(itemSelector, zoneSelector) {
@@ -36,20 +38,10 @@ class Status {
         }
     }
 
-    // Метод получения элемента в том числе и для вновь созданного через websocket, что все элементы были draggeble
-    setupItem(item) {
-        item.draggable = true;
-        item.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('id', item.id);
-            const currentStatus = item.closest('.active-offers') ? 'active' : 'deactive';
-            e.dataTransfer.setData('oldStatus', currentStatus);
-        });
-    }
-
     // Метод перемещения элементов
     init() {
         this.items.forEach(item => {
-            this.setupItem(item);
+            DragItem.setupItem(item, '.active-offers');
         });
         this.zones.forEach(zone => {
             zone.addEventListener('dragover', e => {
@@ -76,13 +68,11 @@ class Status {
                 item.classList.remove('active-offers__item', 'deactive-offers__item');
                 
                 // Устанавливаем статус
-                const status = zone.classList.contains('active-offers') ? 1: 0;
+                const status = zone.classList.contains('active-offers') ? 1 : 0;
 
-                if (zone.classList.contains('active-offers')) {
+                if (status === 1) {
                     item.classList.add('active-offers__item');
-                }
-
-                if (zone.classList.contains('deactive-offers')) {
+                } else {
                     item.classList.add('deactive-offers__item');
                 }
 
@@ -101,5 +91,4 @@ class Status {
     }
 }
 
-// Глобальный экземпляр класса
-window.offerStatus = new Status('.offers__item', '.offers');
+new Status('.offers__item', '.offers');

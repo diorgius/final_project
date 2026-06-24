@@ -1,12 +1,15 @@
 /**
  * Класс изменения положения оффера в зависимости от статуса
  */
+// import DragItem from './DragItem.js';
+
 class OfferStatusListener {
 
-    constructor(activeOffers, deactiveOffers, subscriptions) {
+    constructor(activeOffers, deactiveOffers, subscriptions, unsubscriptions) {
         this.activeZone = document.querySelector(activeOffers);
         this.deactiveZone = document.querySelector(deactiveOffers);
         this.subscriptionsZone = document.querySelector(subscriptions);
+        this.unsubscriptionsZone = document.querySelector(unsubscriptions);
 
         this.listener();
     }
@@ -73,14 +76,14 @@ class OfferStatusListener {
                     const divOffer = document.createElement('div');
                     divOffer.setAttribute('id', `${offer.id}`);
                     divOffer.innerHTML =
-                    `<p class="font-semibold">Рекламодатель: ${offer.advertiser}</p>
-                    <p class="font-semibold">Наименование: ${offer.name}</p>
-                    <p class="font-semibold">Тема: ${offer.theme}</p>
-                    <p class="font-semibold">Цена: ${offer.price.toFixed(2)} р. за переход</p>
+                    `<p class="font-semibold">Рекламодатель: <span class="font-light">${offer.advertiser}</span></p>
+                    <p class="font-semibold">Наименование: <span class="font-light">${offer.name}</span></p>
+                    <p class="font-semibold">Тема: <span class="font-light">${offer.theme}</span></p>
+                    <p class="font-semibold">Цена: <span class="font-light">${offer.price.toFixed(2)} р. за переход</span></p>
                     <a href="#" class="offer-url hidden__item font-semibold text-xl text-blue-600" title=${offer.url} target="_blank">Реферальная ссылка</a>`
                     if (offer.subscribe === 0) {
                         divOffer.className = 'offers__item deactive-offers__item';
-                        this.deactiveZone.appendChild(divOffer);
+                        this.unsubscriptionsZone.appendChild(divOffer);
                     } else {
                         divOffer.className = 'offers__item active-offers__item';
                         this.subscriptionsZone.appendChild(divOffer);
@@ -89,7 +92,7 @@ class OfferStatusListener {
                             url.classList.remove('hidden__item');
                         }, 1500);
                     }
-                    window.offerStatus.setupItem(divOffer);
+                    DragItem.setupItem(divOffer, '.subscriptions');
                 }
                 return;
                 // если оффер есть и его отключили, то удаляем его
@@ -104,4 +107,4 @@ class OfferStatusListener {
     }
 }
 
-new OfferStatusListener('.active-offers', '.deactive-offers', '.subscriptions');
+new OfferStatusListener('.active-offers', '.deactive-offers', '.subscriptions', '.unsubscriptions');

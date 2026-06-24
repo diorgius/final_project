@@ -1,6 +1,8 @@
 /**
  * Класс добавления оффера у админа, если добавлен новый оффер рекламщиком
  */
+// import DragItem from './DragItem.js';
+
 class OfferCreateListener {
 
     constructor(deactiveOffers) {
@@ -36,14 +38,15 @@ class OfferCreateListener {
                         <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
                     </div>
                 </form >
-                <p class="font-semibold">Рекламодатель: ${offer.advertiser}</p>
-                <p class="font-semibold">Наименование: ${offer.name}</p>
-                <p class="font-semibold">Тема: ${offer.theme}</p>
-                <p class="font-semibold">URL: ${offer.url}</p>
-                <p class="font-semibold">Цена: ${offer.price} р. за переход</p>
-                <p class="font-semibold">Подписчиков: 0</p>`
+                <p class="font-semibold">Рекламодатель: <span class="font-light">${offer.advertiser}</span></p>
+                <p class="font-semibold">Наименование: <span class="font-light">${offer.name}</span></p>
+                <p class="font-semibold">Тема: <span class="font-light">${offer.theme}</span></p>
+                <p class="font-semibold">URL: <span class="font-light">${offer.url}</span></p>
+                <p class="font-semibold">Цена: <span class="font-light">${offer.price} р. за переход</span></p>
+                <p class="font-semibold">Подписчиков: <span class="font-light">0</span></p>`
             this.deactiveZone.appendChild(divOffer);
-            window.offerStatus.setupItem(divOffer);
+            // window.offerStatus.setupItem(divOffer);
+            DragItem.setupItem(divOffer, '.active-offers');
             return;
         }
     }
