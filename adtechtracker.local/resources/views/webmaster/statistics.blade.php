@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('js')
-    <script src="/js/Statistics.js" defer></script>
+    {{-- <script src="/js/Statistics.js" defer></script> --}}
+    @vite('resources/js/statistics.js')
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>

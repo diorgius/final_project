@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('js')
-    <script src="/js/DragItem.js" defer></script>
+    {{-- <script src="/js/DragItem.js" defer></script>
     <script src="/js/Subscription.js" defer></script>
     <script src="/js/OfferStatusListener.js" defer></script>
-    <script src="/js/OfferDeleteListener.js" defer></script>
+    <script src="/js/OfferDeleteListener.js" defer></script> --}}
+    @vite('resources/js/webmaster.js')
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>

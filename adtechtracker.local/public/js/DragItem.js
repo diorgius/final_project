@@ -1,8 +1,8 @@
 /**
  * Класс для drag&drop элементов, что все элементы были draggeble, в том числе и созданные через websocket
  */
-// export default class DragItem {
-class DragItem {
+export default class DragItem {
+// class DragItem {
 
     static setupItem(item, activeSelector) {
 

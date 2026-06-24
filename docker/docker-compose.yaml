@@ -26,8 +26,23 @@ services:
       - ../adtechtracker.local:/var/www/adtechtracker.local
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    networks:
+      - www-network
+
+  adtechtracker-reverb:
+    image: adtechtracker-php
+    container_name: adtechtracker-reverb
+    working_dir: /var/www/adtechtracker.local
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    restart: unless-stopped
+    volumes:
+      - ../adtechtracker.local:/var/www/adtechtracker.local
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
     ports:
-      - "8080:8080"
+      - "8081:8080"
+    depends_on:
+      - adtechtracker-mysql
     networks:
       - www-network
 

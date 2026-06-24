@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('js')
-    <script src="/js/Statistics.js" defer></script>
+    {{-- <script src="/js/Statistics.js" defer></script> --}}
+    @vite('resources/js/statistics.js')
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
@@ -43,13 +44,13 @@
                             class="text-indigo-600">{{ $rejectedClicks }}</span>
                     </p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Расходы рекламодателей -
-                        <span id="advertiser-expenses" class="text-indigo-600">{{ number_format($advertiserExpenses, 2, '.', '' ) }}</span>
+                        <span id="advertiser-expenses" class="text-indigo-600">{{ number_format($advertiserExpenses, 2, '.', '') }}</span>
                     </p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-1">Доходы вебмастеров -
                         <span id="webmaster-income" class="text-indigo-600">{{ number_format($webmasterIncome, 2, '.', '') }}</span>
                     </p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Доходы системы - <span id="system-profit"
-                            class="text-indigo-600">{{ number_format($systemProfit, 2, '.', '' ) }}</span></p>
+                            class="text-indigo-600">{{ number_format($systemProfit, 2, '.', '') }}</span></p>
 
                 </div>
             </section>
