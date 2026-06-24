@@ -185,11 +185,14 @@ class OfferController extends Controller
     public function destroy(string $id)
     {
         $offer = Offer::findOrFail($id);
-
+        
         // отправляем сообщение об удалении оффера
         broadcast(new OfferDelete($offer->id));
         
+        // удаляем оффер
         $offer->delete();
+        // удаляем подписку
+        OfferSubscription::where('offer_id', $offer->id)->delete();
         
         return redirect()->route(auth()->user()->role . '.offers');
     }

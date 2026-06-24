@@ -1,7 +1,7 @@
 name: adtechtracker
 services:
   adtechtracker-nginx:
-    image: nginx:latest
+    image: nginx
     container_name: adtechtracker-nginx
     restart: unless-stopped
     volumes:
@@ -9,11 +9,11 @@ services:
       - ./nginx/conf/hosts/adtechtracker.local.conf:/etc/nginx/conf.d/adtechtracker.local.conf
     ports:
       - "80:80"
-    networks:
-      - www-network
     depends_on:
       - adtechtracker-php
       - adtechtracker-mysql
+    networks:
+      - www-network
 
   adtechtracker-php:
     build:
@@ -22,19 +22,24 @@ services:
     image: adtechtracker-php
     container_name: adtechtracker-php
     restart: unless-stopped
+    working_dir: /var/www/adtechtracker.local
     volumes:
       - ../adtechtracker.local:/var/www/adtechtracker.local
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    depends_on:
+      - adtechtracker-mysql
+      - adtechtracker-redis
+      - adtechtracker-memcached
     networks:
       - www-network
 
   adtechtracker-reverb:
     image: adtechtracker-php
     container_name: adtechtracker-reverb
+    restart: unless-stopped
     working_dir: /var/www/adtechtracker.local
     command: php artisan reverb:start --host=0.0.0.0 --port=8080
-    restart: unless-stopped
     volumes:
       - ../adtechtracker.local:/var/www/adtechtracker.local
       - ./php/php.ini:/usr/local/etc/php/php.ini
@@ -43,27 +48,68 @@ services:
       - "8081:8080"
     depends_on:
       - adtechtracker-mysql
+      - adtechtracker-redis
+    networks:
+      - www-network
+
+  adtechtracker-worker:
+    image: adtechtracker-php
+    container_name: adtechtracker-worker
+    restart: unless-stopped
+    working_dir: /var/www/adtechtracker.local
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
+    volumes:
+      - ../adtechtracker.local:/var/www/adtechtracker.local
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    depends_on:
+      - adtechtracker-redis
+      - adtechtracker-mysql
+    networks:
+      - www-network
+
+  adtechtracker-scheduler:
+    image: adtechtracker-php
+    container_name: adtechtracker-scheduler
+    restart: unless-stopped
+    working_dir: /var/www/adtechtracker.local
+    command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+    volumes:
+      - ../adtechtracker.local:/var/www/adtechtracker.local
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    depends_on:
+      - adtechtracker-mysql
     networks:
       - www-network
 
   adtechtracker-mysql:
-    image: mysql:latest
+    image: mysql
     container_name: adtechtracker-mysql
     restart: unless-stopped
-    ports:
-      - "3306:3306"
     command:
-      - --lower_case_table_names=1  
+      - --lower_case_table_names=1
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
     volumes:
       - ./mysql/dbdata:/var/lib/mysql
     networks:
       - www-network
 
+  adtechtracker-redis:
+    image: redis:7-alpine
+    container_name: adtechtracker-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - www-network
+
   adtechtracker-memcached:
-    image: memcached:latest
+    image: memcached
     container_name: adtechtracker-memcached
     restart: unless-stopped
     ports:
@@ -71,8 +117,32 @@ services:
     networks:
       - www-network
 
+  adtechtracker-mailpit:
+    image: axllent/mailpit
+    container_name: adtechtracker-mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - www-network
+
+  adtechtracker-node:
+    image: node:22-alpine
+    container_name: adtechtracker-node
+    restart: unless-stopped
+    working_dir: /var/www/adtechtracker.local
+    command: sh -c "npm run dev -- --host 0.0.0.0 --port 5173"
+    tty: true
+    volumes:
+      - ../adtechtracker.local:/var/www/adtechtracker.local
+    ports:
+      - "5173:5173"      
+    networks:
+      - www-network
+
   adtechtracker-phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin
     container_name: adtechtracker-phpmyadmin
     restart: unless-stopped
     environment:

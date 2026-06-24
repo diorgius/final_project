@@ -86,7 +86,7 @@ class RedirectController extends Controller
         ]);
 
         // получаем коммиссию
-        $commission = Commission::get('commission')->value('commission');
+        $commission = Commission::value('commission');
 
         // записываем клик в БД
         OfferClick::create([

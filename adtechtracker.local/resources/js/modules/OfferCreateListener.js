@@ -43,7 +43,7 @@ export default class OfferCreateListener {
                 <p class="font-semibold">Тема: <span class="font-light">${offer.theme}</span></p>
                 <p class="font-semibold">URL: <span class="font-light">${offer.url}</span></p>
                 <p class="font-semibold">Цена: <span class="font-light">${offer.price} р. за переход</span></p>
-                <p class="font-semibold">Подписчиков: <span class="font-light">0</span></p>`
+                <p class="subscribers font-semibold">Подписчиков: <span class="font-light">0</span></p>`
             this.deactiveZone.appendChild(divOffer);
             DragItem.setupItem(divOffer, '.active-offers');
             return;

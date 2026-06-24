@@ -20,7 +20,7 @@ export default class OfferSubscribeListener {
                 // if (event.action === 'subscribed') {
                     const offer = document.getElementById(event.offer_id);
                     const subscribers = offer.querySelector('.subscribers');
-                    subscribers.innerText = `Подписчиков: ${(event.subscribe_count)}`;
+                    subscribers.textContent = `Подписчиков: ${(event.subscribe_count)}`;
                 // }
 
                 // if (event.action === 'unsubscribed') {
