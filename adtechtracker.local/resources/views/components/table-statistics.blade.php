@@ -7,6 +7,7 @@
 
     <tr class="border-b border-gray-200 text-sm dark:text-gray-200 uppercase">
         <th class="py-4">Офферы</th>
+        <th class="py-4">Статус</th>
         <th class="py-4">Переходы
         <th class="py-4">{{ $role === 'advertiser' ? 'Расходы' : 'Доходы' }}</th>
     </tr>
@@ -14,6 +15,7 @@
         @foreach ($offers as $offer)
             <tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                 <td class="py-2">{{ $offer->name }}</td>
+                <td class="py-2">{{ !$offer->trashed() ? 'Активный' : 'Удален' }}</td>
                 <td class="py-2">{{ $offer->click_count }}</td>
                 <td class="py-2">{{ $role === 'advertiser' ? number_format($offer->advertiser_expenses, 2, '.', '') : number_format($offer->webmaster_revenue, 2, '.', '') }}</td>
             </tr>
@@ -22,6 +24,7 @@
     <tfoot>
         <tr class="border-b border-gray-200 text-xl dark:text-gray-200 uppercase">
             <th class="py-2">Итого</th>
+            <th class="py-2"></th>
             <th id="total-clicks" class="py-2">{{ $totalClicks }}</th>
             <th id="total-expenses" class="py-2">{{ number_format($total, 2, '.', '') }}</th>
         </tr>

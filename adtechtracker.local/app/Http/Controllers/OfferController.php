@@ -37,9 +37,9 @@ class OfferController extends Controller
                 break;
             case 'webmaster':
                 $offers = Offer::with('theme')->with('advertiser')->where('status', 1)
-                    ->whereDoesntHave('subscribe', function ($query) {
-                        $query->where('webmaster_id', auth()->id());
-                        })->get();
+                                ->whereDoesntHave('subscribe', function ($query) {
+                                    $query->where('webmaster_id', auth()->id());
+                                })->get();
                 $commission = Commission::get('commission')->value('commission');
                 $percent = round((100 - $commission) / 100, 2);
                 $subscriptions = OfferSubscription::with('offer')->where('webmaster_id', auth()->id())->get();
@@ -145,12 +145,6 @@ class OfferController extends Controller
             $subscription->restore();
         }
 
-        // $subscription = OfferSubscription::firstOrCreate([
-        //     'offer_id' => $offer->id,
-        //     'webmaster_id' => auth()->id(),
-        //     'ref_code' => Str::random(16),
-        // ]);
-
         // отправляем сообщение о подписке на оффер
         broadcast(new OfferSubscribeChanged($offer, auth()->id(), 'subscribed'));
 
@@ -188,11 +182,12 @@ class OfferController extends Controller
         
         // отправляем сообщение об удалении оффера
         broadcast(new OfferDelete($offer->id));
-        
+
+        // удаляем подписки
+        $offer->subscribe()->delete();
+
         // удаляем оффер
         $offer->delete();
-        // удаляем подписку
-        OfferSubscription::where('offer_id', $offer->id)->delete();
         
         return redirect()->route(auth()->user()->role . '.offers');
     }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminMainController;
 use App\Http\Controllers\AdvertiserController;
 use App\Http\Controllers\WebmasterController;
 use App\Http\Controllers\OfferController;
@@ -21,12 +22,13 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view(auth()->user()->role . '.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Admin routes
-Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/main', [AdminMainController::class, 'index'])->name('admin.main');
     Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
     Route::resource('/admin/users', AdminUserController::class);
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
@@ -37,7 +39,7 @@ Route::middleware(['auth', 'checkactive', 'checkadmin', 'verified'])->group(func
 });
 
 // Advertiser routes
-Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group(function () {
     Route::get('/advertiser', [AdvertiserController::class, 'index'])->name('advertiser.dashboard');
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
@@ -50,7 +52,7 @@ Route::middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->group
 });
 
 // Webmaster routes
-Route::middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'checkactive', 'checkwebmaster'])->group(function () {
     Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
     Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe']);

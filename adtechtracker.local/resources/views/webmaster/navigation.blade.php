@@ -6,9 +6,6 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    {{-- <x-nav-link :href="route(Auth::user()->role . '.dashboard')" :active="request()->routeIs('webmaster.*')">
-                        {{ __('Главная') }}
-                    </x-nav-link> --}}
                     <x-nav-link :href="route('webmaster.offers')" :active="request()->routeIs('webmaster.offers')">
                         {{ __('Офферы') }}
                     </x-nav-link>

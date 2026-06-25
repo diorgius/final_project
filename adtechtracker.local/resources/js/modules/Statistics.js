@@ -66,6 +66,7 @@ export default class Statistics {
             document.getElementById('advertisers').textContent = data.advertisers;
             document.getElementById('webmasters').textContent = data.webmasters;
             document.getElementById('offers').textContent = data.offers;
+            document.getElementById('deleted-offers').textContent = data.deletedOffers;
             document.getElementById('subscriptions').textContent = data.subscriptions;
             document.getElementById('unsubscriptions').textContent = data.unsubscriptions;
             document.getElementById('clicks').textContent = data.clicks;
@@ -84,6 +85,7 @@ export default class Statistics {
                     'beforeend',
                     `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                         <td class="py-2">${offer.name}</td>
+                        <td class="py-2">${offer.deleted_at === null ? 'Активный' : 'Удален'}</td>
                         <td class="py-2">${offer.click_count}</td>
                         <td class="py-2">${Number(offer.advertiser_expenses).toFixed(2)}</td>
                     </tr>`
@@ -102,6 +104,7 @@ export default class Statistics {
                     'beforeend',
                     `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                         <td class="py-2">${offer.name}</td>
+                        <td class="py-2">${offer.deleted_at === null ? 'Активный' : 'Удален'}</td>                        
                         <td class="py-2">${offer.click_count}</td>
                         <td class="py-2">${Number(offer.webmaster_revenue).toFixed(2)}</td>
                     </tr>`

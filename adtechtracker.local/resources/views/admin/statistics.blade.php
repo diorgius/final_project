@@ -33,6 +33,8 @@
                     </p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество офферов - <span id="offers"
                             class="text-indigo-600">{{ $offers }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество удаленных офферов - <span id="deleted-offers"
+                            class="text-indigo-600">{{ $deletedOffers }}</span></p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество подписок на
                         офферы - <span id="subscriptions" class="text-indigo-600">{{ $subscriptions }}</span></p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество отписок от

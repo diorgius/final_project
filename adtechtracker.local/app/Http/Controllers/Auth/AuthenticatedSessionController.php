@@ -31,12 +31,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // $role = User::where('email', $request->email)->first('role');
-        // switch ($role->role) {
-
         switch (auth()->user()->role) {
             case 'admin':
-                return redirect()->intended(route('admin.dashboard', absolute: false));
+                return redirect()->intended(route('admin.main', absolute: false));
                 break;
             case 'advertiser':
                 return redirect()->intended(route('advertiser.offers', absolute: false));

@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OfferSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use App\Mail\UserDeletedMail;
+use App\Mail\UserBlockedMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Models\Offer;
+use App\Events\OfferDelete;
+use App\Events\OfferSubscribeChanged;
+
 
 class AdminUserController extends Controller
 {
@@ -99,8 +108,15 @@ class AdminUserController extends Controller
         $user = User::find($id);
         // проверяем пароль, если изменился, то записываем новый, если нет, то старый
         $password = $request->password === $user->password ? $user->password : Hash::make($request->password);
+        
         // проверяем статус
         $status = isset($request->status) ? 1 : 0;
+
+        if ($user->status !== $status && $status === 0) {
+            // отправляем письмо
+            Mail::to($user->email)->send(new UserBlockedMail($user));
+        }
+
 
         $user->name = $request->name;
         $user->password = $password;
@@ -118,8 +134,44 @@ class AdminUserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
-        $user->delete();
+        // используем транзакцию
+        DB::transaction(function () use ($id) {
+            $user = User::findOrFail($id);
+
+            // удаляем офферы и подписки пользователя
+            if ($user->role === 'advertiser') {
+                foreach ($user->offers as $offer) {
+                    // удаляем подписки и офферы
+                    $offer->subscribe()->delete();
+                    $offer->delete();
+                    // отправляем сообщение об удалении оффера
+                    broadcast(new OfferDelete($offer->id));
+                }
+            }
+
+            // удаляем подписки пользователя
+            if ($user->role === 'webmaster') {
+                
+                // получаем офферы на которые подписан вебмастер
+                $offers = Offer::query()
+                                ->whereHas('subscribe', function ($query) use ($user) {
+                                    $query->where('webmaster_id', $user->id);
+                                })->get();
+
+                foreach ($offers as $offer) {
+                    // удаляем подписки
+                    $user->subscriptions()->delete();
+                    // отправляем сообщение об отписке от оффера
+                    broadcast(new OfferSubscribeChanged($offer, $user->id, 'unsubscribed'));
+                }
+            }
+            // отправляем письмо
+            Mail::to($user->email)->send(new UserDeletedMail($user));
+            // удаляем сессии пользователя
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+            // удаляем пользователя
+            $user->delete();
+        });
 
         return redirect()->route('users.index');
     }

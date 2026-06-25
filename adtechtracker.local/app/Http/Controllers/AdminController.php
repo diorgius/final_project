@@ -17,10 +17,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $commissions = Commission::get(['id', 'commission']);
-        $advertiserExpenses = OfferClick::sum('advertiser_cost');
-        $webmasterIncome = OfferClick::sum('webmaster_income');
-        $systemProfit = OfferClick::sum('system_commission');
-        return view('admin.dashboard', compact('commissions', 'advertiserExpenses', 'webmasterIncome', 'systemProfit'));
+        return view('admin.dashboard');
     }
 }

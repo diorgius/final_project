@@ -25,6 +25,7 @@ class StatisticController extends Controller
                     'webmasters' => User::where('role', 'webmaster')->count(),
                     'offers' => Offer::count(),
                     'subscriptions' => OfferSubscription::count(),
+                    'deletedOffers' => Offer::query()->withTrashed()->whereNotNull('deleted_at')->count(),                    
                     'unsubscriptions' => OfferSubscription::withTrashed()->whereNotNull('deleted_at')->count(),
                     'clicks' => OfferClick::count(),
                     'rejectedClicks' => OfferAccessLog::where('status', 'rejected')->count(),
@@ -34,7 +35,8 @@ class StatisticController extends Controller
                     ]);
                 break;
             case 'advertiser':
-                $offers = Offer::query()->where('advertiser_id', auth()->id())
+                $offers = Offer::query()->withTrashed()
+                                ->where('advertiser_id', auth()->id())
                                 ->withCount('click')
                                 ->withSum('click as advertiser_expenses', 'advertiser_cost')
                                 ->orderBy('name')->get();
@@ -43,12 +45,13 @@ class StatisticController extends Controller
                 return view(auth()->user()->role . '.statistics', compact('offers', 'totalClicks', 'totalExpenses'));
                 break;
             case 'webmaster':
-                $offers = Offer::query()->whereHas('subscribe', function ($query) {
-                        $query->where('webmaster_id', auth()->id())->withTrashed();
-                    })
-                    ->withCount('click')
-                    ->withSum('click as webmaster_revenue', 'webmaster_income')
-                    ->orderBy('name')->get();
+                $offers = Offer::query()->withTrashed()
+                                ->whereHas('subscribe', function ($query) {
+                                    $query->where('webmaster_id', auth()->id())->withTrashed();
+                                })
+                                ->withCount('click')
+                                ->withSum('click as webmaster_revenue', 'webmaster_income')
+                                ->orderBy('name')->get();
                 $totalClicks = $offers->sum('click_count');
                 $totalRevenue = $offers->sum('webmaster_revenue');
                 return view(auth()->user()->role . '.statistics', compact('offers', 'totalClicks', 'totalRevenue'));
@@ -87,6 +90,7 @@ class StatisticController extends Controller
                     'advertisers' => User::where('role', 'advertiser')->whereBetween('created_at', [$start, $end])->count(),
                     'webmasters' => User::where('role', 'webmaster')->whereBetween('created_at', [$start, $end])->count(),
                     'offers' => Offer::query()->whereBetween('created_at', [$start, $end])->count(),
+                    'deletedOffers' => Offer::query()->withTrashed()->whereBetween('deleted_at', [$start, $end])->count(),
                     'subscriptions' => OfferSubscription::query()->whereBetween('created_at', [$start, $end])->count(),
                     'unsubscriptions' => OfferSubscription::query()->withTrashed()->whereBetween('deleted_at', [$start, $end])->count(),
                     'clicks' => OfferClick::query()->whereBetween('created_at', [$start, $end])->count(),
@@ -97,7 +101,7 @@ class StatisticController extends Controller
                 ]);
                 break;
             case 'advertiser':
-                $offers = Offer::query()
+                $offers = Offer::query()->withTrashed()
                     ->where('advertiser_id', auth()->id())
                     ->withCount([
                         'click as click_count' => function ($query) use ($start, $end) {
@@ -109,8 +113,7 @@ class StatisticController extends Controller
                             $query->whereBetween('created_at', [$start, $end]);
                         }
                     ], 'advertiser_cost')
-                    ->orderBy('name')
-                    ->get();                    
+                    ->orderBy('name')->get();
                 $totalClicks = $offers->sum('click_count');
                 $totalExpenses = $offers->sum('advertiser_expenses');
                 return response()->json([
@@ -120,7 +123,7 @@ class StatisticController extends Controller
                 ]);
                 break;
             case 'webmaster':
-                $offers = Offer::query()
+                $offers = Offer::query()->withTrashed()
                     ->whereHas('subscribe', function ($query) {
                         $query->where('webmaster_id', auth()->id())->withTrashed();
                     })
@@ -136,8 +139,7 @@ class StatisticController extends Controller
                                 ->whereBetween('created_at', [$start, $end]);
                         }
                     ], 'webmaster_income')
-                    ->orderBy('name')
-                    ->get();
+                    ->orderBy('name')->get();
                 $totalClicks = $offers->sum('click_count');
                 $totalRevenue = $offers->sum('webmaster_revenue');
                 return response()->json([

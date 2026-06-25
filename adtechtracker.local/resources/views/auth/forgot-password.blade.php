@@ -18,7 +18,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>
-                {{ __('Ссылка для сброса пароля по электронной почте') }}
+                {{ __('Ссылка для сброса пароля') }}
             </x-primary-button>
         </div>
     </form>
