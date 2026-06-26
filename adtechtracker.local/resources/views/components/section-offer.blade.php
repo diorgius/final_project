@@ -1,8 +1,7 @@
 @props(['offers'])
 @props(['role'])
 
-<section class="flex justify-between text-center w-5/6 mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)]
-                        dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
+<section class="flex justify-between text-center w-5/6 mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
 
     <!-- активные офферы -->
     <div class="w-1/2 inline-block m-0 p-3">
@@ -10,7 +9,8 @@
         <div class="offers active-offers h-full">
             @foreach ($offers as $offer)
                 @if ($offer->status === 1)
-                    <div id="{{ $offer->id }}" class="offers__item active-offers__item" draggable="true">
+                    <div id="{{ $offer->id }}" class="offers__item offer-item offer-active" draggable="true">
+                    {{-- <div id="{{ $offer->id }}" class="offers__item active-offers__item" draggable="true"></div> --}}
                         <form method="POST" action="{{ route("$role.offers.destroy", $offer->id) }}">
                             @csrf
                             @method('DELETE')
@@ -36,7 +36,8 @@
         <div class="offers deactive-offers h-full">
             @foreach ($offers as $offer)
                 @if ($offer->status === 0)
-                    <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true">
+                    <div id="{{ $offer->id }}" class="offers__item offer-item offer-deactive" draggable="true">
+                    {{-- <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true"> --}}
                         <form method="POST" action="{{ route("$role.offers.destroy", $offer->id) }}">
                             @csrf
                             @method('DELETE')

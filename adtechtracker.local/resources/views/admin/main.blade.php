@@ -4,11 +4,10 @@
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
-                class="flex flex-col items-center pb-4 pt-4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                class="flex flex-col items-center pb-4 pt-4 bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
                 <p class="font-semibold text-gray-700 dark:text-gray-300">Установить коммиссию системы (%):<p>
                 <div
-                    class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] 
-                            dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
+                    class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
 
                     <form method="POST" action="{{ route('commission.update', $commissions[0]->id) }}">
                         @csrf
@@ -36,8 +35,7 @@
                 <div class="flex flex-col items-center pt-5 pb-1">
                     <p></p>
                 </div>
-                <div class="flex flex-col items-center w-2/3 mt-6 px-6 py-4 mb-2 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] 
-                    dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
+                <div class="flex flex-col items-center w-2/3 mt-6 px-6 py-4 mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-300 text-xl pb-2">Расходы рекламодателей - <span class="text-indigo-600">{{ $advertiserExpenses }}</span></p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-300 text-xl pb-1">Доходы вебмастеров - <span class="text-indigo-600">{{ $webmasterIncome }}</span></p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-300 text-xl pb-2">Доходы системы - <span class="text-indigo-600">{{ $systemProfit }}</span></p>

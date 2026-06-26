@@ -65,15 +65,15 @@ export default class Status {
                 }
 
                 // Убираем стили
-                item.classList.remove('active-offers__item', 'deactive-offers__item');
+                item.classList.remove('offer-active', 'offer-deactive');
                 
                 // Устанавливаем статус
                 const status = zone.classList.contains('active-offers') ? 1 : 0;
 
                 if (status === 1) {
-                    item.classList.add('active-offers__item');
+                    item.classList.add('offer-active');
                 } else {
-                    item.classList.add('deactive-offers__item');
+                    item.classList.add('offer-deactive');
                 }
 
                 // Сохраняем в БД

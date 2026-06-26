@@ -35,15 +35,15 @@ export default class OfferStatusListener {
             if (offer.status === 1) {
                 if (item) {
                     this.activeZone.appendChild(item);
-                    item.classList.remove('deactive-offers__item');
-                    item.classList.add('active-offers__item');
+                    item.classList.remove('offer-deactive');
+                    item.classList.add('offer-active');
                 }
                 return;
             } else if (offer.status === 0) {
                 if (item) {
                     this.deactiveZone.appendChild(item);
-                    item.classList.remove('active-offers__item');
-                    item.classList.add('deactive-offers__item');
+                    item.classList.remove('offer-active');
+                    item.classList.add('offer-deactive');
                 }
                 return;
             }
@@ -54,15 +54,15 @@ export default class OfferStatusListener {
             if (offer.status === 1) {
                 if (item) {
                     this.activeZone.appendChild(item);
-                    item.classList.remove('deactive-offers__item');
-                    item.classList.add('active-offers__item');
+                    item.classList.remove('offer-deactive');
+                    item.classList.add('offer-active');
                 }
                 return;
             } else if (offer.status === 0) {
                 if (item) {
                     this.deactiveZone.appendChild(item);
-                    item.classList.remove('active-offers__item');
-                    item.classList.add('deactive-offers__item');
+                    item.classList.remove('offer-active');
+                    item.classList.add('offer-deactive');
                 }
                 return;
             }
@@ -82,10 +82,10 @@ export default class OfferStatusListener {
                     <p class="font-semibold">Цена: <span class="font-light">${offer.price.toFixed(2)} р. за переход</span></p>
                     <a href="#" class="offer-url hidden__item font-semibold text-xl text-blue-600" title=${offer.url} target="_blank">Реферальная ссылка</a>`
                     if (offer.subscribe === 0) {
-                        divOffer.className = 'offers__item deactive-offers__item';
+                        divOffer.className = 'offers__item offer-item offer-deactive';
                         this.unsubscriptionsZone.appendChild(divOffer);
                     } else {
-                        divOffer.className = 'offers__item active-offers__item';
+                        divOffer.className = 'offers__item offer-item offer-active';
                         this.subscriptionsZone.appendChild(divOffer);
                         const url = divOffer.querySelector('.offer-url');
                         setTimeout(() => {

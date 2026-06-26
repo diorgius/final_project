@@ -68,7 +68,8 @@ export default class Statistics {
             document.getElementById('offers').textContent = data.offers;
             document.getElementById('deleted-offers').textContent = data.deletedOffers;
             document.getElementById('subscriptions').textContent = data.subscriptions;
-            document.getElementById('unsubscriptions').textContent = data.unsubscriptions;
+            document.getElementById('active-subscriptions').textContent = data.activeSubscriptions;
+            document.getElementById('deactive-subscriptions').textContent = data.deactiveSubscriptions;
             document.getElementById('clicks').textContent = data.clicks;
             document.getElementById('rejected-clicks').textContent = data.rejectedClicks;
             document.getElementById('advertiser-expenses').textContent = Number(data.advertiserExpenses).toFixed(2);

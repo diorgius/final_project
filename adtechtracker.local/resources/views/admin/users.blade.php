@@ -8,10 +8,10 @@
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
-                class="flex flex-col items-center pb-6 pt-4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                class="flex flex-col items-center pb-6 pt-4 bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
                 <p class="font-semibold text-gray-700 dark:text-gray-200">Новый пользователь:</p>
                 <div
-                    class=" w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] overflow-hidden rounded-lg">
+                    class=" w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
                     <form method="POST" action="{{ route('users.store') }}">
                         @csrf
 
@@ -34,7 +34,7 @@
                         <!-- Role -->
                         <div class="mt-4">
                             <x-input-label for="role" :value="__('Роль')" />
-                            <x-select-input id="role" class="block mt-1 w-full" name="role"  :create="true" required >
+                            <x-select-input id="role" class="block mt-1 w-full" name="role" :create="true" required>
                             </x-select-input>
                         </div>
 
@@ -57,7 +57,7 @@
                 <div class="flex flex-col items-center pt-5 pb-1">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 text-xl">Текущие пользователи:</h3>
                 </div>
-                
+
                 <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">Администраторы:</h4>
 
                 <x-table-user :users="$admins">
@@ -71,7 +71,7 @@
                 <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">Вебмастера:</h4>
 
                 <x-table-user :users="$webmasters">
-                    
+
                 </x-table-user>
             </div>
         </div>

@@ -46,10 +46,10 @@
             @endif
         </header>
         <main class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-                <div class="flex max-w flex-col lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] 
-                    shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-lg">
-                    <h1 class="m-4 text-3xl text-indigo-600 font-semibold">Приложение SF-AdTech</h1>
-                    <p class="m-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">Для работы в системе необходимо авторизоваться</p>
+                <div class="flex max-w flex-col lg:p-20 bg-white dark:bg-gray-800 
+                    shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <h1 class="m-4 text-3xl text-indigo-600 dark:text-gray-200 font-semibold">Приложение SF-AdTech</h1>
+                    <p class="m-4 text-sm text-gray-700 dark:text-gray-300">Для работы в системе необходимо авторизоваться</p>
                 </div>
         </main>
 

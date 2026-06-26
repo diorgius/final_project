@@ -72,7 +72,7 @@ export default class Subscription {
                 }
 
                 // Убираем стили
-                item.classList.remove('active-offers__item', 'deactive-offers__item');
+                item.classList.remove('offer-active', 'offer-deactive');
                 
                 const url = item.querySelector('.offer-url');
 
@@ -93,10 +93,10 @@ export default class Subscription {
                     
                     // таймер появления ссылки
                     setTimeout(() => {
-                        url.classList.remove('hidden__item');
+                        url.classList.remove('hidden');
                     }, 1500);
 
-                    item.classList.add('active-offers__item');
+                    item.classList.add('offer-active');
 
                 }
 
@@ -112,8 +112,8 @@ export default class Subscription {
                         return;
                     }
 
-                    url.classList.add('hidden__item');
-                    item.classList.add('deactive-offers__item');
+                    url.classList.add('hidden');
+                    item.classList.add('offer-deactive');
 
                 }
 

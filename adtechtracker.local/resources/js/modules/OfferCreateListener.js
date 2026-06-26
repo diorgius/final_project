@@ -29,7 +29,7 @@ export default class OfferCreateListener {
         if (!item) {
             const divOffer = document.createElement('div');
             divOffer.setAttribute('id', `${offer.id}`);
-            divOffer.className = 'offers__item deactive-offers__item';
+            divOffer.className = 'offers__item offer-item offer-deactive';
             divOffer.innerHTML =
                 `<form method="POST" action="/admin/offers/${offer.id}" >
                     <input type="hidden" name="_token" value="${this.csrfToken}">

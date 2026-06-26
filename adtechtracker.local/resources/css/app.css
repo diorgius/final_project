@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+
+    .offer-item {
+        @apply relative mb-4 rounded-lg cursor-pointer;
+    }
+
+    .offer-active {
+        @apply bg-indigo-100 text-indigo-500;
+    }
+
+    .offer-deactive {
+        @apply bg-gray-100 text-gray-700;
+    }
+}
