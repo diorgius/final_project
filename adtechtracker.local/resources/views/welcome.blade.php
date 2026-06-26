@@ -22,23 +22,23 @@
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     @auth
-                        <a href="{{ route(Auth::user()->role . '.dashboard') }}"
+                        <a href="{{ route('dashboard') }}"
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] 
                             border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                            Перейти на главную страницу
+                            {{ __('actions.go_home') }}
                         </a>
                     @else
                         <a href="{{ route('login') }}"
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent 
                             hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal">
-                            Вход
+                            {{ __('actions.log_in') }}
                         </a>
 
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
                                 class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] 
                                 border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                                Регистрация
+                                 {{ __('actions.sign_in') }}
                             </a>
                         @endif
                     @endauth
@@ -46,10 +46,10 @@
             @endif
         </header>
         <main class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-                <div class="flex max-w flex-col lg:p-20 bg-white dark:bg-gray-800 
+                <div class="flex max-w flex-col justify-center items-center lg:p-20 bg-white dark:bg-gray-800 
                     shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <h1 class="m-4 text-3xl text-indigo-600 dark:text-gray-200 font-semibold">Приложение SF-AdTech</h1>
-                    <p class="m-4 text-sm text-gray-700 dark:text-gray-300">Для работы в системе необходимо авторизоваться</p>
+                    <h1 class="m-4 text-3xl text-indigo-600 dark:text-gray-200 font-semibold">{{ __('common.application') }}</h1>
+                    <p class="m-4 text-sm text-gray-700 dark:text-gray-300">{{ __('common.welcome_text') }}</p>
                 </div>
         </main>
 

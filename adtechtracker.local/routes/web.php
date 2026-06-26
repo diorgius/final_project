@@ -17,17 +17,19 @@ use PHPUnit\Framework\Attributes\Group;
 
 require __DIR__ . '/auth.php';
 
+// Welcome routes
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Common dashboard routes
 Route::get('/dashboard', function () {
-    return view(auth()->user()->role . '.dashboard');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Admin routes
 Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/admin/main', [AdminMainController::class, 'index'])->name('admin.main');
     Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
     Route::resource('/admin/users', AdminUserController::class);
@@ -40,7 +42,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(func
 
 // Advertiser routes
 Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group(function () {
-    Route::get('/advertiser', [AdvertiserController::class, 'index'])->name('advertiser.dashboard');
+    Route::get('/advertiser', [AdvertiserController::class, 'index'])->name('dashboard');
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
@@ -53,7 +55,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group
 
 // Webmaster routes
 Route::middleware(['auth', 'verified', 'checkactive', 'checkwebmaster'])->group(function () {
-    Route::get('/webmaster', [WebmasterController::class, 'index'])->name('webmaster.dashboard');
+    Route::get('/webmaster', [WebmasterController::class, 'index'])->name('dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
     Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe']);
     Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe']);
@@ -62,21 +64,6 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkwebmaster'])->group(
     Route::get('/webmaster/statistics/summary', [StatisticController::class, 'summary']);    
 });
     
-// Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'checkadmin', 'verified'])->name('admin.dashboard');
-// Route::get('/advertiser', [AdvertiserController::class, 'index'])->middleware(['auth', 'checkactive', 'checkadvertiser', 'verified'])->name('advertiser.dashboard');
-// Route::get('/webmaster', [WebmasterController::class, 'index'])->middleware(['auth', 'checkactive', 'checkwebmaster', 'verified'])->name('webmaster.dashboard');
-
-// проверка ip
-// Route::get('/ip-test', function () {
-
-//     dd([
-//         'ip' => request()->ip(),
-//         'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? null,
-//         'xff' => request()->header('X-Forwarded-For'),
-//         'xreal' => request()->header('X-Real-IP'),
-//     ]);
-// });
-
 // Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

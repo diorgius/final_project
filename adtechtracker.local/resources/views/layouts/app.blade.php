@@ -30,21 +30,21 @@
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
 
             <!-- Navigation -->
-            @include(Auth::user()->role . '.navigation')
-
+            @include('layouts.navigation')
+            
             <!-- Header -->
             <header class="bg-white dark:bg-gray-800 shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <h2 class="font-semibold text-xl text-indigo-600 dark:text-gray-200 leading-tight">
                         @switch (Auth::user()->role)
                             @case ('admin')
-                                {{ __('Панель администратора') }}
+                                {{ __('common.panel_admin') }}
                             @break
                             @case ('advertiser')
-                                {{ __('Панель рекламодателя') }}
+                                {{ __('common.panel_advertiser') }}
                             @break
                             @case ('webmaster')
-                                {{ __('Панель вебмастера') }}
+                                {{ __('common.panel_webmaster') }}
                             @break
                         @endswitch
                     </h2>

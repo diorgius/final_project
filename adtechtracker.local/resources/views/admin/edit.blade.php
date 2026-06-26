@@ -18,7 +18,7 @@
 
                             <!-- Name -->
                             <div>
-                                <x-input-label for="name" :value="__('Имя')" />
+                                <x-input-label for="name" :value="__('Name')" />
                                 <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ old('name', $user->name) }}"
                                     required autofocus autocomplete="name" />
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -34,14 +34,14 @@
 
                             <!-- Role -->
                             <div class="mt-4">
-                                <x-input-label for="role" :value="__('Роль')" />
+                                <x-input-label for="role" :value="__('Role')" />
                                 <x-select-input id="role" class='block mt-1 w-full' name="role" :role="$user->role" required >
                                 </x-select-input>
                             </div>
 
                             <!-- Password -->
                             <div class="mt-4">
-                                <x-input-label for="password" :value="__('Пароль')" />
+                                <x-input-label for="password" :value="__('Password')" />
                                 <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" value="{{ old('password', $user->password) }}" required
                                     autocomplete="new-password" />
                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -49,7 +49,7 @@
 
                             <!-- Status -->
                             <div class="mt-4" align="center">
-                                <x-input-label for="status" :value="__('Статус')" />
+                                <x-input-label for="status" :value="__('users.status')" />
                                     <x-switch-checkbox id="status" name="status" :checked="$user->status" />
                                 </label>
                             </div>
@@ -57,10 +57,10 @@
                             <!-- Button -->
                             <div class="flex items-center justify-center mt-4">
                                 <x-reset-button onclick="window.location='{{ route('users.index') }}'">
-                                    {{ __('Отменить') }}
+                                    {{ __('Cancel') }}
                                 </x-reset-button>
                                 <x-primary-button class="ms-4">
-                                    {{ __('Сохранить') }}
+                                    {{ __('Save') }}
                                 </x-primary-button>
                             </div>
                         </form>
@@ -72,7 +72,7 @@
 
                             <div class="flex items-center justify-center mt-4">
                                 <x-primary-button>
-                                    {{ __('Удалить пользователя') }}
+                                    {{ __('Delete') }}
                                 </x-primary-button>
                             </div>
                         </form>

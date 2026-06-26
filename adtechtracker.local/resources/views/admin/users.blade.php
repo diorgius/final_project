@@ -17,7 +17,7 @@
 
                         <!-- Name -->
                         <div>
-                            <x-input-label for="name" :value="__('Имя')" />
+                            <x-input-label for="name" :value="__('Name')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')"
                                 required autofocus autocomplete="name" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -33,14 +33,14 @@
 
                         <!-- Role -->
                         <div class="mt-4">
-                            <x-input-label for="role" :value="__('Роль')" />
+                            <x-input-label for="role" :value="__('Role')" />
                             <x-select-input id="role" class="block mt-1 w-full" name="role" :create="true" required>
                             </x-select-input>
                         </div>
 
                         <!-- Password -->
                         <div class="mt-4">
-                            <x-input-label for="password" :value="__('Пароль')" />
+                            <x-input-label for="password" :value="__('Password')" />
                             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
                                 autocomplete="new-password" />
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -49,26 +49,26 @@
                         <!-- Button -->
                         <div class="flex items-center justify-center mt-4">
                             <x-primary-button>
-                                {{ __('Создать пользователя') }}
+                                {{ __('Create') }}
                             </x-primary-button>
                         </div>
                     </form>
                 </div>
                 <div class="flex flex-col items-center pt-5 pb-1">
-                    <h3 class="font-semibold text-gray-700 dark:text-gray-200 text-xl">Текущие пользователи:</h3>
+                    <h3 class="font-semibold text-gray-700 dark:text-gray-200 text-xl">{{ __('users.current_users') }}:</h3>
                 </div>
 
-                <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">Администраторы:</h4>
+                <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">{{ __('users.admins') }}:</h4>
 
                 <x-table-user :users="$admins">
                 </x-table-user>
 
-                <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">Рекламодатели:</h4>
+                <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">{{ __('users.advertisers') }}:</h4>
 
                 <x-table-user :users="$advertisers">
                 </x-table-user>
 
-                <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">Вебмастера:</h4>
+                <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">{{ __('users.webmasters') }}:</h4>
 
                 <x-table-user :users="$webmasters">
 

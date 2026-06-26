@@ -23,13 +23,11 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         
-            @auth
-                @include(Auth::user()->role . '.navigation')
-            @else
-                @include('layouts.navigation')
-            @endauth
+            <!-- Navigation -->
+            @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)

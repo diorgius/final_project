@@ -12,6 +12,6 @@ class WebmasterController extends Controller
      */
     public function index()
     {
-        return view('webmaster.dashboard');
+        return view('dashboard');
     }
 }

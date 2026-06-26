@@ -6,15 +6,15 @@
 @isset($role)
     @if ($role === 'admin')
         @php
-            $role_ru = 'Администратор'
+            $role_ru = __('users.admin')
         @endphp
     @elseif ($role === 'advertiser')
         @php
-            $role_ru = 'Рекламодатель'
+            $role_ru = __('users.advertiser')
         @endphp
     @elseif ($role === 'webmaster')
         @php
-            $role_ru = 'Вебмастер'
+            $role_ru = __('users.webmaster')
         @endphp
     @else
         @php
@@ -33,10 +33,10 @@
     @else
         <option value="{{ $role ?? '' }}">{{ $role_ru ?? ''}}</option>
         @isset ($create)
-            <option value="admin">Администратор</option>
+            <option value="admin">{{ __('users.admin') }}</option>
         @endisset
-        <option value="advertiser">Рекламодатель</option>
-        <option value="webmaster">Вебмастер</option>
+        <option value="advertiser">{{ __('users.advertiser') }}</option>
+        <option value="webmaster">{{ __('users.webmaster') }}</option>
     @endisset
 
 </select>

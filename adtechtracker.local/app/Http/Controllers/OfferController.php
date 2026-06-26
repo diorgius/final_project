@@ -73,18 +73,11 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // 'name' => ['required', 'string', 'max:255', 'unique:' . Offer::class],
             'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255', 'url'],
             'price' => ['required', 'numeric'],
             'theme' => 'required'
         ]);
-
-        // убираем get-параметры из url
-        // $url = $request->url;
-        // if (mb_stripos($url, '?')) {
-        //     $url = mb_substr($url, 0, mb_stripos($url, '?'));
-        // }
 
         $offer = Offer::create([
             'name' => $request->name,
