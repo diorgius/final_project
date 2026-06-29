@@ -114,7 +114,7 @@ class AdminUserController extends Controller
 
         if ($user->status !== $status && $status === 0) {
             // отправляем письмо
-            Mail::to($user->email)->send(new UserBlockedMail($user));
+            Mail::to($user->email)->locale(app()->getLocale())->send(new UserBlockedMail($user));
         }
 
 
@@ -166,7 +166,7 @@ class AdminUserController extends Controller
                 }
             }
             // отправляем письмо
-            Mail::to($user->email)->send(new UserDeletedMail($user));
+            Mail::to($user->email)->locale(app()->getLocale())->send(new UserDeletedMail($user));
             // удаляем сессии пользователя
             DB::table('sessions')->where('user_id', $user->id)->delete();
             // удаляем пользователя

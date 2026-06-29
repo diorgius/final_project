@@ -29,7 +29,7 @@ class UserDeletedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'User Deleted Mail',
+            subject: __('mail.deleted_subject'),
         );
     }
 

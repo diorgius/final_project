@@ -1,16 +1,16 @@
 <x-mail::message>
-{{-- # Учетная запись удалена --}}
-# Здравствуйте, {{ $user->name }}!
+    {{-- # Учетная запись заблокирована --}}
+    # {{ __('mail.hello') }}, {{ $user->name }}!
 
 
-Ваша учетная запись в системе AdTechTracker была удалена администратором.
+    {{ __('mail.deleted_text') }}
 
-Если вы считаете это ошибкой, свяжитесь с администрацией.
+    {{ __('mail.contact_text') }}
 
-{{-- <x-mail::button :url="''">
-Button Text
-</x-mail::button> --}}
+    {{-- <x-mail::button :url="''">
+        Button Text
+    </x-mail::button> --}}
 
-С уважением, AdTechTracker<br>
-{{ config('app.name') }}
+    {{ __('mail.footer_text') }},<br>
+    {{ config('app.name') }}
 </x-mail::message>

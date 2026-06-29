@@ -29,7 +29,7 @@ class UserBlockedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'User Blocked Mail',
+            subject: __('mail.blocked_subject'),
         );
     }
 

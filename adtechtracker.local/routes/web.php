@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
+use Illuminate\Http\Request;
 
 
 require __DIR__ . '/auth.php';
@@ -21,6 +22,17 @@ require __DIR__ . '/auth.php';
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Set locale
+Route::post('/locale', function (Request $request) {
+    $request->validate([
+        'locale' => 'required|in:ru,en',
+    ]);
+    session([
+        'locale' => $request->input('locale'),
+    ]);
+    return back();
+})->name('locale');
 
 // Common dashboard routes
 Route::get('/dashboard', function () {
