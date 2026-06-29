@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'period' => 'Период',
+    'day' => 'день',
+    'month' => 'месяц',
+    'year' => 'год',
+    'alltime' => 'все время',
+    'title' => 'Статистика за все время на',
+    'title_for_js' => 'Статистика за',
+    'title_for_js_on' => 'на',
+    'number_advertisers' => 'Количество рекламодателей',
+    'number_webmasters' => 'Количество вебмастеров',
+    'number_offers' => 'Количество предложений',
+    'number_deleted_offers' => 'Количество удаленных предложений',
+    'total_subscriptions' => 'Общее количество подписок на предложения',
+    'active_subscriptions' => 'Количество активных подписок на предложения',
+    'inactive_subscriptions' => 'Количество неактивных подписок на предложения',
+    'click_links' => 'Количество переходов по ссылкам',
+    'rejected_click' => 'Количество отклоненных переходов по ссылкам',
+    'advertiser_expenses' => 'Расходы рекламодателей',
+    'webmasters_income' => 'Доходы вебмастеров',
+    'revenue_system' => 'Доход системы',
+    'offers' => 'Предложение',
+    'status' => 'Статус',
+    'clicks' => 'Переходы',
+    'income' => 'Доходы',
+    'expenses' => 'Расходы',
+    'total' => 'Всего',
+    'active' => 'Активный',
+    'deleted' => 'Удален',
+];

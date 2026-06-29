@@ -9,4 +9,5 @@ return [
     'panel_admin' => 'The admin panel',
     'panel_advertiser' => 'The advertiser panel',
     'panel_webmaster' => 'The webmaster panel',
+    'delete' => 'Delete',
 ];

@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'period' => 'Period',
+    'day' => 'day',
+    'month' => 'month',
+    'year' => 'year',
+    'alltime' => 'all time',
+    'title' => 'Statistics for all time on',
+    'title_for_js' => 'Statistics for',
+    'title_for_js_on' => 'on',
+    'number_advertisers' => 'Number of advertisers',
+    'number_webmasters' => 'Number of webmasters',
+    'number_offers' => 'Number of offers',
+    'number_deleted_offers' => 'Number of deleted offers',
+    'total_subscriptions' => 'Total number of subscriptions to offers',
+    'active_subscriptions' => 'Number of active users subscriptions to offers',
+    'inactive_subscriptions' => 'Number of inactive users subscriptions to offers',
+    'click_links' => 'Number of clicks on links',
+    'rejected_click' => 'The number of rejected link clicks',
+    'advertiser_expenses' => "Advertisers' expenses",
+    'webmasters_income' => "Webmasters' income",
+    'revenue_system' => 'Revenue of the system',
+    'offers' => 'Offer',
+    'status' => 'Status',
+    'clicks' => 'Clicks',
+    'income' => 'Income',
+    'expenses' => 'Expenses',
+    'total' => 'Total',
+    'active' => 'Active',
+    'deleted' => 'Deleted',
+];

@@ -16,4 +16,5 @@ return [
     'admin' => 'Administrator',
     'advertiser' => 'Advertiser',
     'webmaster' => 'Webmaster',
+    'new_user' => 'New user',
 ];

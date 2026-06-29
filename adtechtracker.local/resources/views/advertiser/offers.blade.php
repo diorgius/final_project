@@ -24,10 +24,10 @@
                 <!-- Button -->
                 <section class="flex items-center justify-center mt-4">
                     <x-primary-button class="w-56" onclick="window.location='{{ route('themes.index') }}'">
-                        {{ __('Темы офферов') }}
+                        {{ __('offers.offer_themes') }}
                     </x-primary-button>
                     <x-primary-button class="ms-4 w-56" onclick="window.location='{{ route('offers.create') }}'">
-                        {{ __('Создать оффер') }}
+                        {{ __('Create') }}
                     </x-primary-button>
                 </section>
 

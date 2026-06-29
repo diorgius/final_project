@@ -6,19 +6,19 @@
 @isset($role)
     @if ($role === 'admin')
         @php
-            $role_ru = __('users.admin')
+            $role_full = __('users.admin')
         @endphp
     @elseif ($role === 'advertiser')
         @php
-            $role_ru = __('users.advertiser')
+            $role_full = __('users.advertiser')
         @endphp
     @elseif ($role === 'webmaster')
         @php
-            $role_ru = __('users.webmaster')
+            $role_full = __('users.webmaster')
         @endphp
     @else
         @php
-            $role_ru = null
+            $role_full = null
         @endphp
     @endif
 @endisset
@@ -31,7 +31,7 @@
             <option value={{ $theme['id'] }}>{{ $theme['name'] }}</option>
         @endforeach
     @else
-        <option value="{{ $role ?? '' }}">{{ $role_ru ?? ''}}</option>
+        <option value="{{ $role ?? '' }}">{{ $role_full ?? ''}}</option>
         @isset ($create)
             <option value="admin">{{ __('users.admin') }}</option>
         @endisset

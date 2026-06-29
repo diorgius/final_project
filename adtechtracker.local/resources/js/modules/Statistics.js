@@ -39,26 +39,26 @@ export default class Statistics {
     // метод вывода полученных данных
     updateStatistics(period, data, role) {
         const dateTimeCurrent = new Date();
-        let periodRus ='';
+        let periodLang ='';
         switch (period) {
             case 'day':
-                periodRus = 'день'
+                periodLang = __('day');
                 break;
             case 'month':
-                periodRus = 'месяц'
+                periodLang = __('month');
                 break;
             case 'year':
-                periodRus = 'год'
+                periodLang = __('year');
                 break;
             case 'all':
-                periodRus = 'все время'
+                periodLang = __('alltime');
                 break;
             default:
-                periodRus = 'все время'
+                periodLang = __('alltime');
                 break;
         }
 
-        document.getElementById('period-date').textContent = `Статистика за ${periodRus} на ` 
+        document.getElementById('period-date').textContent = `${__('title_for_js')} ${periodLang} ${__('title_for_js_on')} ` 
             + dateTimeCurrent.toLocaleTimeString("ru-RU") + ' ' + dateTimeCurrent.toLocaleDateString("ru-RU");
         
         // если админ
@@ -77,8 +77,8 @@ export default class Statistics {
             document.getElementById('system-profit').textContent = Number(data.systemProfit).toFixed(2);
         }
 
-        // если рекламодатель
-        if (role === 'advertiser') {
+        // если рекламодатель или вебмастер
+        if (role === 'advertiser' || role === 'webmaster') {
             const tbody = document.getElementById('offers-table-body');
             tbody.innerHTML = '';
             data.offers.forEach(offer => {
@@ -86,32 +86,18 @@ export default class Statistics {
                     'beforeend',
                     `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                         <td class="py-2">${offer.name}</td>
-                        <td class="py-2">${offer.deleted_at === null ? 'Активный' : 'Удален'}</td>
+                        <td class="py-2">${offer.deleted_at === null ? __('active') : __('deleted')}</td>
                         <td class="py-2">${offer.click_count}</td>
-                        <td class="py-2">${Number(offer.advertiser_expenses).toFixed(2)}</td>
+                        <td class="py-2">${role === 'advertiser' ?
+                            Number(offer.advertiser_expenses).toFixed(2) :
+                            Number(offer.webmaster_revenue).toFixed(2)
+                            }</td>
                     </tr>`
                 );
             });
             document.getElementById('total-clicks').textContent = data.totalClicks;
-            document.getElementById('total-expenses').textContent = Number(data.totalExpenses).toFixed(2);
-        }
-
-        // если вебмастер
-        if (role === 'webmaster') {
-            const tbody = document.getElementById('offers-table-body');
-            tbody.innerHTML = '';
-            data.offers.forEach(offer => {
-                tbody.insertAdjacentHTML(
-                    'beforeend',
-                    `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
-                        <td class="py-2">${offer.name}</td>
-                        <td class="py-2">${offer.deleted_at === null ? 'Активный' : 'Удален'}</td>                        
-                        <td class="py-2">${offer.click_count}</td>
-                        <td class="py-2">${Number(offer.webmaster_revenue).toFixed(2)}</td>
-                    </tr>`
-                );
-            });
-            document.getElementById('total-clicks').textContent = data.totalClicks;
+            role === 'advertiser' ?
+            document.getElementById('total-expenses').textContent = Number(data.totalExpenses).toFixed(2) :
             document.getElementById('total-expenses').textContent = Number(data.totalRevenue).toFixed(2);
         }
     }

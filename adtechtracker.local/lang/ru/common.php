@@ -9,5 +9,6 @@ return [
     'panel_admin' => 'Панель администратора',
     'panel_advertiser' => 'Панель рекламодателя',
     'panel_webmaster' => 'Панель вебмастера',
+    'delete' => 'Удалить',
 
 ];

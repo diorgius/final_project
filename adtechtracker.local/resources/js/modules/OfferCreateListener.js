@@ -38,12 +38,12 @@ export default class OfferCreateListener {
                         <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
                     </div>
                 </form >
-                <p class="font-semibold">Рекламодатель: <span class="font-light">${offer.advertiser}</span></p>
-                <p class="font-semibold">Наименование: <span class="font-light">${offer.name}</span></p>
-                <p class="font-semibold">Тема: <span class="font-light">${offer.theme}</span></p>
+                <p class="font-semibold">${__('advertiser')}: <span class="font-light">${offer.advertiser}</span></p>
+                <p class="font-semibold">${__('offer_name')}: <span class="font-light">${offer.name}</span></p>
+                <p class="font-semibold">${__('offer_theme')}: <span class="font-light">${offer.theme}</span></p>
                 <p class="font-semibold">URL: <span class="font-light">${offer.url}</span></p>
-                <p class="font-semibold">Цена: <span class="font-light">${offer.price} р. за переход</span></p>
-                <p class="subscribers font-semibold">Подписчиков: <span class="font-light">0</span></p>`
+                <p class="font-semibold">${__('offer_price')}: <span class="font-light">${offer.price}</span></p>
+                <p class="subscribers font-semibold">${__('subscribers')}: <span class="font-light">0</span></p>`
             this.deactiveZone.appendChild(divOffer);
             DragItem.setupItem(divOffer, '.active-offers');
             return;

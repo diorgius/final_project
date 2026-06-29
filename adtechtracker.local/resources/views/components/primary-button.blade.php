@@ -1,5 +1,6 @@
 <button {{ $attributes->merge(['type' => 'submit', 
         'class' => '
+        w-32
         inline-flex 
         items-center 
         justify-center 

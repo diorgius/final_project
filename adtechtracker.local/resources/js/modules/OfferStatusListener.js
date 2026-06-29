@@ -76,11 +76,11 @@ export default class OfferStatusListener {
                     const divOffer = document.createElement('div');
                     divOffer.setAttribute('id', `${offer.id}`);
                     divOffer.innerHTML =
-                    `<p class="font-semibold">Рекламодатель: <span class="font-light">${offer.advertiser}</span></p>
-                    <p class="font-semibold">Наименование: <span class="font-light">${offer.name}</span></p>
-                    <p class="font-semibold">Тема: <span class="font-light">${offer.theme}</span></p>
-                    <p class="font-semibold">Цена: <span class="font-light">${offer.price.toFixed(2)} р. за переход</span></p>
-                    <a href="#" class="offer-url hidden__item font-semibold text-xl text-blue-600" title=${offer.url} target="_blank">Реферальная ссылка</a>`
+                        `<p class="font-semibold">${__('advertiser')}: <span class="font-light">${offer.advertiser}</span></p>
+                        <p class="font-semibold">${__('offer_name')}: <span class="font-light">${offer.name}</span></p>
+                        <p class="font-semibold">${__('offer_theme')}: <span class="font-light">${offer.theme}</span></p>
+                        <p class="font-semibold">${__('offer_price')}: <span class="font-light">${offer.price.toFixed(2)}</span></p>
+                        <a href="#" class="offer-url hidden font-semibold text-xl text-blue-600" title=${offer.url} target="_blank">${__('referral_link')}</a>`
                     if (offer.subscribe === 0) {
                         divOffer.className = 'offers__item offer-item offer-deactive';
                         this.unsubscriptionsZone.appendChild(divOffer);
@@ -89,7 +89,7 @@ export default class OfferStatusListener {
                         this.subscriptionsZone.appendChild(divOffer);
                         const url = divOffer.querySelector('.offer-url');
                         setTimeout(() => {
-                            url.classList.remove('hidden__item');
+                            url.classList.remove('hidden');
                         }, 1500);
                     }
                     DragItem.setupItem(divOffer, '.subscriptions');

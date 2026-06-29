@@ -5,25 +5,16 @@
 
     <!-- активные офферы -->
     <div class="w-1/2 inline-block m-0 p-3">
-        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Активные офферы</h4>
+        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">{{ __('offers.active_offers') }}</h4>
         <div class="offers active-offers h-full">
             @foreach ($offers as $offer)
                 @if ($offer->status === 1)
                     <div id="{{ $offer->id }}" class="offers__item offer-item offer-active" draggable="true">
-                    {{-- <div id="{{ $offer->id }}" class="offers__item active-offers__item" draggable="true"></div> --}}
-                        <form method="POST" action="{{ route("$role.offers.destroy", $offer->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <div class="flex items-center justify-center mt-4">
-                                <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
-                            </div>
-                        </form>
-                        @if ($role === 'admin') <p class="font-semibold">Рекламодатель: <span class="font-light">{{ $offer->advertiser->name }}</span></p> @endif
-                        <p class="font-semibold">Наименование: <span class="font-light">{{ $offer->name }}</span></p>
-                        <p class="font-semibold">Тема: <span class="font-light">{{ $offer->theme->name }}</span></p>
-                        <p class="font-semibold">URL: <span class="font-light">{{ $offer->url }}</span></p>
-                        <p class="font-semibold">Цена: <span class="font-light">{{ $offer->price }} р. за переход</span></p>
-                        <p class="subscribers font-semibold">Подписчиков: <span class="font-light">{{ $offer->subscribe->count() }}</span></p>
+
+                        <x-div-offer :role="$role" :offer="$offer">
+
+                        </x-div-offer>
+
                     </div>
                 @endif
             @endforeach
@@ -32,25 +23,16 @@
 
     <!-- неактивные офферы -->
     <div class="w-1/2 inline-block m-0 p-3">
-        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">Неактивные офферы</h4>
+        <h4 class="font-semibold text-xl mx-auto text-gray-600 dark:text-gray-200 mb-4">{{ __('offers.inactive_offers') }}</h4>
         <div class="offers deactive-offers h-full">
             @foreach ($offers as $offer)
                 @if ($offer->status === 0)
                     <div id="{{ $offer->id }}" class="offers__item offer-item offer-deactive" draggable="true">
-                    {{-- <div id="{{ $offer->id }}" class="offers__item deactive-offers__item" draggable="true"> --}}
-                        <form method="POST" action="{{ route("$role.offers.destroy", $offer->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <div class="flex items-center justify-center mt-4">
-                                <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
-                            </div>
-                        </form>
-                        @if ($role === 'admin') <p class="font-semibold">Рекламодатель: <span class="font-light">{{ $offer->advertiser->name }}</span></p> @endif
-                        <p class="font-semibold">Наименование: <span class="font-light">{{ $offer->name }}</span></p>
-                        <p class="font-semibold">Тема: <span class="font-light">{{ $offer->theme->name }}</span></p>
-                        <p class="font-semibold">URL: <span class="font-light">{{ $offer->url }}</span></p>
-                        <p class="font-semibold">Цена: <span class="font-light">{{ number_format($offer->price, 2) }} р. за переход</span></p>
-                        <p class="subscribers font-semibold">Подписчиков: <span class="font-light">{{ $offer->subscribe->count() }}</span></p>
+                    
+                        <x-div-offer :role="$role" :offer="$offer">
+
+                        </x-div-offer>
+
                     </div>
                 @endif
             @endforeach

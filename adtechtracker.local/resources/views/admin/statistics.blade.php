@@ -26,46 +26,18 @@
                 <div class="flex flex-col items-center w-2/3 mt-6 px-6 py-4 mb-2 bg-white dark:bg-gray-800 
                                     border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
 
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество
-                        рекламодателей - <span id="advertisers" class="text-indigo-600">{{ $advertisers }}</span></p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество вебмастеров
-                        -
-                        <span id="webmasters" class="text-indigo-600">{{ $webmasters }}</span>
-                    </p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество офферов -
-                        <span id="offers" class="text-indigo-600">{{ $offers }}</span></p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество удаленных
-                        офферов - <span id="deleted-offers" class="text-indigo-600">{{ $deletedOffers }}</span></p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Общее количество
-                        подписок на
-                        офферы - <span id="subscriptions" class="text-indigo-600">{{ $subscriptions }}</span></p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество активных
-                        подписок на
-                        офферы - <span id="active-subscriptions" class="text-indigo-600">{{ $activeSubscriptions }}</span>
-                    </p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество неактивных
-                        подписок на
-                        офферы - <span id="deactive-subscriptions"
-                            class="text-indigo-600">{{ $deactiveSubscriptions }}</span></p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество переходов
-                        по
-                        ссылкам - <span id="clicks" class="text-indigo-600">{{ $clicks }}</span></p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Количество отклоненных
-                        переходов по ссылкам - <span id="rejected-clicks"
-                            class="text-indigo-600">{{ $rejectedClicks }}</span>
-                    </p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Расходы рекламодателей
-                        -
-                        <span id="advertiser-expenses"
-                            class="text-indigo-600">{{ number_format($advertiserExpenses, 2, '.', '') }}</span>
-                    </p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-1">Доходы вебмастеров -
-                        <span id="webmaster-income"
-                            class="text-indigo-600">{{ number_format($webmasterIncome, 2, '.', '') }}</span>
-                    </p>
-                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">Доходы системы - <span
-                            id="system-profit" class="text-indigo-600">{{ number_format($systemProfit, 2, '.', '') }}</span>
-                    </p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.number_advertisers') }} - <span id="advertisers" class="text-indigo-600">{{ $advertisers }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.number_webmasters') }} - <span id="webmasters" class="text-indigo-600">{{ $webmasters }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.number_offers') }} - <span id="offers" class="text-indigo-600">{{ $offers }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.number_deleted_offers') }} - <span id="deleted-offers" class="text-indigo-600">{{ $deletedOffers }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.total_subscriptions') }} - <span id="subscriptions" class="text-indigo-600">{{ $subscriptions }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.active_subscriptions') }} - <span id="active-subscriptions" class="text-indigo-600">{{ $activeSubscriptions }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.inactive_subscriptions') }} - <span id="deactive-subscriptions" class="text-indigo-600">{{ $deactiveSubscriptions }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.click_links') }} - <span id="clicks" class="text-indigo-600">{{ $clicks }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.rejected_click') }} - <span id="rejected-clicks" class="text-indigo-600">{{ $rejectedClicks }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.advertiser_expenses') }} - <span id="advertiser-expenses" class="text-indigo-600">{{ number_format($advertiserExpenses, 2, '.', '') }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-1">{{ __('statistics.webmasters_income') }} - <span id="webmaster-income" class="text-indigo-600">{{ number_format($webmasterIncome, 2, '.', '') }}</span></p>
+                    <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-200 text-xl pb-2">{{ __('statistics.revenue_system') }} - <span id="system-profit" class="text-indigo-600">{{ number_format($systemProfit, 2, '.', '') }}</span></p>
 
                 </div>
             </section>
