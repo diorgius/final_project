@@ -2,6 +2,7 @@
 @props(['role'])
 @props(['create'])
 @props(['themes'])
+@props(['lang'])
 
 @isset($role)
     @if ($role === 'admin')
@@ -30,6 +31,9 @@
         @foreach ($themes as $theme)
             <option value={{ $theme['id'] }}>{{ $theme['name'] }}</option>
         @endforeach
+    @elseif(@isset($lang))
+        <option value="ru">{{ __('common.ru') }}</option>
+        <option value="en">{{ __('common.en') }}</option>
     @else
         <option value="{{ $role ?? '' }}">{{ $role_full ?? ''}}</option>
         @isset ($create)

@@ -38,6 +38,32 @@ class ProfileController extends Controller
     }
 
     /**
+     * Summary of updateLocale
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateLocale(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'lang' => ['required', 'in:ru,en'],
+        ]);
+
+        $request->user()->update([
+            'locale' => $request->input('lang'),
+        ]);
+
+        // применяем новый язык
+        app()->setLocale($request->input('lang'));
+
+        // записываем в сессию
+        session([
+            'locale' => $request->input('lang'),
+        ]);
+
+        return Redirect::route('profile.edit')->with('status', 'locale-updated');
+    }
+
+    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse

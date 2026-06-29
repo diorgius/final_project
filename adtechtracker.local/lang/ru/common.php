@@ -10,5 +10,6 @@ return [
     'panel_advertiser' => 'Панель рекламодателя',
     'panel_webmaster' => 'Панель вебмастера',
     'delete' => 'Удалить',
-
+    'ru' => 'Русский',
+    'en' => 'English',
 ];
