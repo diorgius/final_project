@@ -58,6 +58,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(func
 Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group(function () {
     Route::get('/advertiser', [AdvertiserController::class, 'index'])->name('dashboard');
     Route::get('/advertiser/offers', [OfferController::class, 'index'])->name('advertiser.offers');
+    Route::post('/advertiser/offers/check', [OfferController::class, 'check'])->name('offers.check');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');

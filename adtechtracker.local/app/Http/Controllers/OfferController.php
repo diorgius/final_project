@@ -65,6 +65,24 @@ class OfferController extends Controller
         return view('advertiser.create', compact('themes')); 
     }
 
+
+    public function check(Request $request)
+    {
+        $offer = Offer::onlyTrashed()
+            ->where('advertiser_id', auth()->id())
+            // ->where('name', $request->name)
+            ->where('url', $request->url)
+            ->first();
+        
+        // $offer ? 
+
+        return response()->json([
+            // 'found' => true,
+            'offer' => $offer,
+        ]);
+    }
+
+
     /**
      * Сохраняем новый оффер
      * @param Request $request

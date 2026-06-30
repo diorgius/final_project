@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('js')
+    @vite('resources/js/advertiser.js')
+@endsection
+
+
 @section('content')
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -8,7 +13,7 @@
                 <p class="font-semibold text-gray-700 dark:text-gray-200">{{ __('offers.new_offer') }}:</p>
                 <div
                     class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
-                    <form method="POST" action="{{ route('offers.store') }}">
+                    <form method="POST" action="{{ route('offers.store') }}" id="offer-create">
                         @csrf
 
                         <!-- Name -->
