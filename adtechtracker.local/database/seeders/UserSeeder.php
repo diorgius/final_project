@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make(self::PASSWORD),
             'role' => 'admin',
+            'locale' => 'ru',
             'status' => true,
         ]);
         for ($i = 1; $i < 4; ++$i) {
@@ -33,6 +34,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make(self::PASSWORD),
                 'role' => 'advertiser',
+                'locale' => 'ru',
                 'status' => true,
             ]);
             User::create([
@@ -41,6 +43,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make(self::PASSWORD),
                 'role' => 'webmaster',
+                'locale' => 'ru',
                 'status' => true,
             ]);
         }

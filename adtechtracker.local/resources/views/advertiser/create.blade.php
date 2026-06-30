@@ -38,7 +38,9 @@
                         <!-- Theme -->
                         <div class="mt-4">
                             <x-input-label for="theme" :value="__('offers.offer_theme')" />
-                            <x-select-input id="theme" class="block mt-1 w-full" name="theme" :themes="$themes" required >
+                            <x-select-input id="theme" class="block mt-1 w-full" name="theme" required 
+                                :options="$themes->pluck('name', 'id')"
+                                :selected="old('theme')">
                             </x-select-input>
                         </div>
 

@@ -17,10 +17,12 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has('locale')) {
+        if (auth()->check() && $request->user()?->locale) {
+            App::setLocale(auth()->user()->locale);
+        } elseif (session()->has('locale')) {
             App::setLocale(session('locale'));
         } else {
-            App::setLocale($request->getPreferredLanguage(config('app.available_locales')) ?? config('app.locale'));
+            App::setLocale($request->getPreferredLanguage(array_keys(config('app.available_locales'))) ?? config('app.locale'));
         }
         return $next($request);
     }

@@ -14,6 +14,7 @@ use App\Http\Controllers\RedirectController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 require __DIR__ . '/auth.php';
@@ -26,7 +27,7 @@ Route::get('/', function () {
 // Set locale
 Route::post('/locale', function (Request $request) {
     $request->validate([
-        'locale' => 'required|in:ru,en',
+        'locale' => ['required', Rule::in(array_keys(config('app.available_locales')))],
     ]);
     session([
         'locale' => $request->input('locale'),

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -45,9 +46,10 @@ class ProfileController extends Controller
     public function updateLocale(Request $request): RedirectResponse
     {
         $request->validate([
-            'lang' => ['required', 'in:ru,en'],
+            'lang' => ['required', Rule::in(array_keys(config('app.available_locales')))],
         ]);
 
+        // обновляем язык в БД
         $request->user()->update([
             'locale' => $request->input('lang'),
         ]);

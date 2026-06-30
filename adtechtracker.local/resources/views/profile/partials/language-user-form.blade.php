@@ -15,7 +15,10 @@
 
         <div class="mt-4">
             <x-input-label for="lang" :value="__('Language')" />
-            <x-select-input id="lang" class='block mt-1 w-full' name="lang" :lang="true" :selected="old('locale', $user->locale)" required>
+            <x-select-input id="lang" class='block mt-1 w-full' name="lang"
+                :options="config('app.available_locales')"
+                :selected="old('lang', $user->locale)" 
+                :translate="true">
             </x-select-input>
         </div>
 
@@ -28,5 +31,4 @@
             @endif
         </div>
     </form>
-
 </section>
