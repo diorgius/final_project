@@ -30,6 +30,19 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+
+        // проверка на ранее удаленные записи, если пользователь с таким email уже был и удален, направляем сообщение 
+        $deletedUser = User::onlyTrashed()
+            ->where('email', $request->email)
+            ->exists();
+
+        if ($deletedUser) {
+            throw ValidationException::withMessages([
+                'email' => __('auth.deleted_account'),
+            ]);
+        }
+
+        // далее обычные проверки
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -37,11 +50,13 @@ class RegisteredUserController extends Controller
             'role' => 'required'
         ]);
 
+        // если все хорошо, создаем учетку
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => ($request->role),
+            'locale' => session('locale', config('app.locale')),
             'status' => 1
         ]);
 

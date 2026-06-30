@@ -7,6 +7,6 @@ import OfferSubscribeListener from './modules/OfferSubscribeListener.js';
 
 new Status('.offers__item', '.offers');
 new OfferStatusListener('.active-offers', '.deactive-offers', '.subscriptions', '.unsubscriptions');
-new OfferCreateListener('.deactive-offers');
+new OfferCreateListener('.active-offers', '.deactive-offers');
 new OfferDeleteListener();
 new OfferSubscribeListener();

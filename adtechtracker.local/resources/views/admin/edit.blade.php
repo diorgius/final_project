@@ -10,6 +10,7 @@
             <div
                 class="flex flex-col items-center pb-4 pt-4 bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
                 <p class="font-semibold text-gray-700 dark:text-gray-200">{{ __('users.user_title') }} - {{ $user->name }}<p>
+                @if ($user->trashed()) <p class="font-semibold text-red-700 dark:text-gray-200">{{ __('users.user_deleted') }}</p>@endif
                 <div 
                     class=" w-full sm:max-w-md mt-6 px-6 py-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
                     <form method="POST" action="{{ route('users.update', $user->id) }}">
@@ -19,7 +20,7 @@
                         <!-- Name -->
                         <div>
                             <x-input-label for="name" :value="__('Name')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ old('name', $user->name) }}"
+                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $user->name)"
                                 required autofocus autocomplete="name" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
@@ -28,7 +29,7 @@
                         <div class="mt-4">
                             <x-input-label for="email" :value="__('Email')" />
                             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
-                                value="{{ old('email', $user->email) }}" required autocomplete="username" disabled />
+                                :value="old('email', $user->email)" required autocomplete="username" disabled />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
@@ -66,23 +67,36 @@
                             <x-reset-button onclick="window.location='{{ route('users.index') }}'">
                                 {{ __('Cancel') }}
                             </x-reset-button>
-                            <x-primary-button class="ms-4">
+                            <x-primary-button class="ms-4"  :disabled="$user->trashed()">
                                 {{ __('Save') }}
                             </x-primary-button>
                         </div>
                     </form>
 
                     <!-- Delete -->
-                    <form method="POST" action="{{ route('users.destroy', $user->id) }}">
-                        @csrf
-                        @method('DELETE')
+                    @if (!$user->trashed())
+                        <form method="POST" action="{{ route('users.destroy', $user->id) }}">
+                            @csrf
+                            @method('DELETE')
 
-                        <div class="flex items-center justify-center mt-4">
-                            <x-primary-button>
-                                {{ __('Delete') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                            <div class="flex items-center justify-center mt-4">
+                                <x-primary-button>
+                                    {{ __('Delete') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route('users.restore', $user->id) }}">
+                            @csrf
+                            @method('PATCH')
+
+                            <div class="flex items-center justify-center mt-4">
+                                <x-primary-button>
+                                    {{ __('Restore') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

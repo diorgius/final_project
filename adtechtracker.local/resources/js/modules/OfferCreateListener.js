@@ -5,7 +5,8 @@ import DragItem from './DragItem.js';
 
 export default class OfferCreateListener {
 
-    constructor(deactiveOffers) {
+    constructor(activeOffers, deactiveOffers) {
+        this.activeZone = document.querySelector(activeOffers);
         this.deactiveZone = document.querySelector(deactiveOffers);
         this.csrfToken = document.querySelector('meta[name="csrf-token"]').content;
         this.listener();
@@ -29,7 +30,7 @@ export default class OfferCreateListener {
         if (!item) {
             const divOffer = document.createElement('div');
             divOffer.setAttribute('id', `${offer.id}`);
-            divOffer.className = 'offers__item offer-item offer-deactive';
+            divOffer.className = `offers__item offer-item ${offer.status === 1 ? 'offer-active' : 'offer-deactive'}`;
             divOffer.innerHTML =
                 `<form method="POST" action="/admin/offers/${offer.id}" >
                     <input type="hidden" name="_token" value="${this.csrfToken}">
@@ -43,8 +44,10 @@ export default class OfferCreateListener {
                 <p class="font-semibold">${__('offer_theme')}: <span class="font-light">${offer.theme}</span></p>
                 <p class="font-semibold">URL: <span class="font-light">${offer.url}</span></p>
                 <p class="font-semibold">${__('offer_price')}: <span class="font-light">${offer.price}</span></p>
-                <p class="subscribers font-semibold">${__('subscribers')}: <span class="font-light">0</span></p>`
-            this.deactiveZone.appendChild(divOffer);
+                <p class="font-semibold">${__('subscribers')}: <span class="subscribers font-light">0</span></p>`
+
+            offer.status === 0 ? this.deactiveZone.appendChild(divOffer) : this.activeZone.appendChild(divOffer);
+            
             DragItem.setupItem(divOffer, '.active-offers');
             return;
         }

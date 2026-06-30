@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(func
     Route::get('/admin/main', [AdminMainController::class, 'index'])->name('admin.main');
     Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
     Route::resource('/admin/users', AdminUserController::class);
+    Route::patch('/admin/users/{user}/restore', [AdminUserController::class, 'restore'])->name('users.restore');
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
     Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status']);
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
@@ -74,9 +75,9 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkwebmaster'])->group(
     Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe']);
     Route::get('/r/{ref}', [RedirectController::class, 'handle']);
     Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
-    Route::get('/webmaster/statistics/summary', [StatisticController::class, 'summary']);    
+    Route::get('/webmaster/statistics/summary', [StatisticController::class, 'summary']);
 });
-    
+
 // Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -17,6 +17,6 @@
     <p class="font-semibold">{{ __('offers.offer_theme') }}: <span class="font-light">{{ $offer->theme->name }}</span></p>
     <p class="font-semibold">URL: <span class="font-light">{{ $offer->url }}</span></p>
     <p class="font-semibold">{{ __('offers.offer_price') }}: <span class="font-light">{{ $offer->price }}</span></p>
-    <p class="subscribers font-semibold">{{ __('offers.subscribers') }}: <span class="font-light">{{ $offer->subscribe->count() }}</span></p>
+    <p class="font-semibold">{{ __('offers.subscribers') }}: <span class=" subscribers font-light">{{ $offer->subscribe->count() }}</span></p>
 
 </div>
