@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Commission;
 use App\Models\OfferSubscription;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use App\Models\OfferTheme;
 use App\Models\Offer;
@@ -45,12 +46,6 @@ class OfferController extends Controller
                 $subscriptions = OfferSubscription::with('offer')->where('webmaster_id', auth()->id())->get();
                 break;
         }
-
-        // это можно и не отправлять, т.к. работает и без этого
-        // $themes = OfferTheme::get(['id', 'name']);
-        // $users = User::get(['id', 'name']);
-        // return view(Auth::user()->role . '.offers', compact('offers', 'themes', 'users')); 
-
         return view(auth()->user()->role . '.offers', compact('offers', 'percent', 'subscriptions')); 
     }
 
@@ -61,24 +56,44 @@ class OfferController extends Controller
     public function create()
     {
         $themes = OfferTheme::all();
-
         return view('advertiser.create', compact('themes')); 
     }
 
 
+    /**
+     * Проверка текущих и удаленных офферов
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function check(Request $request)
     {
-        $offer = Offer::onlyTrashed()
+
+        $offer = Offer::where('advertiser_id', auth()->id())
+            ->where('url', $request->url)
+            ->first();
+
+        if ($offer) {
+            throw ValidationException::withMessages([
+                'email' => __('offers.offer_exists'),
+            ]);
+        }
+
+        // if ($offer) {
+        //     return response()->json([
+        //         // 'message' => __('offers.offer_exists'),
+        //         'errors' => [
+        //             'url' => [__('offers.offer_exists')],
+        //         ],
+        //     ], 422);
+        // }    
+
+        $deletedOffer = Offer::onlyTrashed()
             ->where('advertiser_id', auth()->id())
-            // ->where('name', $request->name)
             ->where('url', $request->url)
             ->first();
         
-        // $offer ? 
-
         return response()->json([
-            // 'found' => true,
-            'offer' => $offer,
+            'offer' => $deletedOffer,
         ]);
     }
 
@@ -90,6 +105,39 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (!$request->boolean('force_create')) {
+
+            $offer = Offer::where('advertiser_id', auth()->id())
+                ->where('url', $request->url)
+                ->first();
+
+            if ($offer) {
+                throw ValidationException::withMessages([
+                    'url' => __('offers.offer_exists'),
+                ]);
+            }
+
+            $deletedOffer = Offer::onlyTrashed()
+                ->where('advertiser_id', auth()->id())
+                ->where('url', $request->url)
+                ->first();
+
+            if ($deletedOffer) {
+                return back()
+                    ->withInput()
+                    ->with('theme')
+                    ->with('restore_offer', [
+                        'id' => $deletedOffer->id,
+                        'name' => $deletedOffer->name,
+                        'url' => $deletedOffer->url,
+                        'price' => $deletedOffer->price,
+                        'theme' => $deletedOffer->theme->name,
+                        'deleted_at' => $deletedOffer->deleted_at->setTimezone('Europe/Moscow')->format('H:i:s d.m.Y'),
+                    ]);
+            }
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255', 'url'],
@@ -106,6 +154,71 @@ class OfferController extends Controller
         ]);
 
         // отправляем сообщение о создании оффера
+        broadcast(new OfferCreate($offer));
+
+        return redirect()->route('advertiser.offers');
+    }
+
+    /**
+     * Восстанавливаем удаленный ранее оффер
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore(string $id) {
+        
+        // получаем оффер
+        $offer = Offer::onlyTrashed()->find($id);
+        // восстанавливаем
+        $offer->restore();
+        // отсылаем сообщение о создании
+        broadcast(new OfferCreate($offer));
+        // восстанавливаем все подписки
+        $offer->subscribe()->onlyTrashed()->restore();
+        // получаем восстановленные подписки
+        $subscriptions = $offer->subscribe()->get();
+        // отправляем сообщение о подписках
+        foreach ($subscriptions as $subscription) {
+            broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
+        }
+        return redirect()->route('advertiser.offers');
+    }
+
+    /**
+     * Редактируем оффер
+     * @param string $id
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function edit(string $id)
+    {
+        $offer = Offer::with('theme')->find($id);
+        $themes = OfferTheme::all();
+        return view('advertiser.edit', compact('offer', 'themes'));
+    }
+
+    /**
+     * Обновляем данные оффера
+     * @param Request $request
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, string $id)
+    {
+        // получаем оффер
+        $offer = Offer::find($id);
+        // проверяем данные
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'url' => ['required', 'string', 'max:255', 'url'],
+            'price' => ['required', 'numeric'],
+            'theme' => 'required'
+        ]);
+        // обновляем
+        $offer->name = $request->name;
+        $offer->url = $request->url;
+        $offer->price = $request->price;
+        $offer->theme_id = $request->theme;
+        $offer->save();
+        // отправляем сообщение об изменении оффера
         broadcast(new OfferCreate($offer));
 
         return redirect()->route('advertiser.offers');

@@ -10,6 +10,7 @@ return [
     'panel_advertiser' => 'The advertiser panel',
     'panel_webmaster' => 'The webmaster panel',
     'delete' => 'Delete',
+    'edit' => 'Edit',
     'ru' => 'Russian',
     'en' => 'English',
 ];

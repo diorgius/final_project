@@ -67,7 +67,7 @@
                             <x-reset-button onclick="window.location='{{ route('users.index') }}'">
                                 {{ __('Cancel') }}
                             </x-reset-button>
-                            <x-primary-button class="ms-4"  :disabled="$user->trashed()">
+                            <x-primary-button class="ms-4" :disabled="$user->trashed()">
                                 {{ __('Save') }}
                             </x-primary-button>
                         </div>

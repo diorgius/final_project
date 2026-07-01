@@ -22,33 +22,22 @@ export default class OfferCheck {
 
         event.preventDefault();
 
-        // const formData = new FormData(this.offerCreateForm);
-        // const response = await fetch('/advertiser/offers/check', {
-        //     method: 'POST',
-        //     headers: {
-        //         'X-CSRF-TOKEN': document
-        //             .querySelector('meta[name="csrf-token"]')
-        //             .content,
-        //         'Accept': 'application/json',
-        //     },
-        //     body: formData,
-        // });
-
-        // const data = await response.json();
-
         try {
-            const data = await this.checkDeletedOffer(
+            const data = await this.checkOffer(
                 new FormData(this.offerCreateForm)
             );
             
-            console.log(data);
-            
-            if (!data.offer) {
-                this.offerCreateForm.submit();
+            if (data === null) {
                 return;
             }
 
-            // this.showRestoreModal(data.offer);
+            if (!data.offer) {
+
+                this.offerCreateForm.submit();
+
+                return;
+
+            }
             
         } catch (error) {
             console.error(error);
@@ -56,25 +45,29 @@ export default class OfferCheck {
 
     }
 
-    async checkDeletedOffer(formData) {
+    async checkOffer(formData) {
 
         const response = await fetch('/advertiser/offers/check', {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': document
-                    .querySelector('meta[name="csrf-token"]')
-                    .content,
+                'X-CSRF-TOKEN': this.csrfToken,
                 'Accept': 'application/json',
             },
             body: formData,
         });
 
+        const data = await response.json();
 
-        // if (!response.ok) {
-        //     throw new Error('Ошибка проверки оффера');
-        // }   
+        if (!response.ok) {
 
-        return await response.json();
+            console.log(data);
+            this.showErrors(data.errors);
+
+            return null;
+
+        }
+
+        return data;
     }
 
     showRestoreModal(data) {
@@ -89,4 +82,29 @@ export default class OfferCheck {
 
     }
 
+    showErrors(errors) {
+
+        Object.keys(errors).forEach(field => {
+
+            const errorBlock = document.getElementById(`${field}-error`);
+
+            if (!errorBlock) {
+                return;
+            }
+
+            errorBlock.innerHTML = '';
+
+            errors[field].forEach(message => {
+
+                errorBlock.innerHTML += `
+                    <p class="text-sm text-red-600 dark:text-red-400">
+                        ${message}
+                    </p>
+                `;
+
+            });
+
+        });
+
+    }
 }

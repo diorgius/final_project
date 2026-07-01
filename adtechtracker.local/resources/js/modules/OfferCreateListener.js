@@ -27,7 +27,11 @@ export default class OfferCreateListener {
     createOffer(offer) {
         // ищем оффер
         const item = document.getElementById(`${offer.id}`);
-        if (!item) {
+        // сделано для того чтобы если оффер уже есть, но рекламодатель его отредактировал, произошло обновление данных
+        if (item) {
+            item.remove();
+        }
+        // if (!item) {
             const divOffer = document.createElement('div');
             divOffer.setAttribute('id', `${offer.id}`);
             divOffer.className = `offers__item offer-item ${offer.status === 1 ? 'offer-active' : 'offer-deactive'}`;
@@ -50,7 +54,7 @@ export default class OfferCreateListener {
             
             DragItem.setupItem(divOffer, '.active-offers');
             return;
-        }
+        // }
     }
 }
 

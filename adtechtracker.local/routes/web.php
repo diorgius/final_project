@@ -61,6 +61,9 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group
     Route::post('/advertiser/offers/check', [OfferController::class, 'check'])->name('offers.check');
     Route::get('/advertiser/offers/create', [OfferController::class, 'create'])->name('offers.create');
     Route::post('/advertiser/offers/create', [OfferController::class, 'store'])->name('offers.store');
+    Route::get('/advertiser/offers/{id}/edit', [OfferController::class, 'edit'])->name('offers.edit');
+    Route::patch('/advertiser/offers/{id}/update', [OfferController::class, 'update'])->name('offers.update');
+    Route::patch('/advertiser/offers/{id}/restore', [OfferController::class, 'restore'])->name('offers.restore');
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
     Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status']);

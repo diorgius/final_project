@@ -23,9 +23,9 @@
 
                         <!-- Button -->
                         <div class="flex items-center justify-center mt-4">
-                            <x-reset-button>
+                            <x-secondary-button type="reset">
                                 {{ __('Cancel') }}
-                            </x-reset-button>
+                            </x-secondary-button>
                             <x-primary-button class="ms-4">
                                 {{ __('Save') }}
                             </x-primary-button>

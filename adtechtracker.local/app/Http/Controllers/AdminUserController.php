@@ -118,7 +118,6 @@ class AdminUserController extends Controller
             Mail::to($user->email)->locale($user->locale)->send(new UserBlockedMail($user));
         }
 
-
         $user->name = $request->name;
         $user->password = $password;
         $user->role =$request->role;
@@ -169,8 +168,7 @@ class AdminUserController extends Controller
                     foreach ($subscriptions as $subscription) {
                         broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
                     }
-                    // broadcast(new OfferCreate($offer));
-                    // broadcast(new OfferSubscribeChanged($offer, $offer->subscribe->webmaster_id, 'subscribed'));
+
                 }
             } elseif ($user->role === 'webmaster') {
                 // получаем подписки
