@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('css')
-    {{-- <link rel="stylesheet" href="/css/admin.css"> --}}
-@endsection
-
 @section('content')
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -64,9 +60,10 @@
 
                         <!-- Button -->
                         <div class="flex items-center justify-center mt-4">
-                            <x-reset-button onclick="window.location='{{ route('users.index') }}'">
+                            <x-link-button :href="route('users.index')">
                                 {{ __('Cancel') }}
-                            </x-reset-button>
+                            </x-link-button>
+
                             <x-primary-button class="ms-4" :disabled="$user->trashed()">
                                 {{ __('Save') }}
                             </x-primary-button>

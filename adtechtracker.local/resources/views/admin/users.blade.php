@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/css/admin.css">
-@endsection
-
 @section('content')
     <section class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -54,7 +50,11 @@
 
                         <!-- Button -->
                         <div class="flex items-center justify-center mt-4">
-                            <x-primary-button>
+                            <x-secondary-button type="reset">
+                                {{ __('Cancel') }}
+                            </x-secondary-button>
+
+                            <x-primary-button class="ms-4">
                                 {{ __('Create') }}
                             </x-primary-button>
                         </div>

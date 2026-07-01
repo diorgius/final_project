@@ -1,18 +1,10 @@
 @extends('layouts.app')
 
 @section('js')
-    {{-- <script src="/js/DragItem.js" defer></script>
-    <script src="/js/Subscription.js" defer></script>
-    <script src="/js/OfferStatusListener.js" defer></script>
-    <script src="/js/OfferDeleteListener.js" defer></script> --}}
     @vite('resources/js/webmaster.js')
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
-@endsection
-
-@section('css')
-    {{-- <link rel="stylesheet" href="/css/offers.css"> --}}
 @endsection
 
 @section('content')
@@ -20,7 +12,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
                 class="flex flex-col items-center pb-6 pt-1 bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
-
                 <section class="flex justify-between text-center w-5/6 mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
 
                     <!-- Подписки -->
@@ -58,7 +49,6 @@
                     </div>
 
                 </section>
-
             </div>
         </div>
     </section>

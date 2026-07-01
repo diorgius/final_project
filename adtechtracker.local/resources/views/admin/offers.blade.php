@@ -1,20 +1,10 @@
 @extends('layouts.app')
 
 @section('js')
-    {{-- <script src="/js/DragItem.js" defer></script>
-    <script src="/js/Status.js" defer></script>
-    <script src="/js/OfferStatusListener.js" defer></script>
-    <script src="/js/OfferCreateListener.js" defer></script>
-    <script src="/js/OfferDeleteListener.js" defer></script>
-    <script src="/js/OfferSubscribeListener.js" defer></script> --}}
     @vite('resources/js/admin.js')
     <script>
         window.userRole = '{{ auth()->user()->role }}';
     </script>
-@endsection
-
-@section('css')
-    {{-- <link rel="stylesheet" href="/css/offers.css"> --}}
 @endsection
 
 @section('content')

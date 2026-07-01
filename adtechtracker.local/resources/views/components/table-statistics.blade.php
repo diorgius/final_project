@@ -9,7 +9,7 @@
         <th class="py-4">{{ __('statistics.offers') }}</th>
         <th class="py-4">{{ __('statistics.status') }}</th>
         <th class="py-4">{{ __('statistics.clicks') }}
-        <th class="py-4">{{ $role === 'advertiser' ? __('statistics.income') : __('statistics.expenses') }}</th>
+        <th class="py-4">{{ $role === 'advertiser' ? __('statistics.expenses') : __('statistics.income') }}</th>
     </tr>
     <tbody id="offers-table-body">
         @foreach ($offers as $offer)

@@ -6,19 +6,18 @@
     <form method="POST" action="{{ route("$role.offers.destroy", $offer->id) }}">
         @csrf
         @method('DELETE')
+        
         <div class="flex items-center justify-center mt-4">
             <button class="absolute bottom-0 right-0 m-1 text-2xl" title="{{ __('common.delete') }}">&#10008;</button>
         </div>
     </form>
+
     @if ($role === 'advertiser')
-    <form method="POST" action="{{ route("offers.edit", $offer->id) }}">
-        @csrf
-        @method('GET')
         <div class="flex items-center justify-center mt-4">
-            <button class="absolute bottom-0 right-6 m-1 text-lg" title="{{ __('common.edit') }}">&#9999;</button>
+            <a class="absolute bottom-0 right-6 m-1 text-lg" href="{{ route('offers.edit', $offer->id) }}" title="{{ __('common.edit') }}">&#9999;</a>
         </div>
-    </form>
     @endif
+    
     @if ($role === 'admin')
         <p class="font-semibold">{{ __('users.advertiser') }}: <span class="font-light">{{ $offer->advertiser->name }}</span></p> 
     @endif

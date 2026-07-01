@@ -23,6 +23,6 @@ class CommissionController extends Controller
         $commission->commission = $request->commission;
         $commission->save();
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.main');
     }
 }

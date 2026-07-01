@@ -26,6 +26,7 @@
                             <x-secondary-button type="reset">
                                 {{ __('Cancel') }}
                             </x-secondary-button>
+                            
                             <x-primary-button class="ms-4">
                                 {{ __('Save') }}
                             </x-primary-button>

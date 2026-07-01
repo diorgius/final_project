@@ -48,9 +48,11 @@
 
                             <!-- Button -->
                             <div class="flex items-center justify-center mt-4">
-                                <x-reset-button onclick="window.location='{{ route('advertiser.offers') }}'">
+                                <x-link-button :href="route('advertiser.offers')">
                                     {{ __('Cancel') }}
-                                </x-reset-button>
+                                </x-link-button>
+
+
                                 <x-primary-button class="ms-4">
                                     {{ __('Save') }}
                                 </x-primary-button>
@@ -88,9 +90,10 @@
 
                 <!-- Button -->
                 <div class="flex items-center justify-center mt-4">
-                    <x-reset-button onclick="window.location='{{ route('advertiser.offers') }}'">
+                    <x-secondary-button x-on:click="$dispatch('close')">
                         {{ __('Cancel') }}
-                    </x-reset-button>
+                    </x-secondary-button>
+                                
                     <form method="POST" action="{{ route('offers.restore', $restoreOffer['id']) }}">
                         @csrf
                         @method('PATCH')
@@ -99,23 +102,6 @@
                             {{ __('Restore') }}
                         </x-primary-button>
                     </form>
-                    {{-- <form method="POST" action="{{ route('offers.create', $restoreOffer['id']) }}">
-                        @csrf
-                        @method('PATCH') --}}
-
-                        {{-- <input type="hidden" name="force_create" value="1">
-
-                        <input type="hidden" name="name" value="{{ old('name') }}">
-                        <input type="hidden" name="url" value="{{ old('url') }}">
-                        <input type="hidden" name="price" value="{{ old('price') }}">
-                        <input type="hidden" name="theme" value="{{ old('theme') }}"> --}}
-
-                        {{-- <x-primary-button class="ms-4" onclick=" 
-                            document.getElementById('force_create').value = 1;
-                            document.getElementById('offer-create').submit();">
-                            {{ __('Create') }}
-                        </x-primary-button> --}}
-                    {{-- </form> --}}
                 </div>
             </div>
         </x-modal>

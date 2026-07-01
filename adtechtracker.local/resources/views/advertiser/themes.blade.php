@@ -19,9 +19,10 @@
 
                     <!-- Button -->
                     <div class="flex items-center justify-center mt-4">
-                        <x-reset-button onclick="window.location='{{ route('advertiser.offers') }}'">
+                        <x-link-button :href="route('advertiser.offers')">
                             {{ __('Cancel') }}
-                        </x-reset-button>
+                        </x-link-button>
+
                         <x-primary-button class="ms-4">
                             {{ __('Save') }}
                         </x-primary-button>
