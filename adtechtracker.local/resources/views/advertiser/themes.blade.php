@@ -6,6 +6,8 @@
             <div
                 class="flex flex-col items-center pb-6 pt-4 bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
                 <p class="font-semibold text-gray-700 dark:text-gray-200 mb-4">{{ __('offers.new_theme') }}:</p>
+
+                <!-- форма создания темы -->
                 <form method="POST" action="{{ route('themes.store') }}">
                     @csrf
 
@@ -29,6 +31,7 @@
                     </div>
                 </form>
 
+                <!-- выводим темы -->
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mt-8">{{ __('offers.current_themes') }}:</h3>
                 <div class="flex justify-center items-center mt-4" >
                     <ol class="list-decimal">    

@@ -16,11 +16,13 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @yield('js')
 
+        <!-- подключаем переводы для js -->
         <x-js-translations />
         
         <!-- css -->
         @yield('css')
     </head>
+    
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
 

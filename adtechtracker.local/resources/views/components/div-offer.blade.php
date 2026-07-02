@@ -21,6 +21,7 @@
     @if ($role === 'admin')
         <p class="font-semibold">{{ __('users.advertiser') }}: <span class="font-light">{{ $offer->advertiser->name }}</span></p> 
     @endif
+    
     <p class="font-semibold">{{ __('offers.offer_name') }}: <span class="font-light">{{ $offer->name }}</span></p>
     <p class="font-semibold">{{ __('offers.offer_theme') }}: <span class="font-light">{{ $offer->theme->name }}</span></p>
     <p class="font-semibold">URL: <span class="font-light">{{ $offer->url }}</span></p>

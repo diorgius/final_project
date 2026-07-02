@@ -33,9 +33,12 @@
                         </div>
                     </form>
                 </div>
+
                 <div class="flex flex-col items-center pt-5 pb-1">
-                    <p></p>
+                    <p>!!!!</p>
                 </div>
+
+                <!-- Выводим общие данные -->
                 <div class="flex flex-col items-center w-2/3 mt-6 px-6 py-4 mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-300 text-xl pb-2">{{ __('statistics.advertiser_expenses') }} - <span class="text-indigo-600">{{ $advertiserExpenses }}</span></p>
                     <p class="border-b-2 font-semibold text-gray-700 dark:text-gray-300 text-xl pb-1">{{ __('statistics.webmasters_income') }} - <span class="text-indigo-600">{{ $webmasterIncome }}</span></p>

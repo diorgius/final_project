@@ -6,6 +6,7 @@ export default class Statistics {
     constructor(){
         this.buttons = document.querySelectorAll('.period-btn');
         this.activeButton = ['bg-indigo-600', 'text-white', 'border-indigo-600'];
+
         this.init();
     }
 
@@ -22,14 +23,19 @@ export default class Statistics {
         });
     }
 
-    // метод получения данных из БД в зависимости от даты
+    // метод получения данных из БД в зависимости от даты и роли пользователя
     async getStatistics(period) {
+
+        // получаем роль пользователя
         const role = window.userRole;
+        
         try {
             const response = await fetch(
                 `/${role}/statistics/summary?period=${period}`, {
             });
             const data = await response.json();
+
+            // обновляем статистику
             this.updateStatistics(period, data, role);
         } catch (error) {
             console.error(error);
@@ -38,8 +44,13 @@ export default class Statistics {
 
     // метод вывода полученных данных
     updateStatistics(period, data, role) {
+
+        // получак=ем текущую дату и время
         const dateTimeCurrent = new Date();
+
         let periodLang ='';
+
+        // получаем период на установленно у пользователя языке
         switch (period) {
             case 'day':
                 periodLang = __('day');
@@ -58,10 +69,11 @@ export default class Statistics {
                 break;
         }
 
+        // выводим "Статистика за ... на" на период и текущее время и дату
         document.getElementById('period-date').textContent = `${__('title_for_js')} ${periodLang} ${__('title_for_js_on')} ` 
             + dateTimeCurrent.toLocaleTimeString("ru-RU") + ' ' + dateTimeCurrent.toLocaleDateString("ru-RU");
         
-        // если админ
+        // выводим статистику если админ
         if (role === 'admin') {
             document.getElementById('advertisers').textContent = data.advertisers;
             document.getElementById('webmasters').textContent = data.webmasters;
@@ -77,10 +89,14 @@ export default class Statistics {
             document.getElementById('system-profit').textContent = Number(data.systemProfit).toFixed(2);
         }
 
-        // если рекламодатель или вебмастер
+        // выводим статистику если рекламодатель или вебмастер
         if (role === 'advertiser' || role === 'webmaster') {
+
+            // получаем куда вставлять
             const tbody = document.getElementById('offers-table-body');
             tbody.innerHTML = '';
+
+            // выводим данные
             data.offers.forEach(offer => {
                 tbody.insertAdjacentHTML(
                     'beforeend',
@@ -102,5 +118,3 @@ export default class Statistics {
         }
     }
 }
-
-// new Statistics();

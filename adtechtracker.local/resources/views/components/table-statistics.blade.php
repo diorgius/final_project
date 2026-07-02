@@ -11,6 +11,7 @@
         <th class="py-4">{{ __('statistics.clicks') }}
         <th class="py-4">{{ $role === 'advertiser' ? __('statistics.expenses') : __('statistics.income') }}</th>
     </tr>
+
     <tbody id="offers-table-body">
         @foreach ($offers as $offer)
             <tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
@@ -21,6 +22,7 @@
             </tr>
         @endforeach
     </tbody>
+
     <tfoot>
         <tr class="border-b border-gray-200 text-xl dark:text-gray-200 uppercase">
             <th class="py-2">{{ __('statistics.total') }}</th>
@@ -29,4 +31,5 @@
             <th id="total-expenses" class="py-2">{{ number_format($total, 2, '.', '') }}</th>
         </tr>
     </tfoot>
+    
 </table>

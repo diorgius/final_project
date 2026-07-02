@@ -3,6 +3,7 @@
 @section('js')
     @vite('resources/js/advertiser.js')
     <script>
+        // передаем в js роль пользователя
         window.userRole = '{{ auth()->user()->role }}';
     </script>
 @endsection
@@ -23,6 +24,7 @@
                     </x-link-button>
                 </section>
 
+                <!-- выводим офферы -->
                 <x-section-offer :offers="$offers" :role="auth()->user()->role">
 
                 </x-section-offer>     

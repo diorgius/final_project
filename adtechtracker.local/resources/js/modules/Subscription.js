@@ -12,9 +12,10 @@ export default class Subscription {
         this.init();
     }
 
-    // Метод записи подписки в БД и отправки сообщения reverb
+    // метод записи подписки в БД и отправки сообщения reverb
     async subscribe(itemId, type) {
 
+        //получаем роль пользователя
         const role = window.userRole;
 
         try {
@@ -32,19 +33,13 @@ export default class Subscription {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-
             return await response.json();
-
         } catch (error) {
             console.error(error);
         }
     }
 
-  
-    // Метод перемещения элементов
+    // метод перемещения элементов
     init() {
         console.log('Subscription drop');
         this.items.forEach(item => {
@@ -63,26 +58,25 @@ export default class Subscription {
 
                 if (!item) return;
 
-                // Проверяем новый статус
+                // проверяем новый статус
                 const newStatus = zone.classList.contains('subscriptions') ? 'active' : 'deactive';
 
-                // Если ничего не изменилось
+                // если ничего не изменилось
                 if (oldStatus === newStatus) {
                     return;
                 }
 
-                // Убираем стили
+                // убираем стили
                 item.classList.remove('offer-active', 'offer-deactive');
                 
                 const url = item.querySelector('.offer-url');
 
+                // если зона подписок
                 if (zone.classList.contains('subscriptions')) {
                     
                     // записываем в БД
                     const result = await this.subscribe(itemId, 'subscribe');
                     
-                    console.log('Subscription response:', result);
-
                     if (!result?.success) {
                         console.log('Ошибка сохранения');
                         return;
@@ -96,32 +90,33 @@ export default class Subscription {
                         url.classList.remove('hidden');
                     }, 1500);
 
+                    // меняем класс
                     item.classList.add('offer-active');
 
                 }
 
+                // если зона отписок
                 if (zone.classList.contains('unsubscriptions')) {
 
-                    // Записываем в БД
+                    // записываем в БД
                     const result = await this.subscribe(itemId, 'unsubscribe');
   
-                    console.log('Subscription response:', result);
-                    
                     if (!result?.success) {
                         console.log('Ошибка сохранения');
                         return;
                     }
 
+                    // прячем ссылку
                     url.classList.add('hidden');
+
+                    // меняем класс
                     item.classList.add('offer-deactive');
 
                 }
 
-                // Перемещаем элемент
+                // перемещаем элемент
                 zone.appendChild(item);
             });
         });
     }
 }
-
-// new Subscription('.offers__item', '.subscriptions, .unsubscriptions');

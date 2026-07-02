@@ -8,6 +8,8 @@
                 <p class="font-semibold text-gray-700 dark:text-gray-200">{{ __('users.new_user') }}:</p>
                 <div
                     class=" w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
+                    
+                    <!-- форма создания пользователя -->
                     <form method="POST" action="{{ route('users.store') }}">
                         @csrf
 
@@ -60,22 +62,28 @@
                         </div>
                     </form>
                 </div>
+
                 <div class="flex flex-col items-center pt-5 pb-1">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 text-xl">{{ __('users.current_users') }}:</h3>
                 </div>
 
                 <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">{{ __('users.admins') }}:</h4>
 
+                <!-- выводим админов -->
                 <x-table-user :users="$admins">
+
                 </x-table-user>
 
                 <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">{{ __('users.advertisers') }}:</h4>
 
+                <!-- выводим рекламодателей -->
                 <x-table-user :users="$advertisers">
+
                 </x-table-user>
 
                 <h4 class="font-semibold text-gray-700 dark:text-gray-200 p-3">{{ __('users.webmasters') }}:</h4>
 
+                <!-- выводим вебмастеров -->
                 <x-table-user :users="$webmasters">
 
                 </x-table-user>

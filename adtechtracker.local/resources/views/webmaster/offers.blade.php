@@ -3,6 +3,7 @@
 @section('js')
     @vite('resources/js/webmaster.js')
     <script>
+        // передаем в js роль пользователя 
         window.userRole = '{{ auth()->user()->role }}';
     </script>
 @endsection

@@ -8,6 +8,8 @@
                     <p class="font-semibold text-gray-700 dark:text-gray-200">{{ __('offers.new_offer') }}:</p>
                     <div
                         class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
+                        
+                        <!-- форма создания оффера -->
                         <form method="POST" action="{{ route('offers.store') }}" id="offer-create">
                             @csrf
 
@@ -50,7 +52,6 @@
                                     {{ __('Cancel') }}
                                 </x-link-button>
 
-
                                 <x-primary-button class="ms-4">
                                     {{ __('Save') }}
                                 </x-primary-button>
@@ -61,12 +62,12 @@
             </div>
         </section>
 
-    {{-- Записываем данные удаленного оффера в переменную --}}
+    <!-- Записываем данные удаленного оффера в переменную -->
     @php
     $restoreOffer = session('restore_offer');
     @endphp
 
-    {{-- Вызываем модальное окно --}}
+    <!-- Вызываем модальное окно -->
     @if($restoreOffer)
         <x-modal name="restore-offer" :show="$restoreOffer !== null">
             <div class="p-6"> 
@@ -75,6 +76,7 @@
                     {{ __('offers.found_deleted_offer') }}
                 </h2>
 
+                <!-- выводим данные удаленного оффера -->
                 <div class="my-8 py-8 px-6 text-lg text-gray-700 dark:text-gray-300 border rounded-lg">
 
                     <p class="font-semibold border-b-2 pb-2">{{ __('offers.offer_name') }}: <span class="font-light">{{ $restoreOffer['name'] ?? '' }}</span></p>

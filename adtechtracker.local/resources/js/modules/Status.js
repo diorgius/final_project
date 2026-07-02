@@ -12,9 +12,10 @@ export default class Status {
         this.init();
     }
 
-    // Метод записи статуса в БД и отправки сообщения reverb
+    // метод записи статуса в БД и отправки сообщения reverb
     async updateStatus(itemId, status) {
 
+        //получаем роль пользователя
         const role = window.userRole;
 
         try {
@@ -32,13 +33,12 @@ export default class Status {
             });
 
             return await response.json();
-
         } catch (error) {
             console.error(error);
         }
     }
 
-    // Метод перемещения элементов
+    // метод перемещения элементов
     init() {
         this.items.forEach(item => {
             DragItem.setupItem(item, '.active-offers');
@@ -56,27 +56,28 @@ export default class Status {
 
                 if (!item) return;
 
-                // Проверяем новый статус
+                // проверяем новый статус
                 const newStatus = zone.classList.contains('active-offers') ? 'active' : 'deactive';
 
-                // Если ничего не изменилось
+                // если ничего не изменилось
                 if (oldStatus === newStatus) {
                     return;
                 }
 
-                // Убираем стили
+                // убираем стили
                 item.classList.remove('offer-active', 'offer-deactive');
                 
-                // Устанавливаем статус
+                // устанавливаем статус
                 const status = zone.classList.contains('active-offers') ? 1 : 0;
 
+                // в зависимости от статуса меняем класс
                 if (status === 1) {
                     item.classList.add('offer-active');
                 } else {
                     item.classList.add('offer-deactive');
                 }
 
-                // Сохраняем в БД
+                // сохраняем в БД
                 const result = await this.updateStatus(itemId, status);
 
                 if (!result?.success) {
@@ -84,11 +85,9 @@ export default class Status {
                     return;
                 }
 
-                // Перемещаем элемент
+                // перемещаем элемент
                 zone.appendChild(item);
             });
         });
     }
 }
-
-// new Status('.offers__item', '.offers');

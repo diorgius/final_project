@@ -9,6 +9,8 @@
                 @if ($user->trashed()) <p class="font-semibold text-red-700 dark:text-gray-200">{{ __('users.user_deleted') }}</p>@endif
                 <div 
                     class=" w-full sm:max-w-md mt-6 px-6 py-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
+                    
+                    <!-- форма редактирования пользователя -->
                     <form method="POST" action="{{ route('users.update', $user->id) }}">
                         @csrf
                         @method('PATCH')
@@ -70,7 +72,7 @@
                         </div>
                     </form>
 
-                    <!-- Delete -->
+                    <!-- Delete || Restore-->
                     @if (!$user->trashed())
                         <form method="POST" action="{{ route('users.destroy', $user->id) }}">
                             @csrf
