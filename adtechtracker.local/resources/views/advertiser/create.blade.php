@@ -11,8 +11,6 @@
                         <form method="POST" action="{{ route('offers.store') }}" id="offer-create">
                             @csrf
 
-                            <!-- скрытое поле для отправки формы без проверки в контроллере при создании оффера если есть уже такой удаленный -->
-                            <input type="hidden" id="force_create" name="force_create" value="0">
                             <!-- Name -->
                             <div>
                                 <x-input-label for="name" :value="__('offers.offer_name')" />
@@ -63,13 +61,12 @@
             </div>
         </section>
 
-
+    {{-- Записываем данные удаленного оффера в переменную --}}
     @php
     $restoreOffer = session('restore_offer');
     @endphp
 
-    {{-- @dump($restoreOffer) --}}
-
+    {{-- Вызываем модальное окно --}}
     @if($restoreOffer)
         <x-modal name="restore-offer" :show="$restoreOffer !== null">
             <div class="p-6"> 

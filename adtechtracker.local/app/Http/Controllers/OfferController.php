@@ -16,9 +16,11 @@ use App\Events\OfferDelete;
 use App\Events\OfferSubscribeChanged;
 use Illuminate\Support\Str;
 
+/**
+ * Summary of OfferController
+ */
 class OfferController extends Controller
 {
-
     /**
      * Выводим данные по офферам в зависимости от роли
      * @return \Illuminate\Contracts\View\View
@@ -41,16 +43,20 @@ class OfferController extends Controller
                                 ->whereDoesntHave('subscribe', function ($query) {
                                     $query->where('webmaster_id', auth()->id());
                                 })->get();
-                $commission = Commission::get('commission')->value('commission');
+                $commission = Commission::value('commission');
                 $percent = round((100 - $commission) / 100, 2);
                 $subscriptions = OfferSubscription::with('offer')->where('webmaster_id', auth()->id())->get();
                 break;
+            default:
+                abort(404, __('http-statuses.404'));
+                break;
         }
+
         return view(auth()->user()->role . '.offers', compact('offers', 'percent', 'subscriptions')); 
     }
 
     /**
-     * Создаем новый оффер
+     * Открываем форму создания нового оффера
      * @return \Illuminate\Contracts\View\View
      */
     public function create()
@@ -59,47 +65,8 @@ class OfferController extends Controller
         return view('advertiser.create', compact('themes')); 
     }
 
-
     /**
-     * Проверка текущих и удаленных офферов
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function check(Request $request)
-    {
-
-        $offer = Offer::where('advertiser_id', auth()->id())
-            ->where('url', $request->url)
-            ->first();
-
-        if ($offer) {
-            throw ValidationException::withMessages([
-                'email' => __('offers.offer_exists'),
-            ]);
-        }
-
-        // if ($offer) {
-        //     return response()->json([
-        //         // 'message' => __('offers.offer_exists'),
-        //         'errors' => [
-        //             'url' => [__('offers.offer_exists')],
-        //         ],
-        //     ], 422);
-        // }    
-
-        $deletedOffer = Offer::onlyTrashed()
-            ->where('advertiser_id', auth()->id())
-            ->where('url', $request->url)
-            ->first();
-        
-        return response()->json([
-            'offer' => $deletedOffer,
-        ]);
-    }
-
-
-    /**
-     * Сохраняем новый оффер
+     * Создаем новый оффер
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -108,21 +75,25 @@ class OfferController extends Controller
 
         if (!$request->boolean('force_create')) {
 
+            // проверяем текущие офферы
             $offer = Offer::where('advertiser_id', auth()->id())
                 ->where('url', $request->url)
                 ->first();
 
+            // если оффер есть, выводим сообщение
             if ($offer) {
                 throw ValidationException::withMessages([
                     'url' => __('offers.offer_exists'),
                 ]);
             }
 
+            // проверяем удалненные офферы, если есть, то открываем модальное окно с предложением восстановить оффер
             $deletedOffer = Offer::onlyTrashed()
                 ->where('advertiser_id', auth()->id())
                 ->where('url', $request->url)
                 ->first();
 
+            // передаем данные найденного оффера
             if ($deletedOffer) {
                 return back()
                     ->withInput()
@@ -138,6 +109,8 @@ class OfferController extends Controller
             }
         }
 
+        // если ничего не нашлость, то создаем новый оффер
+        // стандартные проверки
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255', 'url'],
@@ -145,6 +118,7 @@ class OfferController extends Controller
             'theme' => 'required'
         ]);
 
+        // запись в БД
         $offer = Offer::create([
             'name' => $request->name,
             'url' =>$request->url,
@@ -164,33 +138,39 @@ class OfferController extends Controller
      * @param string $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore(string $id) {
-        
+    public function restore(string $id)
+    {
         // получаем оффер
-        $offer = Offer::onlyTrashed()->find($id);
+        $offer = Offer::onlyTrashed()->findOrFail($id);
+
         // восстанавливаем
         $offer->restore();
+
         // отсылаем сообщение о создании
         broadcast(new OfferCreate($offer));
+
         // восстанавливаем все подписки
         $offer->subscribe()->onlyTrashed()->restore();
+
         // получаем восстановленные подписки
         $subscriptions = $offer->subscribe()->get();
+
         // отправляем сообщение о подписках
         foreach ($subscriptions as $subscription) {
             broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
         }
+
         return redirect()->route('advertiser.offers');
     }
 
     /**
-     * Редактируем оффер
+     * Открываем форму редактирования оффера
      * @param string $id
      * @return \Illuminate\Contracts\View\View
      */
     public function edit(string $id)
     {
-        $offer = Offer::with('theme')->find($id);
+        $offer = Offer::with('theme')->findOrFail($id);
         $themes = OfferTheme::all();
         return view('advertiser.edit', compact('offer', 'themes'));
     }
@@ -204,7 +184,8 @@ class OfferController extends Controller
     public function update(Request $request, string $id)
     {
         // получаем оффер
-        $offer = Offer::find($id);
+        $offer = Offer::findOrFail($id);
+
         // проверяем данные
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -212,12 +193,14 @@ class OfferController extends Controller
             'price' => ['required', 'numeric'],
             'theme' => 'required'
         ]);
+
         // обновляем
         $offer->name = $request->name;
         $offer->url = $request->url;
         $offer->price = $request->price;
         $offer->theme_id = $request->theme;
         $offer->save();
+
         // отправляем сообщение об изменении оффера
         broadcast(new OfferCreate($offer));
 
@@ -232,6 +215,7 @@ class OfferController extends Controller
      */
     public function status(Request $request, Offer $offer)
     {
+        // обновляем статус
         $offer->update([
             'status' => $request->status
         ]);
@@ -279,14 +263,14 @@ class OfferController extends Controller
     }
 
     /**
-     * Записываем в БД отподписку от оффера и отсылаем сообщение
+     * Записываем в БД отписку от оффера и отсылаем сообщение
      * @param Request $request
      * @param Offer $offer
      * @return \Illuminate\Http\JsonResponse
      */
     public function unsubscribe(Request $request, Offer $offer)
     {
-        // используем мягкое удаление
+        // удаляем подписку
         OfferSubscription::where('offer_id', $offer->id)->where('webmaster_id', auth()->id())->delete();
 
         // отправляем сообщение об отписке от оффера
@@ -302,6 +286,7 @@ class OfferController extends Controller
      */
     public function destroy(string $id)
     {
+        // находим оффер
         $offer = Offer::findOrFail($id);
         
         // отправляем сообщение об удалении оффера

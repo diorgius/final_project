@@ -8,9 +8,11 @@ use App\Models\OfferAccessLog;
 use App\Models\OfferClick;
 use App\Models\Commission;
 
+/**
+ * Summary of RedirectController
+ */
 class RedirectController extends Controller
 {
-    
     /**
      * Summary of handle
      * @param string $ref
@@ -21,7 +23,7 @@ class RedirectController extends Controller
         // получаем подписку
         $subscription = OfferSubscription::withTrashed()->where('ref_code', $ref)->first();
 
-        // если вообще нет такой подписки
+        // если вообще нет такой подписки, запись в лог
         if (!$subscription) {
             OfferAccessLog::create([
                 'offer_id' => null,
@@ -33,14 +35,14 @@ class RedirectController extends Controller
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
-            abort(404, 'Запрашиваемая страница не найдена');
+            abort(404, __('http-statuses.404'));
         }
 
         // получаем оффер и вебмастера
         $offer = $subscription->offer;
         $webmaster = $subscription->webmaster;
         
-        // если подписка существует, но вебмастер отписался
+        // если подписка существует, но вебмастер отписался, запись в лог
         if ($subscription->trashed()) {
             OfferAccessLog::create([
                 'offer_id' => $subscription->offer_id,
@@ -53,10 +55,10 @@ class RedirectController extends Controller
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
-            abort(404, 'Запрашиваемая страница не найдена');
+            abort(404, __('http-statuses.404'));
         }
 
-        // если оффер отключён
+        // если оффер отключён, запись в лог
         if (!$offer || $offer->status !== 1) {
             OfferAccessLog::create([
                 'offer_id' => $offer?->id,
@@ -69,10 +71,10 @@ class RedirectController extends Controller
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
-            abort(404, 'Запрашиваемая страница не найдена');
+            abort(404, __('http-statuses.404'));
         }
 
-        // логируем успешный доступ
+        // если все хорошо, запись в лог
         OfferAccessLog::create([
             'offer_id' => $offer->id,
             'webmaster_id' => $webmaster->id,

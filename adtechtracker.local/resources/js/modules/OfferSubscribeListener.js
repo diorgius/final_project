@@ -4,10 +4,12 @@
 export default class OfferSubscribeListener {
 
     constructor() {
-        // this.offersZone = document.querySelector(offers);
+
+        // вызываем слушатель
         this.listener();
     }
 
+    // слушаем событие
     listener() {
         const role = window.userRole;
         Echo.channel(`offers.${role}`)
@@ -15,9 +17,11 @@ export default class OfferSubscribeListener {
                 console.log('Subscribed to chenal: .offer.subscribe.changed');
             })
             .listen('.offer.subscribe.changed', (event) => {
-                console.log('Subscribe change', event);
 
+                // если случилось, ищем оффер
                 const offer = document.getElementById(event.offer_id);
+                
+                //если нашли, то изменяем у него количество подписчиков
                 if (offer) {
                     const subscribers = offer.querySelector('.subscribers');
                     subscribers.textContent = `${(event.subscribe_count)}`;
@@ -25,5 +29,3 @@ export default class OfferSubscribeListener {
             });
     }
 }
-
-// new OfferSubscribeListener();

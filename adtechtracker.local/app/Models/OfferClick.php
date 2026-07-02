@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class OfferClick extends Model
 {
-
     /**
      * Устанавливливаем тип полей
      * @return array{advertiser_cost: string, system_commission: string, webmaster_income: string}

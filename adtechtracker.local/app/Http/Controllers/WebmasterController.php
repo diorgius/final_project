@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * Summary of WebmasterController
+ */
 class WebmasterController extends Controller
 {
     /**

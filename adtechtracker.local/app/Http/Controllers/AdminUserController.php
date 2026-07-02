@@ -18,7 +18,9 @@ use App\Events\OfferCreate;
 use App\Events\OfferDelete;
 use App\Events\OfferSubscribeChanged;
 
-
+/**
+ * Summary of AdminUserController
+ */
 class AdminUserController extends Controller
 {
     /**
@@ -49,7 +51,6 @@ class AdminUserController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -86,7 +87,7 @@ class AdminUserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::withTrashed()->find($id);
+        $user = User::withTrashed()->findOrFail($id);
         
         return view('admin.edit', compact('user'));
     }
@@ -101,12 +102,14 @@ class AdminUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            // не даем возможность менять email, т.к. по нему регистрация и по нему вход
+            // не даем админу возможность менять email, т.к. по нему регистрация и по нему вход
             // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
-        $user = User::find($id);
+        // получаем пользователя
+        $user = User::findOrFail($id);
+
         // проверяем пароль, если изменился, то записываем новый, если нет, то старый
         $password = $request->password === $user->password ? $user->password : Hash::make($request->password);
         
@@ -114,10 +117,11 @@ class AdminUserController extends Controller
         $status = isset($request->status) ? 1 : 0;
 
         if ($user->status !== $status && $status === 0) {
-            // отправляем письмо
+            // если пользователя заблокировали, то отправляем письмо
             Mail::to($user->email)->locale($user->locale)->send(new UserBlockedMail($user));
         }
 
+        // сохраняем в БД
         $user->name = $request->name;
         $user->password = $password;
         $user->role =$request->role;
@@ -144,12 +148,13 @@ class AdminUserController extends Controller
             $user->restore();
             
             if ($user->role === 'advertiser') {
+
                 // получаем его офферы
-                // $offers = $user->offers()->onlyTrashed()->get();
                 $offers = $user->offers()
                     ->onlyTrashed()
                     ->with('subscribe')
                     ->get();
+
                 // восстанавливаем его офферы
                 $user->offers()->onlyTrashed()->restore();
 
@@ -161,16 +166,16 @@ class AdminUserController extends Controller
                     // получаем восстановленные подписки
                     $subscriptions = $offer->subscribe()->get();
 
-                    // отправляем сообщение !!! В ИДЕАЛЕ ВЫНЕСТИ ИЗ ТРАНЗАКЦИИ !!!
+                    // отправляем сообщение
                     broadcast(new OfferCreate($offer));
 
                     // отправляем сообщение о подписках
                     foreach ($subscriptions as $subscription) {
                         broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
                     }
-
                 }
             } elseif ($user->role === 'webmaster') {
+
                 // получаем подписки
                 $subscriptions = OfferSubscription::onlyTrashed()
                                 ->with('offer')
@@ -180,9 +185,11 @@ class AdminUserController extends Controller
                                 })->get();
 
                 foreach ($subscriptions as $subscription) {
+
                     // восстанавливаем подписки
                     $subscription->restore();
-                    // отправляем сообщение !!! В ИДЕАЛЕ ВЫНЕСТИ ИЗ ТРАНЗАКЦИИ !!!
+
+                    // отправляем сообщение
                     broadcast(new OfferSubscribeChanged($subscription->offer, $user->id, 'subscribed'));
                 }           
             }
@@ -198,7 +205,7 @@ class AdminUserController extends Controller
      */
     public function destroy(string $id)
     {
-        // получаем ползователя
+        // получаем пользователя
         $user = User::findOrFail($id);
 
         // используем транзакцию
@@ -207,10 +214,12 @@ class AdminUserController extends Controller
             // удаляем офферы и подписки пользователя
             if ($user->role === 'advertiser') {
                 foreach ($user->offers as $offer) {
+
                     // удаляем подписки и офферы
                     $offer->subscribe()->delete();
                     $offer->delete();
-                    // отправляем сообщение об удалении оффера !!! В ИДЕАЛЕ ВЫНЕСТИ ИЗ ТРАНЗАКЦИИ !!!
+
+                    // отправляем сообщение об удалении оффера
                     broadcast(new OfferDelete($offer->id));
                 }
             }
@@ -228,13 +237,15 @@ class AdminUserController extends Controller
                 $user->subscriptions()->delete();
 
                 foreach ($offers as $offer) {
-                    // отправляем сообщение об отписке от оффера !!! В ИДЕАЛЕ ВЫНЕСТИ ИЗ ТРАНЗАКЦИИ !!!
+
+                    // отправляем сообщение об отписке от оффера
                     broadcast(new OfferSubscribeChanged($offer, $user->id, 'unsubscribed'));
                 }
             }
 
             // удаляем сессии пользователя
             DB::table('sessions')->where('user_id', $user->id)->delete();
+            
             // удаляем пользователя
             $user->delete();
         });

@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class CheckWebmaster
 {
     /**
-     * Проверка уровня доступа.
+     * Проверка уровня доступа вебмастера
      *
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()?->role !== 'webmaster') {
-            abort(403, 'Доступ запрещен');
+            abort(403, __('http-statuses.403'));
         }
         return $next($request);
     }

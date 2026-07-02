@@ -5,9 +5,12 @@ export default class OfferDeleteListener {
 
     constructor(offers) {
         this.offersZone = document.querySelector(offers);
+
+        // вызываем слушатель
         this.listener();
     }
 
+    // слушаем событие
     listener() {
         const role = window.userRole;
         Echo.channel(`offers.${role}`)
@@ -15,8 +18,8 @@ export default class OfferDeleteListener {
                 console.log('Subscribed to chenal: .offer.delete');
             })
             .listen('.offer.delete', (event) => {
-                console.log('Delete offer', event);
 
+                // если случилось, вызываем метод удаления оффера
                 this.deleteOffer(event);
             });
     }
@@ -25,5 +28,3 @@ export default class OfferDeleteListener {
         document.getElementById(offer.id)?.remove();
     }
 }
-
-// new OfferDeleteListener('.offers');

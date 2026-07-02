@@ -9,7 +9,7 @@ use App\Models\Offer;
 class OfferSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Создаем офферы
      */
     public function run(): void
     {

@@ -39,12 +39,13 @@ class ProfileController extends Controller
     }
 
     /**
-     * Summary of updateLocale
+     * Изменяем язык системы у пользователя
      * @param Request $request
      * @return RedirectResponse
      */
     public function updateLocale(Request $request): RedirectResponse
     {
+        // проверяем язык
         $request->validate([
             'lang' => ['required', Rule::in(array_keys(config('app.available_locales')))],
         ]);

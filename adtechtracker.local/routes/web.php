@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(func
     Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/admin/main', [AdminMainController::class, 'index'])->name('admin.main');
     Route::patch('/admin/commission/{id}', [CommissionController::class, 'update'])->name('commission.update');
-    Route::resource('/admin/users', AdminUserController::class);
+    Route::resource('/admin/users', AdminUserController::class)->except(['show', 'create']);
     Route::patch('/admin/users/{user}/restore', [AdminUserController::class, 'restore'])->name('users.restore');
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
     Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status']);

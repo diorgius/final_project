@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     protected const PASSWORD = '12345678';
 
     /**
-     * создаем пользователей
+     * Создаем пользователей
      */
     public function run(): void
     {

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 
+/**
+ * Summary of CommissionController
+ */
 class CommissionController extends Controller
 {
     /**
-     * Summary of update
+     * Обновляем комиссию
      * @param Request $request
      * @param string $id
      * @return \Illuminate\Http\RedirectResponse
@@ -19,7 +22,7 @@ class CommissionController extends Controller
             'commission' => ['required', 'numeric']
         ]);
 
-        $commission = Commission::find($id);
+        $commission = Commission::findOrFail($id);
         $commission->commission = $request->commission;
         $commission->save();
 

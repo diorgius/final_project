@@ -18,9 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // создаем пользователей
         $userSeeder = new UserSeeder();
         $userSeeder->run();
 
+        // создаем темы
         OfferTheme::create(['name' => 'IT']);
         OfferTheme::create(['name' => 'Образование']);
         OfferTheme::create(['name' => 'Туризм']);
@@ -30,9 +32,11 @@ class DatabaseSeeder extends Seeder
         OfferTheme::create(['name' => 'Кино']);
         OfferTheme::create(['name' => 'Музыка']);
 
+        // создаем офферы
         $offerSeeder = new OfferSeeder();
         $offerSeeder->run();
 
+        // создаем комиссию
         Commission::create(['commission' => 20]);
     }
 }

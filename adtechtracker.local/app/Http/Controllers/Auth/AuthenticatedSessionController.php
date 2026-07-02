@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(route('webmaster.offers', absolute: false));
                 break;
             default:
-                abort(404, 'Запрашиваемая страница не найдена');
+                abort(404, __('http-statuses.404'));
                 break;
         }
     }

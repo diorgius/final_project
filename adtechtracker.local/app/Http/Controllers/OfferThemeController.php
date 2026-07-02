@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use App\Models\OfferTheme;
 
+/**
+ * Summary of OfferThemeController
+ */
 class OfferThemeController extends Controller
 {
     /**

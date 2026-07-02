@@ -17,10 +17,16 @@ class CheckActive
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()->status === 0) {
+
+            // если учетка заблокирована, разлогиниваем
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            abort(403, 'Ваша учетная запись отключена администратором');
+
+            // редиректим на страницу логина, с сообщением о блокировке учетки
+            return redirect()->route('login')->withErrors([
+                    'email' => __('http-statuses.423'),
+                ]);
         }
         
         return $next($request);

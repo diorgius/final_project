@@ -16,7 +16,7 @@ return [
     'new_offer' => 'New offer',
     'edit_offer' => 'Edit offer',
     'offer_exists' => 'An offer with this URL already exists',
-    'found_deleted_offer' => 'A previously deleted offer already exists for this URL. If you want to host this site again, restore the existing offer and, if necessary, change its parameters.',
+    'found_deleted_offer' => 'A previously deleted offer already exists for this URL. If you want to host this URL again, restore the existing offer and, if necessary, change its parameters.',
     'active_subscriptions' => 'Active subscriptions',
     'available_subscriptions' => 'Available subscriptions',
     'referral_link' => 'Referral link',

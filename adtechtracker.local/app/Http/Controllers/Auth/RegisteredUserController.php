@@ -25,12 +25,10 @@ class RegisteredUserController extends Controller
 
     /**
      * Регистрируем нового пользователя и перенаправляем на страницу в зависимости от роли
-     *
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
-
         // проверка на ранее удаленные записи, если пользователь с таким email уже был и удален, направляем сообщение 
         $deletedUser = User::onlyTrashed()
             ->where('email', $request->email)

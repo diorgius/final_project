@@ -10,10 +10,13 @@ use App\Models\OfferClick;
 use App\Models\OfferSubscription;
 use App\Models\OfferAccessLog;
 
+/**
+ * Summary of StatisticController
+ */
 class StatisticController extends Controller
 {
     /**
-     * Summary of index
+     * Выводим данные статистику в зависимости от роли
      * @return \Illuminate\Contracts\View\View
      */
     public function index ()
@@ -58,13 +61,13 @@ class StatisticController extends Controller
                 return view(auth()->user()->role . '.statistics', compact('offers', 'totalClicks', 'totalRevenue'));
                 break;
             default:
-                abort(404, 'Запрашиваемая страница не найдена');
+                abort(404, __('http-statuses.404'));
                 break;
         }
     }
 
     /**
-     * Summary of getDate
+     * Получаем диапазоны дат
      * @param string $period
      * @return void
      */
@@ -79,12 +82,20 @@ class StatisticController extends Controller
         };
     }
 
+    /**
+     * Получаем статистику в зависимости от диапазона, для вывода на фронте
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function summary(Request $request)
     {
+        // получаем с фронта период
         $period = $request->input('period');
 
+        // определяем диапазоны для запросов
         [$start, $end] = $this->getDate($period);
 
+        // получаем статистику в зависимости от роли
         switch (auth()->user()->role) {
             case 'admin':
                 return response()->json([
@@ -149,6 +160,9 @@ class StatisticController extends Controller
                     'totalClicks' => $totalClicks,
                     'totalRevenue' => $totalRevenue,
                 ]);
+                break;
+            default:
+                abort(404, __('http-statuses.404'));
                 break;
         }        
     }

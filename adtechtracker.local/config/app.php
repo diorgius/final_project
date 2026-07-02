@@ -84,6 +84,7 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
+    // добавлено для проверки доступных языков
     'available_locales' => [
                             'ru' => 'common.ru',
                             'en' => 'common.en',

@@ -14,10 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
+        // устанавливаем язык на все маршруты
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);
 
+        // задаем алиасы для middleware
         $middleware->alias([
             'checkadmin' => \App\Http\Middleware\CheckAdmin::class,
             'checkadvertiser' => \App\Http\Middleware\CheckAdvertiser::class,

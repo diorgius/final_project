@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\App;
 class SetLocale
 {
     /**
-     * Summary of handle
+     * Устанавливаем язык в зависимости от настроек пользователя
      * @param Request $request
      * @param Closure $next
      * @return Response

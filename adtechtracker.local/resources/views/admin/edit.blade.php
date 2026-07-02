@@ -77,9 +77,9 @@
                             @method('DELETE')
 
                             <div class="flex items-center justify-center mt-4">
-                                <x-primary-button>
+                                <x-danger-button>
                                     {{ __('Delete') }}
-                                </x-primary-button>
+                                </x-danger-button>
                             </div>
                         </form>
                     @else
@@ -88,9 +88,9 @@
                             @method('PATCH')
 
                             <div class="flex items-center justify-center mt-4">
-                                <x-primary-button>
+                                <x-danger-button>
                                     {{ __('Restore') }}
-                                </x-primary-button>
+                                </x-danger-button>
                             </div>
                         </form>
                     @endif
