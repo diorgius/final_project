@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
+use App\Services\SecurityLogger;
 
 class LoginRequest extends FormRequest
 {
@@ -42,13 +44,29 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // получаем пользователя с введенным email
+        $user = User::where('email', $this->email)->first();
+
+        // если такого пользователя нет, то пишем событие в лог 
+        if (! $user) {
+            SecurityLogger::loginWithUnknownEmail($this->email, $this);
+        }
+        
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            // если пользователь есть, но пароль неверный, то пишем событие в лог
+            if ($user) {
+                SecurityLogger::loginWithWrongPassword($user, $this);
+            }
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
+
+        // пишем в лог успешный вход
+        SecurityLogger::successfulLogin($user, $this);
 
         RateLimiter::clear($this->throttleKey());
     }

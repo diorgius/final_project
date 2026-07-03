@@ -16,7 +16,15 @@
         @foreach ($offers as $offer)
             <tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                 <td class="py-2">{{ $offer->name }}</td>
-                <td class="py-2">{{ !$offer->trashed() ? __('statistics.active') : __('statistics.deleted') }}</td>
+                <td class="py-2">
+                    @if (!$offer->trashed() && $offer->status === 1) 
+                        {{ __('statistics.active') }}
+                    @elseif ($offer->trashed())
+                        {{ __('statistics.deleted') }}
+                    @else
+                        {{ __('statistics.deactive') }}
+                    @endif    
+                </td>
                 <td class="py-2">{{ $offer->click_count }}</td>
                 <td class="py-2">{{ $role === 'advertiser' ? number_format($offer->advertiser_expenses, 2, '.', '') : number_format($offer->webmaster_revenue, 2, '.', '') }}</td>
             </tr>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Services\SecurityLogger;
 
 class RegisteredUserController extends Controller
 {
@@ -24,11 +25,16 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Регистрируем нового пользователя и перенаправляем на страницу в зависимости от роли
+     * Регистрируем нового пользователя
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
+        // если пользователь ввел уже существующий логин, то пишем событие в лог
+        if (User::where('email', $request->email)->exists()) {
+            SecurityLogger::registrationWithExistingEmail($request->email, $request);
+        }
+
         // проверка на ранее удаленные записи, если пользователь с таким email уже был и удален, направляем сообщение 
         $deletedUser = User::onlyTrashed()
             ->where('email', $request->email)
@@ -59,6 +65,9 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        // пишем в лог успешную регистрацию
+        SecurityLogger::successfulRegistration($request->email, $request);
 
         Auth::login($user);
 

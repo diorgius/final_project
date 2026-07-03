@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Services\SecurityLogger;
 
 class CheckActive
 {
@@ -18,6 +19,9 @@ class CheckActive
     {
         if (Auth::user()->status === 0) {
 
+            // пишем в лог попытку входа заблокированного пользователя
+            SecurityLogger::blockedUserLogin(Auth::user(), $request);
+            
             // если учетка заблокирована, разлогиниваем
             Auth::guard('web')->logout();
             $request->session()->invalidate();

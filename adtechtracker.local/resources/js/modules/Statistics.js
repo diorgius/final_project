@@ -78,6 +78,8 @@ export default class Statistics {
             document.getElementById('advertisers').textContent = data.advertisers;
             document.getElementById('webmasters').textContent = data.webmasters;
             document.getElementById('offers').textContent = data.offers;
+            document.getElementById('active-offers').textContent = data.activeOffers;
+            document.getElementById('deactive-offers').textContent = data.deactiveOffers;
             document.getElementById('deleted-offers').textContent = data.deletedOffers;
             document.getElementById('subscriptions').textContent = data.subscriptions;
             document.getElementById('active-subscriptions').textContent = data.activeSubscriptions;
@@ -96,13 +98,24 @@ export default class Statistics {
             const tbody = document.getElementById('offers-table-body');
             tbody.innerHTML = '';
 
+            
             // выводим данные
             data.offers.forEach(offer => {
+
+                // определяем статус
+                let status = '';
+                if (offer.deleted_at === null && offer.status === 1) {
+                    status = __('active');
+                } else if (offer.deleted_at !== null) {
+                    status = __('deleted');
+                } else {
+                    status = __('deactive');
+                }
                 tbody.insertAdjacentHTML(
                     'beforeend',
                     `<tr class="border-b border-gray-200 dark:text-gray-200 text-xl">
                         <td class="py-2">${offer.name}</td>
-                        <td class="py-2">${offer.deleted_at === null ? __('active') : __('deleted')}</td>
+                        <td class="py-2">${status}</td>
                         <td class="py-2">${offer.click_count}</td>
                         <td class="py-2">${role === 'advertiser' ?
                             Number(offer.advertiser_expenses).toFixed(2) :

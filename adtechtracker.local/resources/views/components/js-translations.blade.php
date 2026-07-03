@@ -13,6 +13,7 @@
         'year' => __('statistics.year'),
         'alltime' => __('statistics.alltime'),
         'active' => __('statistics.active'),
+        'deactive' => __('statistics.deactive'),
         'deleted' => __('statistics.deleted'),
     ]) }};
 
