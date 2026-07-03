@@ -1,2 +1,2 @@
 .env
-/mysql/dbdata/.*
+mysql/dbdata/
