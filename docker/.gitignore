@@ -1,2 +1,2 @@
 .env
-mysql.sock
+/mysql/dbdata/.*

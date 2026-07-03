@@ -26,7 +26,7 @@
                             <x-secondary-button type="reset">
                                 {{ __('Cancel') }}
                             </x-secondary-button>
-                            
+
                             <x-primary-button class="ms-4">
                                 {{ __('Save') }}
                             </x-primary-button>
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="flex flex-col items-center pt-5 pb-1">
-                    <p>!!!!</p>
+                    <h3 class="font-semibold text-gray-700 dark:text-gray-200 text-xl">{{ __('main.summary') }}:</h3>
                 </div>
 
                 <!-- Выводим общие данные -->
