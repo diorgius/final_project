@@ -12,7 +12,7 @@
 
     <tbody>
         @foreach ($users as $user)
-            <tr class="cursor-pointer" onclick="window.location='{{ route('users.edit', $user->id) }}'" title="{{ __('users.user_title') }}">
+            <tr class="cursor-pointer hover:bg-gray-200" onclick="window.location='{{ route('users.edit', $user->id) }}'" title="{{ __('users.user_title') }}">
                 <td class="border border-gray-400 dark:border-gray-500">{{ $user->name }}</td>
                 <td class="border border-gray-400 dark:border-gray-500">{{ $user->email }}</td>
                 <td class="border border-gray-400 dark:border-gray-500">

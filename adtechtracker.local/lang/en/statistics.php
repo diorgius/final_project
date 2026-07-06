@@ -13,7 +13,7 @@ return [
     'title_for_js_on' => 'on',
     'number_advertisers' => 'Number of advertisers',
     'number_webmasters' => 'Number of webmasters',
-    'number_offers' => 'Number of offers',
+    'number_offers' => 'Total number of offers',
     'number_active_offers' => 'Number of active offers',
     'number_deactive_offers' => 'Number of deactive offers',
     'number_deleted_offers' => 'Number of deleted offers',

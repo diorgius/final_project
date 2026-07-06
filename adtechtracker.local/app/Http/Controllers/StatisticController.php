@@ -26,7 +26,7 @@ class StatisticController extends Controller
                 return view(auth()->user()->role . '.statistics', [
                     'advertisers' => User::where('role', 'advertiser')->count(),
                     'webmasters' => User::where('role', 'webmaster')->count(),
-                    'offers' => Offer::count(),
+                    'offers' => Offer::withTrashed()->count(),
                     'activeOffers' => Offer::where('status', 1)->count(),
                     'deactiveOffers' => Offer::where('status', 0)->count(),
                     'deletedOffers' => Offer::withTrashed()->whereNotNull('deleted_at')->count(),                    
@@ -103,7 +103,7 @@ class StatisticController extends Controller
                 return response()->json([
                     'advertisers' => User::where('role', 'advertiser')->whereBetween('created_at', [$start, $end])->count(),
                     'webmasters' => User::where('role', 'webmaster')->whereBetween('created_at', [$start, $end])->count(),
-                    'offers' => Offer::query()->whereBetween('created_at', [$start, $end])->count(),
+                    'offers' => Offer::query()->withTrashed()->whereBetween('created_at', [$start, $end])->count(),
                     'activeOffers' => Offer::where('status', 1)->whereBetween('created_at', [$start, $end])->count(),
                     'deactiveOffers' => Offer::where('status', 0)->whereBetween('created_at', [$start, $end])->count(),
                     'deletedOffers' => Offer::query()->withTrashed()->whereBetween('deleted_at', [$start, $end])->count(),

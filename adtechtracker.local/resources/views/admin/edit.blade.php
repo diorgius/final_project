@@ -11,7 +11,7 @@
                     class=" w-full sm:max-w-md mt-6 px-6 py-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
                     
                     <!-- форма редактирования пользователя -->
-                    <form method="POST" action="{{ route('users.update', $user->id) }}">
+                    <form method="POST" action="{{ route('users.update', $user) }}">
                         @csrf
                         @method('PATCH')
 
@@ -74,7 +74,7 @@
 
                     <!-- Delete || Restore-->
                     @if (!$user->trashed())
-                        <form method="POST" action="{{ route('users.destroy', $user->id) }}">
+                        <form method="POST" action="{{ route('users.destroy', $user) }}">
                             @csrf
                             @method('DELETE')
 
@@ -85,7 +85,7 @@
                             </div>
                         </form>
                     @else
-                        <form method="POST" action="{{ route('users.restore', $user->id) }}">
+                        <form method="POST" action="{{ route('users.restore', $user) }}">
                             @csrf
                             @method('PATCH')
 

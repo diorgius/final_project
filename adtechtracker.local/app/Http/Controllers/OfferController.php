@@ -72,7 +72,6 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-
         if (!$request->boolean('force_create')) {
 
             // проверяем текущие офферы

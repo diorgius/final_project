@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Validation\Rule;
+use App\Services\SecurityLogger;
 
 class ProfileController extends Controller
 {
@@ -34,6 +35,9 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        // пишем событие самообновления в лог
+        SecurityLogger::updatingUserInformation($request->user(), $request);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -76,6 +80,9 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // пишем событие самоудаления в лог
+        SecurityLogger::deletingUser($user, $request);
 
         Auth::logout();
 

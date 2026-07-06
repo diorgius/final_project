@@ -13,7 +13,7 @@ return [
     'title_for_js_on' => 'на',
     'number_advertisers' => 'Количество рекламодателей',
     'number_webmasters' => 'Количество вебмастеров',
-    'number_offers' => 'Количество предложений',
+    'number_offers' => 'Общее количество предложений',
     'number_active_offers' => 'Количество активных предложений',
     'number_deactive_offers' => 'Количество неактивных предложений',
     'number_deleted_offers' => 'Количество удаленных предложений',

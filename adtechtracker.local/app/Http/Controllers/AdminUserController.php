@@ -17,6 +17,7 @@ use App\Models\OfferSubscription;
 use App\Events\OfferCreate;
 use App\Events\OfferDelete;
 use App\Events\OfferSubscribeChanged;
+use App\Services\SecurityLogger;
 
 /**
  * Summary of AdminUserController
@@ -69,6 +70,9 @@ class AdminUserController extends Controller
 
         event(new Registered($user));
 
+        // пишем событие в лог
+        SecurityLogger::creatingUser($user, $request, auth()->user()->email);
+
         return redirect()->route('users.index');
     }
 
@@ -117,14 +121,35 @@ class AdminUserController extends Controller
         $status = isset($request->status) ? 1 : 0;
 
         if ($user->status !== $status && $status === 0) {
+
             // если пользователя заблокировали, то отправляем письмо
             Mail::to($user->email)->locale($user->locale)->send(new UserBlockedMail($user));
+
+            // пишем событие в лог
+            SecurityLogger::blockingUser($user, $request, auth()->user()->email);
+        } elseif ($user->status !== $status && $status === 1) {
+
+            // пишем событие в лог
+            SecurityLogger::unblockingUser($user, $request, auth()->user()->email);
         }
+        
+        if ($request->password !== $user->password) {
+            
+            // пишем событие в лог
+            SecurityLogger::updatingUserPassword($user, $request, auth()->user()->email);
+        }
+
+        if ($request->name !== $user->name || $request->role !== $user->role) {
+
+            // пишем событие в лог
+            SecurityLogger::updatingUserInformation($user, $request, auth()->user()->email);
+        }
+
 
         // сохраняем в БД
         $user->name = $request->name;
         $user->password = $password;
-        $user->role =$request->role;
+        $user->role = $request->role;
         $user->status = $status;
         $user->save();
 
@@ -136,13 +161,13 @@ class AdminUserController extends Controller
      * @param string $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore(string $id)
+    public function restore(Request $request, string $id)
     {
-        // используем транзакцию
-        DB::transaction(function () use ($id) {
+        // получаем пользователя
+        $user = User::withTrashed()->findOrFail($id);
 
-            // получаем пользователя
-            $user = User::withTrashed()->findOrFail($id);
+        // используем транзакцию
+        DB::transaction(function () use ($user) {
 
             // восстанавливаем пользователя
             $user->restore();
@@ -194,6 +219,9 @@ class AdminUserController extends Controller
                 }           
             }
         });
+            
+        // пишем событие в лог
+        SecurityLogger::restoringUser($user, $request, auth()->user()->email);
 
         return redirect()->route('users.index');
     } 
@@ -203,7 +231,7 @@ class AdminUserController extends Controller
      * @param string $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         // получаем пользователя
         $user = User::findOrFail($id);
@@ -252,6 +280,9 @@ class AdminUserController extends Controller
 
         // отправляем письмо удаленному пользователю
         Mail::to($user->email)->locale($user->locale)->send(new UserDeletedMail($user));
+
+        // пишем событие в лог
+        SecurityLogger::deletingUser($user, $request, auth()->user()->email);
 
         return redirect()->route('users.index');
     }
