@@ -1,4 +1,4 @@
-<p class="font-semibold text-gray-700 dark:text-gray-200">{{ __('statistics.period') }}:</p>
+<h3 class="font-semibold text-gray-700 dark:text-gray-200">{{ __('statistics.period') }}:</h3>
 
 <div class="w-auto mt-6 px-6 py-4 bg-white text-gray-700 dark:text-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
 

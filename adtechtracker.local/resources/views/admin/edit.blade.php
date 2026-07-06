@@ -5,7 +5,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div
                 class="flex flex-col items-center pb-4 pt-4 bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
-                <p class="font-semibold text-gray-700 dark:text-gray-200">{{ __('users.user_title') }} - {{ $user->name }}<p>
+                <h3 class="font-semibold text-gray-700 dark:text-gray-200">{{ __('users.user_title') }} - {{ $user->name }}</h3>
                 @if ($user->trashed()) <p class="font-semibold text-red-700 dark:text-gray-200">{{ __('users.user_deleted') }}</p>@endif
                 <div 
                     class=" w-full sm:max-w-md mt-6 px-6 py-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
