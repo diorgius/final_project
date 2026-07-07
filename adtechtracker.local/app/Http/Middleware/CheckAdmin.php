@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Services\SecurityLogger;
 
 class CheckAdmin
 {
@@ -17,6 +18,10 @@ class CheckAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()?->role !== 'admin') {
+
+            // пишем в лог попытку входа на запрещенную страницу
+            SecurityLogger::attemptToLoginForbiddenPage(Auth::user(), $request);
+
             abort(403, __('http-statuses.403'));
         }
 

@@ -73,7 +73,7 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         if (!$request->boolean('force_create')) {
-
+            
             // проверяем текущие офферы
             $offer = Offer::where('advertiser_id', auth()->id())
                 ->where('url', $request->url)
@@ -114,7 +114,7 @@ class OfferController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255', 'url'],
             'price' => ['required', 'numeric'],
-            'theme' => 'required'
+            'theme' => ['required', 'exists:offer_themes,id'],
         ]);
 
         // запись в БД
@@ -133,36 +133,6 @@ class OfferController extends Controller
     }
 
     /**
-     * Восстанавливаем удаленный ранее оффер
-     * @param string $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function restore(string $id)
-    {
-        // получаем оффер
-        $offer = Offer::onlyTrashed()->findOrFail($id);
-
-        // восстанавливаем
-        $offer->restore();
-
-        // отсылаем сообщение о создании
-        broadcast(new OfferCreate($offer));
-
-        // восстанавливаем все подписки
-        $offer->subscribe()->onlyTrashed()->restore();
-
-        // получаем восстановленные подписки
-        $subscriptions = $offer->subscribe()->get();
-
-        // отправляем сообщение о подписках
-        foreach ($subscriptions as $subscription) {
-            broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
-        }
-
-        return redirect()->route('advertiser.offers');
-    }
-
-    /**
      * Открываем форму редактирования оффера
      * @param string $id
      * @return \Illuminate\Contracts\View\View
@@ -170,6 +140,12 @@ class OfferController extends Controller
     public function edit(string $id)
     {
         $offer = Offer::with('theme')->findOrFail($id);
+        
+        // проверяем владельца оффера, если не совпадает, то выводим ошибку
+        if ($offer->advertiser_id !== auth()->id()) {
+            abort(403, __('http-statuses.403'));
+        }
+
         $themes = OfferTheme::all();
         return view('advertiser.edit', compact('offer', 'themes'));
     }
@@ -185,12 +161,25 @@ class OfferController extends Controller
         // получаем оффер
         $offer = Offer::findOrFail($id);
 
+        // проверяем наличие других офферов с таким же url
+        $exists = Offer::where('advertiser_id', auth()->id())
+            ->where('url', $request->url)
+            ->where('id', '!=', $offer->id)
+            ->exists();
+
+        // если находим выводим сообщение
+        if ($exists) {
+            throw ValidationException::withMessages([
+                'url' => __('offers.offer_exists'),
+            ]);
+        }
+
         // проверяем данные
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:255', 'url'],
             'price' => ['required', 'numeric'],
-            'theme' => 'required'
+            'theme' => ['required', 'exists:offer_themes,id'],
         ]);
 
         // обновляем
@@ -287,6 +276,11 @@ class OfferController extends Controller
     {
         // находим оффер
         $offer = Offer::findOrFail($id);
+
+        // проверяем владельца оффера, если не совпадает, то выводим ошибку
+        if ($offer->advertiser_id !== auth()->id()) {
+            abort(403, __('http-statuses.403'));
+        }
         
         // отправляем сообщение об удалении оффера
         broadcast(new OfferDelete($offer->id));
@@ -298,5 +292,40 @@ class OfferController extends Controller
         $offer->delete();
         
         return redirect()->route(auth()->user()->role . '.offers');
+    }
+
+    /**
+     * Восстанавливаем удаленный ранее оффер
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore(string $id)
+    {
+        // получаем оффер
+        $offer = Offer::onlyTrashed()->findOrFail($id);
+
+        // проверяем владельца оффера, если не совпадает, то выводим ошибку
+        if ($offer->advertiser_id !== auth()->id()) {
+            abort(403, __('http-statuses.403'));
+        }
+
+        // восстанавливаем
+        $offer->restore();
+
+        // отсылаем сообщение о создании
+        broadcast(new OfferCreate($offer));
+
+        // восстанавливаем все подписки
+        $offer->subscribe()->onlyTrashed()->restore();
+
+        // получаем восстановленные подписки
+        $subscriptions = $offer->subscribe()->get();
+
+        // отправляем сообщение о подписках
+        foreach ($subscriptions as $subscription) {
+            broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
+        }
+
+        return redirect()->route('advertiser.offers');
     }
 }

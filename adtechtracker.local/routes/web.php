@@ -89,3 +89,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/language', [ProfileController::class, 'updateLocale'])->name('profile.language.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Test routes
+Route::middleware(['auth', 'checkadmin'])->get('/test-admin', fn() => response('OK'));
+Route::middleware(['auth', 'checkadvertiser'])->get('/test-advertiser', fn() => response('OK'));
+Route::middleware(['auth', 'checkwebmaster'])->get('/test-webmaster', fn() => response('OK'));

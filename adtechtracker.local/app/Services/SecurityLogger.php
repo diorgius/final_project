@@ -25,6 +25,7 @@ class SecurityLogger
     private const RESTORING_USER = 'Restoring the user.';
     private const UPDATE_USER_INFORMATION = 'Updating profile information.';
     private const UPDATE_USER_PASSWORD = "Updating the user's password.";
+    private const ATTEMPT_LOGIN_FORBIDDEN_PAGE = "An attempt to log in to a forbidden page.";
     
 
     /**
@@ -392,6 +393,30 @@ class SecurityLogger
                     'email' => $user->email,
                     'role' => $user->role,
                     'admin' => $admin,
+                ]
+            )
+        );
+    }
+
+    /**
+     * Попытка входа на запрещенную страницу.
+     * @param User $user
+     * @param Request $request
+     * @return void
+     */
+    public static function attemptToLoginForbiddenPage(User $user, Request $request): void
+    {
+
+        // запись в лог
+        self::log(
+            'warning',
+            self::ATTEMPT_LOGIN_FORBIDDEN_PAGE,
+            array_merge(
+                self::requestContext($request),
+                [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'role' => $user->role,
                 ]
             )
         );

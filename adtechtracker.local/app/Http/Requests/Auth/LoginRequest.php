@@ -47,16 +47,32 @@ class LoginRequest extends FormRequest
         // получаем пользователя с введенным email
         $user = User::where('email', $this->email)->first();
 
-        // если такого пользователя нет, то пишем событие в лог 
+        // если такого пользователя нет  
         if (! $user) {
+
+            // пишем событие в лог
             SecurityLogger::loginWithUnknownEmail($this->email, $this);
         }
-        
+
+        // если пользователь заблокирован
+        if ($user && $user->status === 0) {
+
+            // пишем событие в лог
+            SecurityLogger::blockedUserLogin($user, $this);
+
+            // выводим сообщение
+            throw ValidationException::withMessages([
+                'email' => __('http-statuses.423'),
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            // если пользователь есть, но пароль неверный, то пишем событие в лог
+            // если пользователь есть, но пароль неверный
             if ($user) {
+
+                // пишем событие в лог
                 SecurityLogger::loginWithWrongPassword($user, $this);
             }
 

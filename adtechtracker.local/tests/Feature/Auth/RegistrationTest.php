@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -26,11 +27,27 @@ class RegistrationTest extends TestCase
             'role' => 'admin',
             'locale' => 'ru',
             'status' => 1,
-
-
         ]);
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
     }
+
+    public function test_registration_fails_if_email_exists(): void
+    {
+        User::factory()->admin()->create([
+            'email' => 'john@example.com',
+        ]);
+
+        $response = $this->post('/register', [
+            'name' => 'John',
+            'email' => 'john@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertSessionHasErrors('email');
+    }
+
 }

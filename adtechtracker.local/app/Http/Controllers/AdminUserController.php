@@ -104,41 +104,56 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            // не даем админу возможность менять email, т.к. по нему регистрация и по нему вход
-            // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', Rules\Password::defaults()],
-        ]);
-
         // получаем пользователя
         $user = User::findOrFail($id);
+
+        // проверяем email
+        if ($request->email === $user->email) {
+            $email = $user->email;
+
+        } else {
+            $request->validate([
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            ]);
+            $email = $request->email;
+        }
+
+        // обычные проверки
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'password' => ['required', Rules\Password::defaults()],
+        ]);
 
         // проверяем пароль, если изменился, то записываем новый, если нет, то старый
         $password = $request->password === $user->password ? $user->password : Hash::make($request->password);
         
         // проверяем статус
-        $status = isset($request->status) ? 1 : 0;
+        $status = $request->has('status') ? 1 : 0;
 
+        // если пользователя заблокирован
         if ($user->status !== $status && $status === 0) {
 
-            // если пользователя заблокировали, то отправляем письмо
+            // отправляем письмо
             Mail::to($user->email)->locale($user->locale)->send(new UserBlockedMail($user));
 
             // пишем событие в лог
             SecurityLogger::blockingUser($user, $request, auth()->user()->email);
+
+        // если разблокировали
         } elseif ($user->status !== $status && $status === 1) {
 
             // пишем событие в лог
             SecurityLogger::unblockingUser($user, $request, auth()->user()->email);
         }
         
+        // если изменился пароль
         if ($request->password !== $user->password) {
             
             // пишем событие в лог
             SecurityLogger::updatingUserPassword($user, $request, auth()->user()->email);
         }
 
+        // если изменили имя или роль
         if ($request->name !== $user->name || $request->role !== $user->role) {
 
             // пишем событие в лог
@@ -148,6 +163,7 @@ class AdminUserController extends Controller
 
         // сохраняем в БД
         $user->name = $request->name;
+        $user->email = $email;
         $user->password = $password;
         $user->role = $request->role;
         $user->status = $status;
@@ -155,76 +171,6 @@ class AdminUserController extends Controller
 
         return redirect()->route('users.index');
     }
-
-    /**
-     * Восстанавливаем пользователя
-     * @param string $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function restore(Request $request, string $id)
-    {
-        // получаем пользователя
-        $user = User::withTrashed()->findOrFail($id);
-
-        // используем транзакцию
-        DB::transaction(function () use ($user) {
-
-            // восстанавливаем пользователя
-            $user->restore();
-            
-            if ($user->role === 'advertiser') {
-
-                // получаем его офферы
-                $offers = $user->offers()
-                    ->onlyTrashed()
-                    ->with('subscribe')
-                    ->get();
-
-                // восстанавливаем его офферы
-                $user->offers()->onlyTrashed()->restore();
-
-                foreach ($offers as $offer) {
-
-                    // восстанавливаем подписки
-                    $offer->subscribe()->onlyTrashed()->restore();
-
-                    // получаем восстановленные подписки
-                    $subscriptions = $offer->subscribe()->get();
-
-                    // отправляем сообщение
-                    broadcast(new OfferCreate($offer));
-
-                    // отправляем сообщение о подписках
-                    foreach ($subscriptions as $subscription) {
-                        broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
-                    }
-                }
-            } elseif ($user->role === 'webmaster') {
-
-                // получаем подписки
-                $subscriptions = OfferSubscription::onlyTrashed()
-                                ->with('offer')
-                                ->where('webmaster_id', $user->id)
-                                ->whereHas('offer', function ($query) {
-                                    $query->whereNull('deleted_at');
-                                })->get();
-
-                foreach ($subscriptions as $subscription) {
-
-                    // восстанавливаем подписки
-                    $subscription->restore();
-
-                    // отправляем сообщение
-                    broadcast(new OfferSubscribeChanged($subscription->offer, $user->id, 'subscribed'));
-                }           
-            }
-        });
-            
-        // пишем событие в лог
-        SecurityLogger::restoringUser($user, $request, auth()->user()->email);
-
-        return redirect()->route('users.index');
-    } 
 
     /**
      * Удаляем пользователя
@@ -235,6 +181,8 @@ class AdminUserController extends Controller
     {
         // получаем пользователя
         $user = User::findOrFail($id);
+
+        // !!!??? ПРОВЕРКА АДМИН НЕ МОЖЕТ САМ СЕБЯ УДАЛИТЬ
 
         // используем транзакцию
         DB::transaction(function () use ($user) {
@@ -283,6 +231,76 @@ class AdminUserController extends Controller
 
         // пишем событие в лог
         SecurityLogger::deletingUser($user, $request, auth()->user()->email);
+
+        return redirect()->route('users.index');
+    }
+
+    /**
+     * Восстанавливаем пользователя
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore(Request $request, string $id)
+    {
+        // получаем пользователя
+        $user = User::withTrashed()->findOrFail($id);
+
+        // используем транзакцию
+        DB::transaction(function () use ($user) {
+
+            // восстанавливаем пользователя
+            $user->restore();
+
+            if ($user->role === 'advertiser') {
+
+                // получаем его офферы
+                $offers = $user->offers()
+                    ->onlyTrashed()
+                    ->with('subscribe')
+                    ->get();
+
+                // восстанавливаем его офферы
+                $user->offers()->onlyTrashed()->restore();
+
+                foreach ($offers as $offer) {
+
+                    // восстанавливаем подписки
+                    $offer->subscribe()->onlyTrashed()->restore();
+
+                    // получаем восстановленные подписки
+                    $subscriptions = $offer->subscribe()->get();
+
+                    // отправляем сообщение
+                    broadcast(new OfferCreate($offer));
+
+                    // отправляем сообщение о подписках
+                    foreach ($subscriptions as $subscription) {
+                        broadcast(new OfferSubscribeChanged($offer, $subscription->webmaster_id, 'subscribed'));
+                    }
+                }
+            } elseif ($user->role === 'webmaster') {
+
+                // получаем подписки
+                $subscriptions = OfferSubscription::onlyTrashed()
+                    ->with('offer')
+                    ->where('webmaster_id', $user->id)
+                    ->whereHas('offer', function ($query) {
+                        $query->whereNull('deleted_at');
+                    })->get();
+
+                foreach ($subscriptions as $subscription) {
+
+                    // восстанавливаем подписки
+                    $subscription->restore();
+
+                    // отправляем сообщение
+                    broadcast(new OfferSubscribeChanged($subscription->offer, $user->id, 'subscribed'));
+                }
+            }
+        });
+
+        // пишем событие в лог
+        SecurityLogger::restoringUser($user, $request, auth()->user()->email);
 
         return redirect()->route('users.index');
     }
