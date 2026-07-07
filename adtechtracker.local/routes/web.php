@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(func
     Route::resource('/admin/users', AdminUserController::class)->except(['show', 'create']);
     Route::patch('/admin/users/{user}/restore', [AdminUserController::class, 'restore'])->name('users.restore');
     Route::get('/admin/offers', [OfferController::class, 'index'])->name('admin.offers');
-    Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status']);
+    Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status'])->name('admin.offers.status');;
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
     Route::get('/admin/statistics', [StatisticController::class, 'index'])->name('admin.statistics');
     Route::get('/admin/statistics/summary', [StatisticController::class, 'summary']);
@@ -66,7 +66,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group
     Route::patch('/advertiser/offers/{id}/restore', [OfferController::class, 'restore'])->name('offers.restore');
     Route::delete('/advertiser/offers/{id}', [OfferController::class, 'destroy'])->name('advertiser.offers.destroy');
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
-    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status']);
+    Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status'])->name('advertiser.offers.status');
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
     Route::get('/advertiser/statistics/summary', [StatisticController::class, 'summary']);
 });

@@ -96,7 +96,6 @@ class OfferController extends Controller
             if ($deletedOffer) {
                 return back()
                     ->withInput()
-                    ->with('theme')
                     ->with('restore_offer', [
                         'id' => $deletedOffer->id,
                         'name' => $deletedOffer->name,
@@ -161,6 +160,11 @@ class OfferController extends Controller
         // получаем оффер
         $offer = Offer::findOrFail($id);
 
+        // проверяем владельца оффера, если не совпадает, то выводим ошибку
+        if ($offer->advertiser_id !== auth()->id()) {
+            abort(403, __('http-statuses.403'));
+        }
+
         // проверяем наличие других офферов с таким же url
         $exists = Offer::where('advertiser_id', auth()->id())
             ->where('url', $request->url)
@@ -203,6 +207,15 @@ class OfferController extends Controller
      */
     public function status(Request $request, Offer $offer)
     {
+        // проверяем владельца оффера, если не совпадает и роль не админ, то выводим ошибку
+        if ($offer->advertiser_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            abort(403, __('http-statuses.403'));
+        }
+
+        $request->validate([
+            'status' => ['required', 'boolean'],
+        ]);
+
         // обновляем статус
         $offer->update([
             'status' => $request->status
@@ -276,9 +289,9 @@ class OfferController extends Controller
     {
         // находим оффер
         $offer = Offer::findOrFail($id);
-
-        // проверяем владельца оффера, если не совпадает, то выводим ошибку
-        if ($offer->advertiser_id !== auth()->id()) {
+        
+        // проверяем владельца оффера, если не совпадает и роль не админ, то выводим ошибку
+        if ($offer->advertiser_id !== auth()->id() && auth()->user()->role !== 'admin') {
             abort(403, __('http-statuses.403'));
         }
         
