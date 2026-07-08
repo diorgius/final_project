@@ -18,6 +18,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
         'user_agent',
     ])]
 
+/**
+ * Summary of OfferAccessLog
+ */
 class OfferAccessLog extends Model
 {
 

@@ -11,12 +11,15 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Offer;
 
+/**
+ * Summary of OfferDelete
+ */
 class OfferDelete implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Получаем данные
      */
     public function __construct(public int $offerId)
     {
@@ -24,8 +27,7 @@ class OfferDelete implements ShouldBroadcast
     }
 
     /**
-     * Get the channels the event should broadcast on.
-     *
+     * Создаем каналы
      * @return array<int, Channel>
      */
     public function broadcastOn(): array
@@ -38,7 +40,7 @@ class OfferDelete implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastAs
+     * Событие
      * @return string
      */
     public function broadcastAs(): string
@@ -47,7 +49,7 @@ class OfferDelete implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastWith
+     * Передаем данные по событию
      * @return array{id: mixed, status: mixed, title: mixed}
      */
     public function broadcastWith(): array

@@ -11,12 +11,15 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Offer;
 
+/**
+ * Summary of OfferCreate
+ */
 class OfferCreate implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Получаем данные.
      */
     public function __construct(public Offer $offer)
     {
@@ -24,8 +27,7 @@ class OfferCreate implements ShouldBroadcast
     }
 
     /**
-     * Get the channels the event should broadcast on.
-     *
+     * Создаем канал для прослушивания
      * @return array<int, Channel>
      */
     public function broadcastOn(): array
@@ -36,7 +38,7 @@ class OfferCreate implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastAs
+     * Событие
      * @return string
      */
     public function broadcastAs(): string
@@ -45,11 +47,12 @@ class OfferCreate implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastWith
+     * Передаем данные по событию
      * @return array{id: mixed, status: mixed, title: mixed}
      */
     public function broadcastWith(): array
     {
+        // передаем данные для отрисовки карточки у админа
         return [
             'id' => $this->offer->id,
             'name' => $this->offer->name,

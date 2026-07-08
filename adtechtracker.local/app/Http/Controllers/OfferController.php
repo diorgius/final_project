@@ -61,7 +61,9 @@ class OfferController extends Controller
      */
     public function create()
     {
+        // получаем темы
         $themes = OfferTheme::all();
+
         return view('advertiser.create', compact('themes')); 
     }
 
@@ -138,6 +140,7 @@ class OfferController extends Controller
      */
     public function edit(string $id)
     {
+        // получаем оффер
         $offer = Offer::with('theme')->findOrFail($id);
         
         // проверяем владельца оффера, если не совпадает, то выводим ошибку
@@ -145,7 +148,9 @@ class OfferController extends Controller
             abort(403, __('http-statuses.403'));
         }
 
+        // получаем темы
         $themes = OfferTheme::all();
+
         return view('advertiser.edit', compact('offer', 'themes'));
     }
 
@@ -212,6 +217,7 @@ class OfferController extends Controller
             abort(403, __('http-statuses.403'));
         }
 
+        // проверяем, что статус есть и это ожидаемый тип
         $request->validate([
             'status' => ['required', 'boolean'],
         ]);
@@ -224,6 +230,7 @@ class OfferController extends Controller
         // отправляем сообщение об изменении статуса оффера
         broadcast(new OfferStatusChanged($offer, auth()->user()->role));
 
+        // возвращаем данные на фронт
         return response()->json(['success' => true]);
     }
 
@@ -250,7 +257,7 @@ class OfferController extends Controller
             abort(404, __('http-statuses.404'));
         }
         
-        // проверяем, была ли ранее подписка в удалена
+        // проверяем, была ли ранее подписка удалена
         $subscription = OfferSubscription::withTrashed()
             ->where('offer_id', $offer->id)
             ->where('webmaster_id', auth()->id())
@@ -272,6 +279,7 @@ class OfferController extends Controller
         // отправляем сообщение о подписке на оффер
         broadcast(new OfferSubscribeChanged($offer, auth()->id(), 'subscribed'));
 
+        // возвращаем данные на фронт
         return response()->json([
             'success' => true,
             'ref_code' => $subscription->ref_code
@@ -297,6 +305,7 @@ class OfferController extends Controller
         // отправляем сообщение об отписке от оффера
         broadcast(new OfferSubscribeChanged($offer, auth()->id(), 'unsubscribed'));
 
+        // возвращаем данные на фронт
         return response()->json(['success' => true]);
     }
 
@@ -314,16 +323,16 @@ class OfferController extends Controller
         if ($offer->advertiser_id !== auth()->id() && auth()->user()->role !== 'admin') {
             abort(403, __('http-statuses.403'));
         }
-        
-        // отправляем сообщение об удалении оффера
-        broadcast(new OfferDelete($offer->id));
 
         // удаляем подписки
         $offer->subscribe()->delete();
 
         // удаляем оффер
         $offer->delete();
-        
+
+        // отправляем сообщение об удалении оффера
+        broadcast(new OfferDelete($offer->id));
+
         return redirect()->route(auth()->user()->role . '.offers');
     }
 

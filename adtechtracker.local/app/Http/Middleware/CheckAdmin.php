@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Services\SecurityLogger;
 
+/**
+ * Summary of CheckAdmin
+ */
 class CheckAdmin
 {
     /**

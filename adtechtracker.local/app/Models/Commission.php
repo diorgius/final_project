@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 // заполняемые поля
 #[Fillable(['commission',])]
 
+/**
+ * Summary of Commission
+ */
 class Commission extends Model
 {
     /**

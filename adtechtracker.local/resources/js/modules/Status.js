@@ -18,6 +18,7 @@ export default class Status {
         //получаем роль пользователя
         const role = window.userRole;
 
+        // отправляем данные на бэк
         try {
             const response = await fetch(`/${role}/offers/${itemId}/status`, {
                 method: 'POST',
@@ -33,6 +34,7 @@ export default class Status {
             });
 
             return await response.json();
+            
         } catch (error) {
             console.error(error);
         }

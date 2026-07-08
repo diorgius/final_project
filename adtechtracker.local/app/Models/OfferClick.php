@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
         'created_at', // добавлено для теста
     ])]
 
+/**
+ * Summary of OfferClick
+ */
 class OfferClick extends Model
 {
     /**

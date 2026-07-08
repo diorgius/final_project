@@ -18,6 +18,7 @@ export default class Subscription {
         //получаем роль пользователя
         const role = window.userRole;
 
+        // отправляем данные на бэк
         try {
             const userId = window.userId;
             const response = await fetch(`/${role}/offers/${itemId}/${type}`, {
@@ -34,6 +35,7 @@ export default class Subscription {
             });
 
             return await response.json();
+            
         } catch (error) {
             console.error(error);
         }

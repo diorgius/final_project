@@ -90,7 +90,7 @@ export default class OfferStatusListener {
                     if (offer.subscribe === 0) {
                         divOffer.className = 'offers__item offer-item offer-deactive';
                         this.unsubscriptionsZone.appendChild(divOffer);
-                        // если с подпиской, то в зону подписок
+                    // если с подпиской, то в зону подписок
                     } else {
                         divOffer.className = 'offers__item offer-item offer-active';
                         this.subscriptionsZone.appendChild(divOffer);
@@ -105,7 +105,7 @@ export default class OfferStatusListener {
                 }
                 return;
 
-                // если оффер есть и его отключили, то удаляем его
+            // если оффер есть и его отключили, то удаляем его
             } else if (offer.status === 0) {
                 console.log(item);
                 if (item) {

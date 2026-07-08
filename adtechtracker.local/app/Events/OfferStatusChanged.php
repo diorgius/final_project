@@ -12,12 +12,15 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Offer;
 use App\Models\Commission;
 
+/**
+ * Summary of OfferStatusChanged
+ */
 class OfferStatusChanged implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Получаемданные
      */
     public function __construct(public Offer $offer, public string $senderRole) 
     {
@@ -25,13 +28,12 @@ class OfferStatusChanged implements ShouldBroadcast
     }
 
     /**
-     * Get the channels the event should broadcast on.
+     * Создаем каналы
      * @return array<int, Channel>
      */
     public function broadcastOn(): array
     {
         return [
-            // new Channel('offers'),
             new Channel('offers.admin'),
             new Channel('offers.advertiser'),
             new Channel('offers.webmaster'),
@@ -39,7 +41,7 @@ class OfferStatusChanged implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastAs
+     * Событие
      * @return string
      */
     public function broadcastAs(): string
@@ -48,7 +50,7 @@ class OfferStatusChanged implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastWith
+     * Передаем данные по событию
      * @return array{id: mixed, status: mixed, title: mixed}
      */
     public function broadcastWith(): array

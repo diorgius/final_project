@@ -26,10 +26,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         'remember_token',
     ])]
 
-// class User extends Authenticatable
+/**
+ * Summary of User
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
+    // используем мягкое удаление
     use HasFactory, Notifiable, SoftDeletes;
 
     /**

@@ -11,24 +11,26 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Offer;
 
+/**
+ * Summary of OfferSubscribeChanged
+ */
 class OfferSubscribeChanged implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Получаем данные
      */
     public function __construct(
         public Offer $offer,
         public int $webmasterId,
         public string $action)
     {
-        //
+
     }
 
     /**
-     * Get the channels the event should broadcast on.
-     *
+     * Создаем каналы
      * @return array<int, Channel>
      */
     public function broadcastOn(): array
@@ -41,7 +43,7 @@ class OfferSubscribeChanged implements ShouldBroadcast
 
     
     /**
-     * Summary of broadcastAs
+     * Событие
      * @return string
      */
     public function broadcastAs(): string
@@ -50,11 +52,12 @@ class OfferSubscribeChanged implements ShouldBroadcast
     }
 
     /**
-     * Summary of broadcastWith
+     * Передаем данные
      * @return array{id: mixed, status: mixed, title: mixed}
      */
     public function broadcastWith(): array
     {
+        // передаем данные для отображения количества подписчиков у рекламщика и админа
         return [
             'offer_id' => $this->offer->id,
             'action' => $this->action,

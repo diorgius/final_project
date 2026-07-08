@@ -17,10 +17,12 @@ class AdminMainController extends Controller
      */
     public function index()
     {
+        // получаем данные для вывода на главной странице админа
         $commissions = Commission::get(['id', 'commission']);
         $advertiserExpenses = OfferClick::sum('advertiser_cost');
         $webmasterIncome = OfferClick::sum('webmaster_income');
         $systemProfit = OfferClick::sum('system_commission');
+
         return view('admin.main', compact('commissions', 'advertiserExpenses', 'webmasterIncome', 'systemProfit'));
     }
 }

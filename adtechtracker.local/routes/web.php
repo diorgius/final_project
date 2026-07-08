@@ -16,7 +16,6 @@ use PHPUnit\Framework\Attributes\Group;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-
 require __DIR__ . '/auth.php';
 
 // Welcome routes

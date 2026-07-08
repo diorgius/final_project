@@ -30,6 +30,7 @@ class AdminUserController extends Controller
      */
     public function index()
     {
+        // получаем данные
         $admins = User::where('role', 'admin')->withTrashed()->get();
         $advertisers = User::where('role', 'advertiser')->withTrashed()->get();
         $webmasters = User::where('role', 'webmaster')->withTrashed()->get();
@@ -107,10 +108,11 @@ class AdminUserController extends Controller
         // получаем пользователя
         $user = User::findOrFail($id);
 
-        // проверяем email
+        // проверяем email, если не изменился, то оставляем старый
         if ($request->email === $user->email) {
             $email = $user->email;
 
+        // если изменился, то проверяем
         } else {
             $request->validate([
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -130,7 +132,7 @@ class AdminUserController extends Controller
         // проверяем статус
         $status = $request->has('status') ? 1 : 0;
 
-        // если пользователя заблокирован
+        // если пользователя заблокировали
         if ($user->status !== $status && $status === 0) {
 
             // отправляем письмо
@@ -160,7 +162,6 @@ class AdminUserController extends Controller
             SecurityLogger::updatingUserInformation($user, $request, auth()->user()->email);
         }
 
-
         // сохраняем в БД
         $user->name = $request->name;
         $user->email = $email;
@@ -189,6 +190,7 @@ class AdminUserController extends Controller
 
             // удаляем офферы и подписки пользователя
             if ($user->role === 'advertiser') {
+                
                 foreach ($user->offers as $offer) {
 
                     // удаляем подписки и офферы

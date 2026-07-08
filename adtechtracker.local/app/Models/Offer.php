@@ -18,6 +18,9 @@ use Database\Factories\OfferFactory;
         'advertiser_id',
     ])]
 
+/**
+ * Summary of Offer
+ */
 class Offer extends Model
 {
     /** @use HasFactory<OfferFactory> */

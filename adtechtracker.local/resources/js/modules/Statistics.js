@@ -29,6 +29,7 @@ export default class Statistics {
         // получаем роль пользователя
         const role = window.userRole;
         
+        // отправляем данные на бэк
         try {
             const response = await fetch(
                 `/${role}/statistics/summary?period=${period}`, {
@@ -37,6 +38,7 @@ export default class Statistics {
 
             // обновляем статистику
             this.updateStatistics(period, data, role);
+            
         } catch (error) {
             console.error(error);
         }
@@ -45,7 +47,7 @@ export default class Statistics {
     // метод вывода полученных данных
     updateStatistics(period, data, role) {
 
-        // получак=ем текущую дату и время
+        // получаем текущую дату и время
         const dateTimeCurrent = new Date();
 
         let periodLang ='';
@@ -98,7 +100,6 @@ export default class Statistics {
             const tbody = document.getElementById('offers-table-body');
             tbody.innerHTML = '';
 
-            
             // выводим данные
             data.offers.forEach(offer => {
 

@@ -11,9 +11,13 @@ use Database\Factories\OfferThemeFactory;
 // заполняемые поля
 #[Fillable(['name',])]
 
+/**
+ * Summary of OfferTheme
+ */
 class OfferTheme extends Model
 {
     /** @use HasFactory<OfferFactory> */
+    
     // используем мягкое удаление
     use HasFactory, SoftDeletes;
     

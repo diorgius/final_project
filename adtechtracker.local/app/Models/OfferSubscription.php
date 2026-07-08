@@ -15,6 +15,9 @@ use Database\Factories\OfferSubscriptionFactory;
         'ref_code',
     ])]
 
+/**
+ * Summary of OfferSubscription
+ */
 class OfferSubscription extends Model
 {
     /** @use HasFactory<OfferFactory> */

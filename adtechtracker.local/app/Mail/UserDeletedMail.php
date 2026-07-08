@@ -11,6 +11,9 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
+/**
+ * Отправка сообщения об удалении пользователя
+ */
 class UserDeletedMail extends Mailable
 {
     use Queueable, SerializesModels;
