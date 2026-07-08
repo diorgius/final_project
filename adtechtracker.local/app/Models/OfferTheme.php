@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Database\Factories\OfferThemeFactory;
 
 // заполняемые поля
-#[Fillable(['name'])]
+#[Fillable(['name',])]
 
 class OfferTheme extends Model
 {

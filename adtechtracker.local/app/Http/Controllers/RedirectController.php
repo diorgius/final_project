@@ -27,7 +27,7 @@ class RedirectController extends Controller
         if (!$subscription) {
             OfferAccessLog::create([
                 'offer_id' => null,
-                'webmaster_id' => auth()->id(),
+                'webmaster_id' => null,
                 'ref_code' => $ref,
                 'target_url' => null,
                 'status' => 'rejected',

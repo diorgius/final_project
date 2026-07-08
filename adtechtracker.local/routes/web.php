@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadmin'])->group(func
     Route::post('/admin/offers/{offer}/status', [OfferController::class, 'status'])->name('admin.offers.status');;
     Route::delete('/admin/offers/{id}', [OfferController::class, 'destroy'])->name('admin.offers.destroy');
     Route::get('/admin/statistics', [StatisticController::class, 'index'])->name('admin.statistics');
-    Route::get('/admin/statistics/summary', [StatisticController::class, 'summary']);
+    Route::get('/admin/statistics/summary', [StatisticController::class, 'summary'])->name('admin.summary');
 });
 
 // Advertiser routes
@@ -68,19 +68,21 @@ Route::middleware(['auth', 'verified', 'checkactive', 'checkadvertiser'])->group
     Route::resource('/advertiser/offers/themes', OfferThemeController::class)->only(['index', 'store']);
     Route::post('/advertiser/offers/{offer}/status', [OfferController::class, 'status'])->name('advertiser.offers.status');
     Route::get('/advertiser/statistics', [StatisticController::class, 'index'])->name('advertiser.statistics');
-    Route::get('/advertiser/statistics/summary', [StatisticController::class, 'summary']);
+    Route::get('/advertiser/statistics/summary', [StatisticController::class, 'summary'])->name('advertiser.summary');
 });
 
 // Webmaster routes
 Route::middleware(['auth', 'verified', 'checkactive', 'checkwebmaster'])->group(function () {
     Route::get('/webmaster', [WebmasterController::class, 'index'])->name('dashboard');
     Route::get('/webmaster/offers', [OfferController::class, 'index'])->name('webmaster.offers');
-    Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe']);
-    Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe']);
-    Route::get('/r/{ref}', [RedirectController::class, 'handle']);
+    Route::post('/webmaster/offers/{offer}/subscribe', [OfferController::class, 'subscribe'])->name('offers.subscribe');
+    Route::post('/webmaster/offers/{offer}/unsubscribe', [OfferController::class, 'unsubscribe'])->name('offers.unsubscribe');
     Route::get('/webmaster/statistics', [StatisticController::class, 'index'])->name('webmaster.statistics');
-    Route::get('/webmaster/statistics/summary', [StatisticController::class, 'summary']);
+    Route::get('/webmaster/statistics/summary', [StatisticController::class, 'summary'])->name('webmaster.summary');
 });
+
+// Referral link route
+Route::get('/r/{ref}', [RedirectController::class, 'handle']);
 
 // Profile routes
 Route::middleware('auth')->group(function () {

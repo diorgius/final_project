@@ -235,6 +235,21 @@ class OfferController extends Controller
      */
     public function subscribe(Request $request, Offer $offer)
     {
+        // проверяем, что только вебмастер может подписаться
+        if (auth()->user()->role !== 'webmaster') {
+            abort(403, __('http-statuses.403'));
+        }
+
+        // проверяем, что нельзя подписаться не неактивный оффер
+        if ($offer->status === 0) {
+            abort(404, __('http-statuses.404'));
+        }
+
+        // проверяем, что нельзя подписаться не удаленный оффер
+        if ($offer->trashed()) {
+            abort(404, __('http-statuses.404'));
+        }
+        
         // проверяем, была ли ранее подписка в удалена
         $subscription = OfferSubscription::withTrashed()
             ->where('offer_id', $offer->id)
@@ -249,7 +264,7 @@ class OfferController extends Controller
                 'ref_code' => Str::random(16),
             ]);
 
-            // если была, то востанавливаем
+        // если была, то востанавливаем
         } elseif ($subscription->trashed()) {
             $subscription->restore();
         }
@@ -271,6 +286,11 @@ class OfferController extends Controller
      */
     public function unsubscribe(Request $request, Offer $offer)
     {
+        // проверяем, что только вебмастер может отписаться
+        if (auth()->user()->role !== 'webmaster') {
+            abort(403, __('http-statuses.403'));
+        }
+
         // удаляем подписку
         OfferSubscription::where('offer_id', $offer->id)->where('webmaster_id', auth()->id())->delete();
 

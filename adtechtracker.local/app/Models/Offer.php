@@ -9,7 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Database\Factories\OfferFactory;
 
 // заполняемые поля
-#[Fillable(['name', 'url', 'price', 'status', 'theme_id', 'advertiser_id'])]
+#[Fillable([
+        'name', 
+        'url', 
+        'price', 
+        'status', 
+        'theme_id', 
+        'advertiser_id',
+    ])]
 
 class Offer extends Model
 {

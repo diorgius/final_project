@@ -19,12 +19,13 @@ class CommissionController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'commission' => ['required', 'numeric']
-        ]);
+            'commission' => ['required', 'numeric', 'min:0', 'max:100']
+            ]);
 
         $commission = Commission::findOrFail($id);
-        $commission->commission = $request->commission;
-        $commission->save();
+        $commission->update([
+            'commission' => $request->commission,
+        ]);
 
         return redirect()->route('admin.main');
     }

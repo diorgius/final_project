@@ -7,19 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 // заполняемые поля
 #[Fillable([
-    'offer_id', 
-    'advertiser_id', 
-    'webmaster_id', 
-    'subscription_id', 
-    'ref_code',
-    'target_url',
-    'price', 
-    'advertiser_cost', 
-    'webmaster_income', 
-    'system_commission', 
-    'ip', 
-    'user_agent'
-])]
+        'offer_id', 
+        'advertiser_id', 
+        'webmaster_id', 
+        'subscription_id', 
+        'ref_code',
+        'target_url',
+        'price', 
+        'advertiser_cost', 
+        'webmaster_income', 
+        'system_commission', 
+        'ip', 
+        'user_agent',
+        'created_at', // добавлено для теста
+    ])]
 
 class OfferClick extends Model
 {

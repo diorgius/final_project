@@ -4,9 +4,15 @@ namespace Tests\Feature\Advertiser;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Offer;
+use App\Models\OfferSubscription;
+use App\Events\OfferCreate;
+use App\Events\OfferDelete;
+use App\Events\OfferStatusChanged;
+
 
 class OfferManagementTest extends TestCase
 {
@@ -14,6 +20,8 @@ class OfferManagementTest extends TestCase
 
     public function test_advertiser_can_create_offer(): void
     {
+        Event::fake();
+
         $advertiser = User::factory()->advertiser()->create();
 
         $offer = Offer::factory()->make([
@@ -29,6 +37,8 @@ class OfferManagementTest extends TestCase
             ]);
 
         $response->assertRedirect(route('advertiser.offers'));
+
+        Event::assertDispatched(OfferCreate::class);
 
         $this->assertDatabaseHas('offers', [
             'name' => $offer->name,
@@ -131,6 +141,8 @@ class OfferManagementTest extends TestCase
 
     public function test_advertiser_can_delete_offer(): void
     {
+        Event::fake();
+
         $advertiser = User::factory()->advertiser()->create();
 
         $offer = Offer::factory()->create([
@@ -141,6 +153,8 @@ class OfferManagementTest extends TestCase
             ->delete(route('advertiser.offers.destroy', $offer->id));
 
         $response->assertRedirect(route('advertiser.offers'));
+
+        Event::assertDispatched(OfferDelete::class);
 
         $this->assertSoftDeleted($offer);
     }
@@ -168,6 +182,8 @@ class OfferManagementTest extends TestCase
 
     public function test_advertiser_can_restore_offer(): void
     {
+        Event::fake();
+
         $advertiser = User::factory()->advertiser()->create();
 
         $offer = Offer::factory()->create([
@@ -181,8 +197,51 @@ class OfferManagementTest extends TestCase
 
         $response->assertRedirect(route('advertiser.offers'));
 
+        Event::assertDispatched(OfferCreate::class);
+
         $this->assertDatabaseHas('offers', [
             'id' => $offer->id,
+            'deleted_at' => null,
+        ]);
+    }
+
+    public function test_advertiser_can_restore_offer_with_subscriptions(): void
+    {
+        Event::fake();
+
+        $advertiser = User::factory()->advertiser()->create();
+
+        $webmaster = User::factory()->webmaster()->create();
+
+        $offer = Offer::factory()->create([
+            'advertiser_id' => $advertiser->id,
+        ]);
+
+        $subscription = OfferSubscription::factory()->create([
+            'offer_id' => $offer->id,
+            'webmaster_id' => $webmaster->id,
+        ]);
+
+        $offer->delete();
+
+        $subscription->delete();
+
+        $this->assertSoftDeleted($offer);
+
+        $this->assertSoftDeleted($subscription);
+
+        $this->actingAs($advertiser)
+            ->patch(route('offers.restore', $offer->id));
+
+        Event::assertDispatched(OfferCreate::class);
+
+        $this->assertDatabaseHas('offers', [
+            'id' => $offer->id,
+            'deleted_at' => null,
+        ]);
+
+        $this->assertDatabaseHas('offer_subscriptions', [
+            'id' => $subscription->id,
             'deleted_at' => null,
         ]);
     }
@@ -238,6 +297,8 @@ class OfferManagementTest extends TestCase
 
     public function test_advertiser_can_change_offer_status(): void
     {
+        Event::fake();
+
         $advertiser = User::factory()->advertiser()->create();
 
         $offer = Offer::factory()->create([
@@ -254,6 +315,8 @@ class OfferManagementTest extends TestCase
             ->assertJson([
                 'success' => true,
             ]);
+
+        Event::assertDispatched(OfferStatusChanged::class);
 
         $this->assertDatabaseHas('offers', [
             'id' => $offer->id,

@@ -13,8 +13,18 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // заполняемые поля
-#[Fillable(['name', 'email', 'password', 'role', 'status', 'locale'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable([
+        'name', 
+        'email', 
+        'password', 
+        'role', 
+        'status', 
+        'locale',
+    ])]
+#[Hidden([
+        'password', 
+        'remember_token',
+    ])]
 
 // class User extends Authenticatable
 class User extends Authenticatable implements MustVerifyEmail

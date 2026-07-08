@@ -21,6 +21,48 @@ class ProfileTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_user_can_change_locale(): void
+    {
+        $user = User::factory()->admin()->create([
+            'locale' => 'ru',
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('profile.language.update'), [
+                'lang' => 'en',
+            ]);
+
+        $response
+            ->assertRedirect(route('profile.edit'))
+            ->assertSessionHas('status', 'locale-updated');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'locale' => 'en',
+        ]);
+
+        $response->assertSessionHas('locale', 'en');
+    }
+
+    public function test_invalid_locale_is_rejected(): void
+    {
+        $user = User::factory()->admin()->create([
+            'locale' => 'ru',
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('profile.language.update'), [
+                'lang' => 'fr',
+            ]);
+
+        $response->assertSessionHasErrors('lang');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'locale' => 'ru',
+        ]);
+    }
+
     public function test_profile_information_can_be_updated(): void
     {
         $user = User::factory()->admin()->create();

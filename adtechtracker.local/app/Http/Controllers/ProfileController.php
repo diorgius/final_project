@@ -24,25 +24,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        // пишем событие самообновления в лог
-        SecurityLogger::updatingUserInformation($request->user(), $request);
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
      * Изменяем язык системы у пользователя
      * @param Request $request
      * @return RedirectResponse
@@ -59,15 +40,31 @@ class ProfileController extends Controller
             'locale' => $request->input('lang'),
         ]);
 
-        // применяем новый язык
-        app()->setLocale($request->input('lang'));
-
         // записываем в сессию
         session([
             'locale' => $request->input('lang'),
         ]);
 
         return Redirect::route('profile.edit')->with('status', 'locale-updated');
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        // пишем событие самообновления в лог
+        SecurityLogger::updatingUserInformation($request->user(), $request);
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
