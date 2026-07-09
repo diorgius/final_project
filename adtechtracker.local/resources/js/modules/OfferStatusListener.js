@@ -37,11 +37,13 @@ export default class OfferStatusListener {
 
         // у админа обновляем оффер
         if (role === 'admin') {
+            const actions = item.querySelector('.offer-actions');
             if (offer.status === 1) {
                 if (item) {
                     this.activeZone.appendChild(item);
                     item.classList.remove('offer-deactive');
                     item.classList.add('offer-active');
+                    actions.classList.add('hidden');
                 }
                 return;
             } else if (offer.status === 0) {
@@ -49,6 +51,7 @@ export default class OfferStatusListener {
                     this.deactiveZone.appendChild(item);
                     item.classList.remove('offer-active');
                     item.classList.add('offer-deactive');
+                    actions.classList.remove('hidden');
                 }
                 return;
             }
@@ -56,25 +59,31 @@ export default class OfferStatusListener {
 
         // если пользователь рекламщик или админ изменил статус оффера, то обновляем его
         if (role === 'advertiser' && offer.sender_role === 'admin') {
-            if (offer.status === 1) {
-                if (item) {
-                    this.activeZone.appendChild(item);
-                    item.classList.remove('offer-deactive');
-                    item.classList.add('offer-active');
+            if (item) {
+                const actions = item.querySelector('.offer-actions');
+                if (offer.status === 1) {
+                    if (item) {
+                        this.activeZone.appendChild(item);
+                        item.classList.remove('offer-deactive');
+                        item.classList.add('offer-active');
+                        actions.classList.add('hidden');
+                    }
+                    return;
+                } else if (offer.status === 0) {
+                    if (item) {
+                        this.deactiveZone.appendChild(item);
+                        item.classList.remove('offer-active');
+                        item.classList.add('offer-deactive');
+                        actions.classList.remove('hidden');
+                    }
+                    return;
                 }
-                return;
-            } else if (offer.status === 0) {
-                if (item) {
-                    this.deactiveZone.appendChild(item);
-                    item.classList.remove('offer-active');
-                    item.classList.add('offer-deactive');
-                }
-                return;
             }
         }
 
         // если пользователь вебмастер и был добавлен новый активный оффер, то отображаем его
         if (role === 'webmaster') {
+            console.log(offer);
             if (offer.status === 1) {
                 if (!item) {
                     // отображаем оффер
@@ -107,7 +116,6 @@ export default class OfferStatusListener {
 
             // если оффер есть и его отключили, то удаляем его
             } else if (offer.status === 0) {
-                console.log(item);
                 if (item) {
                     item.remove();
                 }

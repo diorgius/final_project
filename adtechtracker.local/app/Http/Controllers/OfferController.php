@@ -142,7 +142,12 @@ class OfferController extends Controller
     {
         // получаем оффер
         $offer = Offer::with('theme')->findOrFail($id);
-        
+
+        // проверяем, удалить активный оффер нельзя
+        if ($offer->status) {
+            abort(403, __('http-statuses.403'));
+        }
+
         // проверяем владельца оффера, если не совпадает, то выводим ошибку
         if ($offer->advertiser_id !== auth()->id()) {
             abort(403, __('http-statuses.403'));
@@ -318,6 +323,11 @@ class OfferController extends Controller
     {
         // находим оффер
         $offer = Offer::findOrFail($id);
+
+        // проверяем, удалить активный оффер нельзя
+        if ($offer->status) {
+            abort(403, __('http-statuses.403'));
+        }
         
         // проверяем владельца оффера, если не совпадает и роль не админ, то выводим ошибку
         if ($offer->advertiser_id !== auth()->id() && auth()->user()->role !== 'admin') {

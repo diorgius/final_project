@@ -33,7 +33,7 @@ export default class OfferCreateListener {
         // ищем оффер
         const item = document.getElementById(`${offer.id}`);
         
-        // сделано для того чтобы если оффер уже есть, но рекламодатель его отредактировал, произошло обновление данных
+        // если оффер уже есть, но рекламодатель его отредактировал, произошло обновление данных
         if (item) {
             item.remove();
         }
@@ -41,11 +41,13 @@ export default class OfferCreateListener {
         divOffer.setAttribute('id', `${offer.id}`);
         divOffer.className = `offers__item offer-item ${offer.status === 1 ? 'offer-active' : 'offer-deactive'}`;
         divOffer.innerHTML =
-            `<form method="POST" action="/admin/offers/${offer.id}" >
-                <input type="hidden" name="_token" value="${this.csrfToken}">
-                <input type="hidden" name="_method" value="DELETE">
-                <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
-            </form >
+            `<div class="offer-actions ${offer.status ? 'hidden' : ''}">
+                <form method="POST" action="/admin/offers/${offer.id}" >
+                    <input type="hidden" name="_token" value="${this.csrfToken}">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
+                </form >
+            </div>
             <p class="font-semibold">${__('advertiser')}: <span class="font-light">${offer.advertiser}</span></p>
             <p class="font-semibold">${__('offer_name')}: <span class="font-light">${offer.name}</span></p>
             <p class="font-semibold">${__('offer_theme')}: <span class="font-light">${offer.theme}</span></p>
@@ -53,8 +55,7 @@ export default class OfferCreateListener {
             <p class="font-semibold">${__('offer_price')}: <span class="font-light">${offer.price}</span></p>
             <p class="font-semibold">${__('subscribers')}: <span class="subscribers font-light">0</span></p>`
 
-        // если оффер неактивный, то добавляем в неактивную зону, если нет то в активную      
-        offer.status === 0 ? this.deactiveZone.appendChild(divOffer) : this.activeZone.appendChild(divOffer);
+        this.deactiveZone.appendChild(divOffer);
 
         DragItem.setupItem(divOffer, '.active-offers');
         return;

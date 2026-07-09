@@ -55,6 +55,7 @@ export default class Status {
                 const itemId = e.dataTransfer.getData('id');
                 const item = document.getElementById(itemId);
                 const oldStatus = e.dataTransfer.getData('oldStatus');
+                const actions = item.querySelector('.offer-actions');
 
                 if (!item) return;
 
@@ -75,8 +76,10 @@ export default class Status {
                 // в зависимости от статуса меняем класс
                 if (status === 1) {
                     item.classList.add('offer-active');
+                    actions.classList.add('hidden');
                 } else {
                     item.classList.add('offer-deactive');
+                    actions.classList.remove('hidden');
                 }
 
                 // сохраняем в БД

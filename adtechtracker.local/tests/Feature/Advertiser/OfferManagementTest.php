@@ -99,6 +99,21 @@ class OfferManagementTest extends TestCase
         ]);
     }
 
+    public function test_advertiser_can_not_edit_active_offer(): void
+    {
+        $advertiser = User::factory()->advertiser()->create();
+
+        $offer = Offer::factory()->create([
+            'advertiser_id' => $advertiser->id,
+            'status' => 1,
+        ]);
+
+        $response = $this->actingAs($advertiser)
+            ->get(route('offers.edit', $offer->id));
+
+        $response->assertForbidden();
+    }
+
     public function test_advertiser_can_not_edit_forieng_offer(): void 
     {
         $owner = User::factory()->advertiser()->create();
@@ -158,6 +173,21 @@ class OfferManagementTest extends TestCase
         Event::assertDispatched(OfferDelete::class);
 
         $this->assertSoftDeleted($offer);
+    }
+
+    public function test_advertiser_can_not_delete_active_offer(): void
+    {
+        $advertiser = User::factory()->advertiser()->create();
+
+        $offer = Offer::factory()->create([
+            'advertiser_id' => $advertiser->id,
+            'status' => 1,
+        ]);
+
+        $response = $this->actingAs($advertiser)
+            ->delete(route('advertiser.offers.destroy', $offer->id));
+
+        $response->assertForbidden();
     }
 
     public function test_advertiser_can_not_delete_foreign_offer(): void
