@@ -24,7 +24,8 @@ class OfferSubscribeChanged implements ShouldBroadcast
     public function __construct(
         public Offer $offer,
         public int $webmasterId,
-        public string $action)
+        public string $action
+        )
     {
 
     }

@@ -1,5 +1,5 @@
 /**
- * Класс изменения статуса оффера drug and drop
+ * Класс изменения статуса оффера drug&drop
  */
 import DragItem from './DragItem.js';
 

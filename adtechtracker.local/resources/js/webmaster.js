@@ -1,7 +1,7 @@
 import Subscription from './modules/Subscription.js';
-import OfferStatusListener from './modules/OfferStatusListener.js';
+import OfferStatusForWebmasterListener from './modules/OfferStatusForWebmasterListener.js';
 import OfferDeleteListener from './modules/OfferDeleteListener.js';
 
 new Subscription('.offers__item', '.offers');
-new OfferStatusListener('.active-offers', '.deactive-offers', '.subscriptions','.unsubscriptions');
+new OfferStatusForWebmasterListener('.subscriptions','.unsubscriptions');
 new OfferDeleteListener();

@@ -113,7 +113,6 @@ export default class Subscription {
 
                     // меняем класс
                     item.classList.add('offer-deactive');
-
                 }
 
                 // перемещаем элемент

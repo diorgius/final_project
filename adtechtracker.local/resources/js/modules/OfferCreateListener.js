@@ -16,7 +16,9 @@ export default class OfferCreateListener {
 
     // слушаем событие
     listener() {
+
         Echo.channel(`offers.admin`)
+        
             .subscribed(() => {
                 console.log('Subscribed to chenal: .offer.create');
             })

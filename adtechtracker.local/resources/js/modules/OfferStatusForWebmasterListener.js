@@ -1,13 +1,11 @@
 /**
- * Класс изменения положения оффера в зависимости от статуса
+ * Класс изменения положения оффера у вебмастера в зависимости от статуса
  */
 import DragItem from './DragItem.js';
 
-export default class OfferStatusListener {
+export default class OfferStatusForWebmasterListener {
 
-    constructor(activeOffers, deactiveOffers, subscriptions, unsubscriptions) {
-        this.activeZone = document.querySelector(activeOffers);
-        this.deactiveZone = document.querySelector(deactiveOffers);
+    constructor(subscriptions, unsubscriptions) {
         this.subscriptionsZone = document.querySelector(subscriptions);
         this.unsubscriptionsZone = document.querySelector(unsubscriptions);
         
@@ -19,15 +17,17 @@ export default class OfferStatusListener {
     listener() {
 
         const role = window.userRole;
-        
-        Echo.channel(`offers.${role}`)
-            .subscribed(() => {
-                console.log('Subscribed to chenal: .offer.status.changed');
-            })
-            .listen('.offer.status.changed', (event) => {
+        const userId = window.userId;
 
+        Echo.private(`offers.webmaster.${userId}`)
+            .subscribed(() => {
+                console.log('Subscribed to chenal: .offer.status.for.webmaster.changed');
+            })
+            .listen('.offer.status.for.webmaster.changed', (event) => {
+
+                console.log(event);
                 // если случилось, вызываем метод обновления оффера
-                this.updateOffer(event, role);
+                // this.updateOffer(event, role);
             });
     }
 

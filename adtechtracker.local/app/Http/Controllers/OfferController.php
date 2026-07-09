@@ -7,14 +7,15 @@ use App\Models\OfferSubscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\OfferTheme;
 use App\Models\Offer;
 use App\Models\User;
 use App\Events\OfferStatusChanged;
+use App\Events\OfferStatusForWebmasterChanged;
 use App\Events\OfferCreate;
 use App\Events\OfferDelete;
 use App\Events\OfferSubscribeChanged;
-use Illuminate\Support\Str;
 
 /**
  * Summary of OfferController
@@ -234,6 +235,22 @@ class OfferController extends Controller
 
         // отправляем сообщение об изменении статуса оффера
         broadcast(new OfferStatusChanged($offer, auth()->user()->role));
+
+        foreach (User::where('role', 'webmaster')->get() as $webmaster) {
+
+            $subscription = OfferSubscription::withTrashed()
+                ->where('offer_id', $offer->id)
+                ->where('webmaster_id', $webmaster->id)
+                ->first();
+
+            broadcast(
+                new OfferStatusForWebmasterChanged(
+                    $offer,
+                    $webmaster,
+                    $subscription
+                )
+            );
+        }
 
         // возвращаем данные на фронт
         return response()->json(['success' => true]);

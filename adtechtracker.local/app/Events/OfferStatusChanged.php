@@ -20,9 +20,12 @@ class OfferStatusChanged implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Получаемданные
+     * Получаем данные
      */
-    public function __construct(public Offer $offer, public string $senderRole) 
+    public function __construct(
+        public Offer $offer, 
+        public string $senderRole
+        ) 
     {
         
     }

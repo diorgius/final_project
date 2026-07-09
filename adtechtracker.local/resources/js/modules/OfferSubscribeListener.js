@@ -11,7 +11,9 @@ export default class OfferSubscribeListener {
 
     // слушаем событие
     listener() {
+
         const role = window.userRole;
+        
         Echo.channel(`offers.${role}`)
             .subscribed(() => {
                 console.log('Subscribed to chenal: .offer.subscribe.changed');
