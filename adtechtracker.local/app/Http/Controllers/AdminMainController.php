@@ -19,9 +19,9 @@ class AdminMainController extends Controller
     {
         // получаем данные для вывода на главной странице админа
         $commissions = Commission::get(['id', 'commission']);
-        $advertiserExpenses = OfferClick::sum('advertiser_cost');
-        $webmasterIncome = OfferClick::sum('webmaster_income');
-        $systemProfit = OfferClick::sum('system_commission');
+        $advertiserExpenses = (float) OfferClick::sum('advertiser_cost');
+        $webmasterIncome = (float) OfferClick::sum('webmaster_income');
+        $systemProfit = (float) OfferClick::sum('system_commission');
 
         return view('admin.main', compact('commissions', 'advertiserExpenses', 'webmasterIncome', 'systemProfit'));
     }

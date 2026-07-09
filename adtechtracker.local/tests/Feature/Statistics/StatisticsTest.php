@@ -29,7 +29,17 @@ class StatisticsTest extends TestCase
                 'advertisers',
                 'webmasters',
                 'offers',
+                'activeOffers',
+                'deactiveOffers',
+                'deletedOffers',
+                'subscriptions',
+                'activeSubscriptions',
+                'deactiveSubscriptions',
                 'clicks',
+                'rejectedClicks',
+                'advertiserExpenses',
+                'webmasterIncome',
+                'systemProfit',
             ]);
     }
 
@@ -185,32 +195,36 @@ class StatisticsTest extends TestCase
             'created_at' => now()->subMonth(),
         ]);
 
+        // получаем данные за день
         $response = $this->actingAs($admin)
             ->getJson(route('admin.summary', [
                 'period' => 'day',
             ]));
 
+        // сравниваем ответ
         $response
             ->assertOk()
             ->assertJson([
                 'clicks' => 1,
-                'advertiserExpenses' => '100.00',
-                'webmasterIncome' => '80.00',
-                'systemProfit' => '20.00',
+                'advertiserExpenses' => 100.00,
+                'webmasterIncome' => 80.00,
+                'systemProfit' => 20.00,
             ]);
 
+        // получаем данные за весь период
         $response = $this->actingAs($admin)
             ->getJson(route('admin.summary', [
                 'period' => 'all',
             ]));
 
+        // сравниваем ответ, должно быть больше в два раза
         $response
             ->assertOk()
             ->assertJson([
                 'clicks' => 2,
-                'advertiserExpenses' => '200.00',
-                'webmasterIncome' => '160.00',
-                'systemProfit' => '40.00',
+                'advertiserExpenses' => 200.00,
+                'webmasterIncome' => 160.00,
+                'systemProfit' => 40.00,
             ]);
     }
 
@@ -270,7 +284,7 @@ class StatisticsTest extends TestCase
             ->assertOk()
             ->assertJson([
                 'totalClicks' => 1,
-                'totalExpenses' => '100.00',
+                'totalExpenses' => 100.00,
             ]);
 
         $response = $this->actingAs($advertiser)
@@ -282,7 +296,7 @@ class StatisticsTest extends TestCase
             ->assertOk()
             ->assertJson([
                 'totalClicks' => 2,
-                'totalExpenses' => '200.00',
+                'totalExpenses' => 200.00,
             ]);
     }
 
@@ -342,7 +356,7 @@ class StatisticsTest extends TestCase
             ->assertOk()
             ->assertJson([
                 'totalClicks' => 1,
-                'totalRevenue' => '80.00',
+                'totalRevenue' => 80.00,
             ]);
 
         $response = $this->actingAs($webmaster)
@@ -354,7 +368,7 @@ class StatisticsTest extends TestCase
             ->assertOk()
             ->assertJson([
                 'totalClicks' => 2,
-                'totalRevenue' => '160.00',
+                'totalRevenue' => 160.00,
             ]);
     }
 }

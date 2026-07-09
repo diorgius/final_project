@@ -12,7 +12,6 @@ class CommissionTest extends TestCase
 {
     use RefreshDatabase;
 
-    // тест изменения комиссии админом
     public function test_admin_can_update_commission(): void
     {
         $admin = User::factory()->admin()->create();
@@ -34,7 +33,6 @@ class CommissionTest extends TestCase
         ]);
     }
 
-    // тест комиссия не может иметь пустое значение
     public function test_commission_can_not_empty(): void
     {
         $admin = User::factory()->admin()->create();
@@ -47,7 +45,6 @@ class CommissionTest extends TestCase
         $response->assertSessionHasErrors('commission');
     }
     
-    // тест комиссия должна быть числом
     public function test_commission_must_be_numeric(): void
     {
         $admin = User::factory()->admin()->create();
@@ -62,7 +59,6 @@ class CommissionTest extends TestCase
         $response->assertSessionHasErrors('commission');
     }
 
-    // тест комиссия не может быть меньше 0
     public function test_commission_can_not_be_less_0(): void
     {
         $admin = User::factory()->admin()->create();
@@ -77,7 +73,6 @@ class CommissionTest extends TestCase
         $response->assertSessionHasErrors('commission');
     }
 
-    // тест комиссия не может быть больше 100
     public function test_commission_can_not_be_more_100(): void
     {
         $admin = User::factory()->admin()->create();

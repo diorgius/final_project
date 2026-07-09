@@ -12,6 +12,7 @@ use App\Models\OfferSubscription;
 use App\Events\OfferCreate;
 use App\Events\OfferDelete;
 use App\Events\OfferStatusChanged;
+use App\Events\OfferSubscribeChanged;
 
 
 class OfferManagementTest extends TestCase
@@ -83,7 +84,7 @@ class OfferManagementTest extends TestCase
         $response = $this->actingAs($advertiser)
             ->patch(route('offers.update', $offer->id), [
                 'name' => 'New offer name',
-                'url' => 'https://new-url.test',
+                'url' => 'http://example.ru',
                 'price' => 150,
                 'theme' => $offer->theme_id,
             ]);
@@ -93,7 +94,7 @@ class OfferManagementTest extends TestCase
         $this->assertDatabaseHas('offers', [
             'id' => $offer->id,
             'name' => 'New offer name',
-            'url' => 'https://new-url.test',
+            'url' => 'http://example.ru',
             'price' => 150,
         ]);
     }
@@ -230,10 +231,14 @@ class OfferManagementTest extends TestCase
 
         $this->assertSoftDeleted($subscription);
 
-        $this->actingAs($advertiser)
+        $response = $this->actingAs($advertiser)
             ->patch(route('offers.restore', $offer->id));
 
         Event::assertDispatched(OfferCreate::class);
+
+        Event::assertDispatched(OfferSubscribeChanged::class);
+
+        $response->assertRedirect(route('advertiser.offers'));
 
         $this->assertDatabaseHas('offers', [
             'id' => $offer->id,

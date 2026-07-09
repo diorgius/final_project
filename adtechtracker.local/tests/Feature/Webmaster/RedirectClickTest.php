@@ -16,16 +16,19 @@ class RedirectClickTest extends TestCase
 
     public function test_invalid_ref_code_returns_404(): void
     {
+        // переход по маршруту
         $response = $this->get('/r/invalid-ref-code');
 
         $response->assertNotFound();
 
+        // проверка записи в лог
         $this->assertDatabaseHas('offer_access_logs', [
             'ref_code' => 'invalid-ref-code',
             'status' => 'rejected',
             'reason' => 'invalid_ref',
         ]);
 
+        // проверка записей в таблице
         $this->assertDatabaseCount('offer_clicks', 0);
     }
 
@@ -57,7 +60,7 @@ class RedirectClickTest extends TestCase
 
     public function test_inactive_offer_returns_404(): void
     {
-        $offer = Offer::factory()->create(['status' => 0], );
+        $offer = Offer::factory()->create(['status' => 0],);
 
         $webmaster = User::factory()->webmaster()->create();
 

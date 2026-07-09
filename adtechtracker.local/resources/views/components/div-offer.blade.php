@@ -7,15 +7,11 @@
         @csrf
         @method('DELETE')
         
-        {{-- <div class="flex items-center justify-center mt-4"> --}}
-            <button class="absolute bottom-0 right-0 m-1 text-2xl" title="{{ __('common.delete') }}">&#10008;</button>
-        {{-- </div> --}}
+        <button class="absolute bottom-0 right-0 m-1 text-2xl" title="{{ __('common.delete') }}">&#10008;</button>
     </form>
 
     @if ($role === 'advertiser')
-        {{-- <div class="flex items-center justify-center mt-4"> --}}
-            <a class="absolute bottom-0 right-6 m-1 text-lg" href="{{ route('offers.edit', $offer->id) }}" title="{{ __('common.edit') }}">&#9999;</a>
-        {{-- </div> --}}
+        <a class="absolute bottom-0 right-6 m-1 text-lg" href="{{ route('offers.edit', $offer->id) }}" title="{{ __('common.edit') }}">&#9999;</a>
     @endif
     
     @if ($role === 'admin')

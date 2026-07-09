@@ -12,7 +12,6 @@ class AdminOfferManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    // тест удаления оффера админом
     public function test_admin_can_delete_offer(): void
     {
         // создаем админа
@@ -37,28 +36,33 @@ class AdminOfferManagementTest extends TestCase
         $this->assertSoftDeleted($offer);
     }
 
-    // тест изменения статуса оффера админом
     public function test_admin_can_change_offer_status(): void
     {
+        // создаем админа
         $admin = User::factory()->admin()->create();
 
+        // создаем рекламщика
         $advertiser = User::factory()->advertiser()->create();
 
+        // создаем оффер
         $offer = Offer::factory()->create([
             'advertiser_id' => $advertiser->id,
         ]);
 
+        // меняем статус оффера
         $response = $this->actingAs($admin)
             ->postJson(route('admin.offers.status', $offer), [
                 'status' => 1,
             ]);
 
+        // ответ json
         $response
             ->assertOk()
             ->assertJson([
                 'success' => true,
             ]);
 
+        // проверка в БД
         $this->assertDatabaseHas('offers', [
             'id' => $offer->id,
             'status' => 1,

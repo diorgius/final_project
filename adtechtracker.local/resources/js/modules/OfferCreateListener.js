@@ -44,9 +44,7 @@ export default class OfferCreateListener {
             `<form method="POST" action="/admin/offers/${offer.id}" >
                 <input type="hidden" name="_token" value="${this.csrfToken}">
                 <input type="hidden" name="_method" value="DELETE">
-                <div class="flex items-center justify-center mt-4" >
-                    <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
-                </div>
+                <button class="absolute bottom-0 right-0 m-1 text-2xl" title="Удалить">&#10008;</button>
             </form >
             <p class="font-semibold">${__('advertiser')}: <span class="font-light">${offer.advertiser}</span></p>
             <p class="font-semibold">${__('offer_name')}: <span class="font-light">${offer.name}</span></p>

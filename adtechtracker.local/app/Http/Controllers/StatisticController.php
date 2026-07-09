@@ -35,9 +35,9 @@ class StatisticController extends Controller
                     'deactiveSubscriptions' => OfferSubscription::withTrashed()->whereNotNull('deleted_at')->count(),
                     'clicks' => OfferClick::count(),
                     'rejectedClicks' => OfferAccessLog::where('status', 'rejected')->count(),
-                    'advertiserExpenses' => OfferClick::sum('advertiser_cost'),
-                    'webmasterIncome' => OfferClick::sum('webmaster_income'),
-                    'systemProfit' => OfferClick::sum('system_commission'),
+                    'advertiserExpenses' => (float) OfferClick::sum('advertiser_cost'),
+                    'webmasterIncome' => (float) OfferClick::sum('webmaster_income'),
+                    'systemProfit' => (float) OfferClick::sum('system_commission'),
                     ]);
                 break;
             case 'advertiser':
@@ -46,8 +46,8 @@ class StatisticController extends Controller
                                 ->withCount('click')
                                 ->withSum('click as advertiser_expenses', 'advertiser_cost')
                                 ->orderBy('name')->get();
-                $totalClicks = $offers->sum('click_count');
-                $totalExpenses = $offers->sum('advertiser_expenses');
+                $totalClicks = (float) $offers->sum('click_count');
+                $totalExpenses = (float) $offers->sum('advertiser_expenses');
                 return view(auth()->user()->role . '.statistics', compact('offers', 'totalClicks', 'totalExpenses'));
                 break;
             case 'webmaster':
@@ -58,8 +58,8 @@ class StatisticController extends Controller
                                 ->withCount('click')
                                 ->withSum('click as webmaster_revenue', 'webmaster_income')
                                 ->orderBy('name')->get();
-                $totalClicks = $offers->sum('click_count');
-                $totalRevenue = $offers->sum('webmaster_revenue');
+                $totalClicks = (float) $offers->sum('click_count');
+                $totalRevenue = (float) $offers->sum('webmaster_revenue');
                 return view(auth()->user()->role . '.statistics', compact('offers', 'totalClicks', 'totalRevenue'));
                 break;
             default:
@@ -112,9 +112,9 @@ class StatisticController extends Controller
                     'deactiveSubscriptions' => OfferSubscription::query()->withTrashed()->whereBetween('deleted_at', [$start, $end])->count(),
                     'clicks' => OfferClick::query()->whereBetween('created_at', [$start, $end])->count(),
                     'rejectedClicks' => OfferAccessLog::where('status', 'rejected')->whereBetween('created_at', [$start, $end])->count(),
-                    'advertiserExpenses' => OfferClick::query()->whereBetween('created_at', [$start, $end])->sum('advertiser_cost'),
-                    'webmasterIncome' => OfferClick::query()->whereBetween('created_at', [$start, $end])->sum('webmaster_income'),
-                    'systemProfit' => OfferClick::query()->whereBetween('created_at', [$start, $end])->sum('system_commission'),
+                    'advertiserExpenses' => (float) OfferClick::query()->whereBetween('created_at', [$start, $end])->sum('advertiser_cost'),
+                    'webmasterIncome' => (float) OfferClick::query()->whereBetween('created_at', [$start, $end])->sum('webmaster_income'),
+                    'systemProfit' => (float) OfferClick::query()->whereBetween('created_at', [$start, $end])->sum('system_commission'),
                 ]);
                 break;
             case 'advertiser':
@@ -131,8 +131,8 @@ class StatisticController extends Controller
                         }
                     ], 'advertiser_cost')
                     ->orderBy('name')->get();
-                $totalClicks = $offers->sum('click_count');
-                $totalExpenses = $offers->sum('advertiser_expenses');
+                $totalClicks = (float) $offers->sum('click_count');
+                $totalExpenses = (float) $offers->sum('advertiser_expenses');
                 return response()->json([
                     'offers' => $offers,
                     'totalClicks' => $totalClicks,
@@ -157,8 +157,8 @@ class StatisticController extends Controller
                         }
                     ], 'webmaster_income')
                     ->orderBy('name')->get();
-                $totalClicks = $offers->sum('click_count');
-                $totalRevenue = $offers->sum('webmaster_revenue');
+                $totalClicks = (float) $offers->sum('click_count');
+                $totalRevenue = (float) $offers->sum('webmaster_revenue');
                 return response()->json([
                     'offers' => $offers,
                     'totalClicks' => $totalClicks,

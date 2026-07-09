@@ -105,6 +105,7 @@ class RedirectController extends Controller
             'user_agent' => request()->userAgent(),
         ]);
 
+        // делаем редирект на реальный url
         return redirect()->away($offer->url);
     }
 }

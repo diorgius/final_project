@@ -15,9 +15,11 @@ class CheckAdminTest extends TestCase
     {
         $user = User::factory()->admin()->create();
 
+        // переходим по тестовому маршруту
         $response = $this->actingAs($user)
             ->get('/test-admin');
 
+        // доступ разрешен
         $response->assertOk();
     }
 
@@ -25,9 +27,11 @@ class CheckAdminTest extends TestCase
     {
         $user = User::factory()->advertiser()->create();
 
+        // переходим по тестовому маршруту
         $response = $this->actingAs($user)
             ->get('/test-admin');
 
+        // доступ запрещен
         $response->assertForbidden();
     }
 

@@ -23,6 +23,7 @@ class CheckActiveTest extends TestCase
         $this->assertGuest();
 
         $response->assertRedirect(route('login'));
+        
         $response->assertSessionHasErrors(['email' => __('http-statuses.423'),]);
     }
 
