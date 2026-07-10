@@ -20,4 +20,6 @@ return [
     'advertiser' => 'Advertiser',
     'webmaster' => 'Webmaster',
     'new_user' => 'New user',
+    'admin_can_not_delete_himself' => 'The administrator cannot delete himself',
+    'last_admin_cannot_delete_himself' => 'You are the last administrator in the system and you cannot delete your account.',
 ];

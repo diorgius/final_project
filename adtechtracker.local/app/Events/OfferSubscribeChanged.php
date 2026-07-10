@@ -31,14 +31,14 @@ class OfferSubscribeChanged implements ShouldBroadcast
     }
 
     /**
-     * Создаем каналы
-     * @return array<int, Channel>
+     * Создаем каналы для прослушивания
+     * @return PrivateChannel[]
      */
     public function broadcastOn(): array
     {
         return [
-            new Channel('offers.admin'),
-            new Channel('offers.advertiser'),
+            new PrivateChannel('offers.admin'),
+            new PrivateChannel('offers.advertiser'),
         ];
     }
 
@@ -63,9 +63,7 @@ class OfferSubscribeChanged implements ShouldBroadcast
             'offer_id' => $this->offer->id,
             'action' => $this->action,
             'webmaster_id' => $this->webmasterId,
-            'subscribe_count' => $this->offer
-                ->subscribe()
-                ->count(),
+            'subscribe_count' => $this->offer->subscribe()->count(),
         ];
     }
 }

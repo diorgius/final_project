@@ -27,15 +27,15 @@ class OfferDelete implements ShouldBroadcast
     }
 
     /**
-     * Создаем каналы
-     * @return array<int, Channel>
+     * Создаем каналы для прослушивания
+     * @return PrivateChannel[]
      */
     public function broadcastOn(): array
     {
         return [
-            new Channel('offers.admin'),
-            new Channel('offers.advertiser'),
-            new Channel('offers.webmaster'),
+            new PrivateChannel('offers.admin'),
+            new PrivateChannel('offers.advertiser'),
+            new PrivateChannel('offers.webmaster'),
         ];
     }
 

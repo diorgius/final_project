@@ -31,9 +31,8 @@ class OfferStatusForWebmasterChanged implements ShouldBroadcast
     }
 
     /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, Channel>
+     * Создаем приватный канал для прослушивания
+     * @return PrivateChannel[]
      */
     public function broadcastOn(): array
     {
@@ -73,13 +72,12 @@ class OfferStatusForWebmasterChanged implements ShouldBroadcast
                 'theme' => $this->offer->theme->name,
                 'status' => $this->offer->status,
                 'advertiser' => $this->offer->advertiser->name,
+                'subscribed' =>
+                    $this->subscription &&
+                    !$this->subscription->trashed(),
+                'ref_code' =>
+                    $this->subscription?->ref_code,
             ],
-            'subscribed' =>
-                $this->subscription &&
-                !$this->subscription->trashed(),
-
-            'ref_code' =>
-                $this->subscription?->ref_code,
         ];
     }
 }

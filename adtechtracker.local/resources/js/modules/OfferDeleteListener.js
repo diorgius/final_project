@@ -13,11 +13,14 @@ export default class OfferDeleteListener {
     // слушаем событие
     listener() {
 
+        // получаем роль пользователя
         const role = window.userRole;
         
-        Echo.channel(`offers.${role}`)
+        Echo.private(`offers.${role}`)
+        
             .subscribed(() => {
-                console.log('Subscribed to chenal: .offer.delete');
+                console.log(`Subscribed to channel: offer.${role}`);
+                console.log('Subscribed to event: .offer.delete');
             })
             .listen('.offer.delete', (event) => {
 
@@ -27,6 +30,8 @@ export default class OfferDeleteListener {
     }
 
     deleteOffer(offer) {
+
+        // если есть, то удаляем
         document.getElementById(offer.id)?.remove();
     }
 }

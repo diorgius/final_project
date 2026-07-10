@@ -12,20 +12,23 @@ export default class OfferSubscribeListener {
     // слушаем событие
     listener() {
 
+        // получаем роль пользователя
         const role = window.userRole;
         
-        Echo.channel(`offers.${role}`)
+        Echo.private(`offers.${role}`)
+        
             .subscribed(() => {
-                console.log('Subscribed to chenal: .offer.subscribe.changed');
+                console.log(`Subscribed to channel: offer.${role}`);
+                console.log('Subscribed to event: .offer.subscribe.changed');
             })
             .listen('.offer.subscribe.changed', (event) => {
 
                 // если случилось, ищем оффер
-                const offer = document.getElementById(event.offer_id);
+                const item = document.getElementById(event.offer_id);
                 
                 //если нашли, то изменяем у него количество подписчиков
-                if (offer) {
-                    const subscribers = offer.querySelector('.subscribers');
+                if (item) {
+                    const subscribers = item.querySelector('.subscribers');
                     subscribers.textContent = `${(event.subscribe_count)}`;
                 }
             });

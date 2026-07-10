@@ -108,14 +108,23 @@ class UserManagementTest extends TestCase
                 'status' => 1,
             ]);
 
-        // dd($response);
-        
         $response->assertRedirect(route('users.index'));
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'status' => 1,
         ]);
+    }
+    public function test_another_user_can_not_edit_user(): void
+    {
+        $advertiser = User::factory()->advertiser()->create();
+
+        $user = User::factory()->advertiser()->create();
+
+        $response = $this->actingAs($advertiser)
+            ->get(route('users.edit', $user));
+
+        $response->assertForbidden();
     }
 
     public function test_admin_can_delete_user(): void
@@ -132,6 +141,28 @@ class UserManagementTest extends TestCase
         $this->assertSoftDeleted($user);
     }
 
+    public function test_another_user_can_not_delete_user(): void
+    {
+        $advertiser = User::factory()->advertiser()->create();
+
+        $user = User::factory()->advertiser()->create();
+
+        $response = $this->actingAs($advertiser)
+            ->delete(route('users.destroy', $user));
+
+        $response->assertForbidden();
+    }
+
+    public function test_admin_can_not_delete_himself(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $response = $this->actingAs($admin)
+            ->delete(route('users.destroy', $admin));
+
+        $response->assertSessionHasErrors('email');
+    }
+    
     public function test_admin_can_restore_deleted_user(): void
     {
         $admin = User::factory()->admin()->create();

@@ -31,15 +31,14 @@ class OfferStatusChanged implements ShouldBroadcast
     }
 
     /**
-     * Создаем каналы
-     * @return array<int, Channel>
+     * Создаем каналы для прослушивания
+     * @return PrivateChannel[]
      */
     public function broadcastOn(): array
     {
         return [
-            new Channel('offers.admin'),
-            new Channel('offers.advertiser'),
-            new Channel('offers.webmaster'),
+            new PrivateChannel('offers.admin'),
+            new PrivateChannel('offers.advertiser'),
         ];
     }
 
@@ -58,21 +57,12 @@ class OfferStatusChanged implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
-        // вычисляем коммиссию для вебмастера
-        $commission = Commission::get('commission')->value('commission');
-        $percent = round((100 - $commission) / 100, 2);
 
-        // передаем данные для отрисовки карточки у вебмастера и перемещения существующей у админа
+        // передаем данные для перемещения существующего оффера у админа или рекламщика
         return [
             'id' => $this->offer->id,
-            'name' => $this->offer->name,
-            'url' => $this->offer->url,
-            'price' => round($this->offer->price * $percent, 2),
-            'theme' => $this->offer->theme->name,
-            'advertiser' => $this->offer->advertiser->name,
             'status' => $this->offer->status,
             'sender_role' => $this->senderRole,
-            'subscribe' => $this->offer->subscribe()->count(),
         ];
     }
 }

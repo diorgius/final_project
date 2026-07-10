@@ -105,7 +105,7 @@ class ProfileTest extends TestCase
 
     public function test_user_can_delete_their_account(): void
     {
-        $user = User::factory()->admin()->create();
+        $user = User::factory()->advertiser()->create();
 
         $response = $this
             ->actingAs($user)
@@ -119,6 +119,43 @@ class ProfileTest extends TestCase
 
         $this->assertGuest();
         $this->assertSoftDeleted($user);
+    }
+
+
+    public function test_last_admin_can_not_delete_himself(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $response = $this
+            ->actingAs($admin)
+            ->delete('/profile', [
+                'password' => 'password',
+            ]);
+
+        $response->assertSessionHasErrors();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $admin->id,
+        ]);
+    }
+
+    public function test_admin_can_delete_himself_if_admin_more_than_one(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        User::factory()->admin()->create();
+
+        $response = $this
+            ->actingAs($admin)
+            ->delete('/profile', [
+                'password' => 'password',
+            ]);
+
+        $response->assertSessionHasNoErrors();
+
+        $this->assertSoftDeleted('users', [
+            'id' => $admin->id,
+        ]);
     }
 
     public function test_correct_password_must_be_provided_to_delete_account(): void

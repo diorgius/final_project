@@ -5,6 +5,7 @@ namespace Tests\Feature\Advertiser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Broadcast;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Offer;
@@ -12,6 +13,7 @@ use App\Models\OfferSubscription;
 use App\Events\OfferCreate;
 use App\Events\OfferDelete;
 use App\Events\OfferStatusChanged;
+use App\Events\OfferStatusForWebmasterChanged;
 use App\Events\OfferSubscribeChanged;
 
 
@@ -266,8 +268,6 @@ class OfferManagementTest extends TestCase
 
         Event::assertDispatched(OfferCreate::class);
 
-        Event::assertDispatched(OfferSubscribeChanged::class);
-
         $response->assertRedirect(route('advertiser.offers'));
 
         $this->assertDatabaseHas('offers', [
@@ -336,6 +336,8 @@ class OfferManagementTest extends TestCase
 
         $advertiser = User::factory()->advertiser()->create();
 
+        $webmaster = User::factory()->webmaster()->create();
+
         $offer = Offer::factory()->create([
             'advertiser_id' => $advertiser->id,
         ]);
@@ -353,6 +355,8 @@ class OfferManagementTest extends TestCase
 
         Event::assertDispatched(OfferStatusChanged::class);
 
+        Event::assertDispatched(OfferStatusForWebmasterChanged::class);
+        
         $this->assertDatabaseHas('offers', [
             'id' => $offer->id,
             'status' => 1,

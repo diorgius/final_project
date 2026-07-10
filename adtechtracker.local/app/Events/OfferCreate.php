@@ -27,13 +27,13 @@ class OfferCreate implements ShouldBroadcast
     }
 
     /**
-     * Создаем канал для прослушивания
-     * @return array<int, Channel>
+     * Создаем каналы для прослушивания
+     * @return PrivateChannel[]
      */
     public function broadcastOn(): array
     {
         return [
-            new Channel('offers.admin'),
+            new PrivateChannel('offers.admin'),
         ];
     }
 

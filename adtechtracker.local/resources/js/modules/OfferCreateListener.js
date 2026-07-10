@@ -17,10 +17,11 @@ export default class OfferCreateListener {
     // слушаем событие
     listener() {
 
-        Echo.channel(`offers.admin`)
+        Echo.private(`offers.admin`)
         
             .subscribed(() => {
-                console.log('Subscribed to chenal: .offer.create');
+                console.log('Subscribed to channel: offer.admin');
+                console.log('Subscribed to event: .offer.create');
             })
             .listen('.offer.create', (event) => {
 
@@ -39,6 +40,8 @@ export default class OfferCreateListener {
         if (item) {
             item.remove();
         }
+
+        // создаем оффер
         const divOffer = document.createElement('div');
         divOffer.setAttribute('id', `${offer.id}`);
         divOffer.className = `offers__item offer-item ${offer.status === 1 ? 'offer-active' : 'offer-deactive'}`;

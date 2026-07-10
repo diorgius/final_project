@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use App\Services\SecurityLogger;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -77,6 +79,13 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // проверка если последний админ в системе, то нельзя удалить
+        if ($user->role === 'admin' && User::where('role', 'admin')->count() === 1) {
+            throw ValidationException::withMessages([
+                'password' => __('users.last_admin_cannot_delete_himself'),
+            ])->errorBag('userDeletion');
+        }
 
         // пишем событие самоудаления в лог
         SecurityLogger::deletingUser($user, $request);

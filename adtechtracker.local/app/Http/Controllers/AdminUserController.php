@@ -183,7 +183,12 @@ class AdminUserController extends Controller
         // получаем пользователя
         $user = User::findOrFail($id);
 
-        // !!!??? ПРОВЕРКА АДМИН НЕ МОЖЕТ САМ СЕБЯ УДАЛИТЬ
+        // админ не может удалить сам себя
+        if (Auth()->user()->role === 'admin' && Auth()->id() === $user->id) {
+            throw ValidationException::withMessages([
+                'email' => __('users.admin_can_not_delete_himself'),
+            ]);
+        }
 
         // используем транзакцию
         DB::transaction(function () use ($user) {

@@ -128,9 +128,10 @@ return [
         ],
 
         'security' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/security.log'),
             'level' => 'info',
+            'days' => 90,
         ],
 
     ],
