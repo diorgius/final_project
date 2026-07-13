@@ -57,7 +57,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 ENV PATH="$PATH:/usr/local/bin"
 
-USER 1000:1000
+ARG GID=1000
+ARG UID=1000
+
+RUN groupmod -g ${GID} www-data && usermod -u ${UID} -g ${GID} www-data
 
 WORKDIR /var/www/adtechtracker.local
 

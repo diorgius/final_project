@@ -19,6 +19,9 @@ services:
     build:
       context: ./php
       dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
     image: adtechtracker-php
     container_name: adtechtracker-php
     restart: unless-stopped
@@ -132,7 +135,7 @@ services:
     container_name: adtechtracker-node
     restart: unless-stopped
     working_dir: /var/www/adtechtracker.local
-    command: sh -c "npm run dev -- --host 0.0.0.0 --port 5173"
+    # command: sh -c "npm run dev -- --host 0.0.0.0 --port 5173"
     tty: true
     volumes:
       - ../adtechtracker.local:/var/www/adtechtracker.local
