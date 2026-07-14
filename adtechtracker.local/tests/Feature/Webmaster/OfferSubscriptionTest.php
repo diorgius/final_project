@@ -152,7 +152,7 @@ class OfferSubscriptionTest extends TestCase
         $this->assertSoftDeleted($subscription);
     }
 
-    public function test_admin_cannot_subscribe(): void
+    public function test_admin_can_not_subscribe(): void
     {
         $advertiser = User::factory()->admin()->create();
 
@@ -163,7 +163,7 @@ class OfferSubscriptionTest extends TestCase
             ->assertForbidden();
     }
 
-    public function test_advertiser_cannot_subscribe(): void
+    public function test_advertiser_can_not_subscribe(): void
     {
         $advertiser = User::factory()->advertiser()->create();
 

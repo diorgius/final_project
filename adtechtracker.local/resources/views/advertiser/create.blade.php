@@ -97,9 +97,9 @@
                         @csrf
                         @method('PATCH')
 
-                        <x-primary-button class="ms-4">
+                        <x-danger-button class="ms-4">
                             {{ __('Restore') }}
-                        </x-primary-button>
+                        </x-danger-button>
                     </form>
                 </div>
             </div>
