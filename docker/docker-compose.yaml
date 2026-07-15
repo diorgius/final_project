@@ -10,8 +10,8 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - adtechtracker-php
-      - adtechtracker-mysql
+      adtechtracker-php:
+        condition: service_started
     networks:
       - www-network
 
@@ -31,9 +31,12 @@ services:
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
     depends_on:
-      - adtechtracker-mysql
-      - adtechtracker-redis
-      - adtechtracker-memcached
+      adtechtracker-mysql:
+        condition: service_healthy
+      adtechtracker-redis:
+        condition: service_started
+      adtechtracker-memcached:
+        condition: service_started
     networks:
       - www-network
 
@@ -50,8 +53,10 @@ services:
     ports:
       - "8081:8080"
     depends_on:
-      - adtechtracker-mysql
-      - adtechtracker-redis
+      adtechtracker-php:
+        condition: service_started
+      adtechtracker-redis:
+        condition: service_started
     networks:
       - www-network
 
@@ -66,8 +71,10 @@ services:
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
     depends_on:
-      - adtechtracker-redis
-      - adtechtracker-mysql
+      adtechtracker-php:
+        condition: service_started
+      adtechtracker-redis:
+        condition: service_started
     networks:
       - www-network
 
@@ -82,7 +89,8 @@ services:
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
     depends_on:
-      - adtechtracker-mysql
+      adtechtracker-php:
+        condition: service_started
     networks:
       - www-network
 
@@ -93,12 +101,17 @@ services:
     command:
       - --lower_case_table_names=1
     environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
       - ./mysql/dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     networks:
       - www-network
 
@@ -135,7 +148,7 @@ services:
     container_name: adtechtracker-node
     restart: unless-stopped
     working_dir: /var/www/adtechtracker.local
-    # command: sh -c "npm run dev -- --host 0.0.0.0 --port 5173"
+    command: sh -c "npm run dev -- --host 0.0.0.0 --port 5173"
     tty: true
     volumes:
       - ../adtechtracker.local:/var/www/adtechtracker.local
@@ -156,7 +169,8 @@ services:
     ports:
       - "81:80"
     depends_on:
-      - adtechtracker-mysql
+      adtechtracker-mysql:
+        condition: service_healthy
     networks:
       - www-network
 

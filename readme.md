@@ -31,7 +31,7 @@ SF-AdTech Tracker — веб-приложение для управления р
 
 * вход в систему;
 * изменение комиссии системы;
-* управление пользователями (создание, редактирование, блокировка, разблокировка, удаление, восстановление с офферами или подписками);
+* управление пользователями (создание, редактирование, блокировка, разблокировка, удаление, восстановление с офферами/подписками);
 * активация/деактивация офферов через Drag&Drop;
 * удаление неактивных офферов;
 * изменение списка доступных офферов в режиме реального времени;
@@ -49,7 +49,7 @@ SF-AdTech Tracker — веб-приложение для управления р
 
 * регистрация и вход в систему;
 * создание тематики офферов;
-* создание офферов (имя, URL, цену за переход, тематику);
+* создание офферов (имя, URL, цена за переход, тематика);
 * просмотр своих офферов;
 * редактирование неактивных офферов;
 * удаление неактивных офферов;
@@ -95,7 +95,7 @@ SF-AdTech Tracker — веб-приложение для управления р
 * администратор может:
   * создать учетную запись пользователя;
   * редактировать учетную запись пользователя;
-  * блокировать/разблокировать пользователей;
+  * заблокировать/разблокировать пользователя;
   * удалить пользователя;
   * восстановить пользователя, в зависимости от роли, вместе с офферами/подписками;
 * уведомление по email (с использованием Mailpit) о блокировке/удалении пользователя;
@@ -164,7 +164,6 @@ SF-AdTech Tracker — веб-приложение для управления р
 * восстановление офферов;
 * переход по реферальным ссылкам;
 * статистика;
-* локализация;
 * бизнес-правила системы.
 
 Общее покрытие тестами:
@@ -174,12 +173,12 @@ SF-AdTech Tracker — веб-приложение для управления р
 Запуск тестов:
 
 ```bash
-docker exec adtechtracker-php php artisan test
+docker compose exec adtechtracker-php php artisan test
 ```
 Получить покрытие тестами:
 
 ```bash
-docker exec adtechtracker-php php artisan test --coverage
+docker compose exec adtechtracker-php php artisan test --coverage
 ```
 
 ---
@@ -198,7 +197,15 @@ docker exec adtechtracker-php php artisan test --coverage
 
 ---
 
-## Развертывание проекта
+## Проект разрабатывался и тестировался
+
+* Ubuntu 24.04 + Docker;
+* Windows 10 + Docker Desktop + WSL2 (Ubuntu);
+* Windows 10 + Oracle VirtualBox + Ubuntu Server 24.04 + Docker;
+
+Если запускать проект под Windows + Docker Desktop, работать будет, но в связи с особенностями работы WSL2 и большим количеством файлов в Laravel, будут значительные задержки при открытии страниц.
+
+# Развертывание проекта
 
 ### Проект построен c использованием docker контейнеров
 * PHP
@@ -220,18 +227,26 @@ docker exec adtechtracker-php php artisan test --coverage
 * Docker
 * Docker Compose
 
-Других зависимостей (PHP, Composer, Node.js, MySQL, Redis и т.д.) на хост-системе не требуется.
+Других зависимостей (PHP, Composer, Node.js, MySQL, Redis и т.д.) на хост-системе не требуется. Пользователь от имени которого осуществляется запуск должен входить в группу docker.
 
 ### Запуск
 
-Клонировать репозоторий:
+Клонировать репозиторий:
 ```bash
 git clone https://github.com/diorgius/final_project.git
+```
+Перейти в директорию:
+```bash
+cd final_project/
 ```
 Создать файлы окружения:
 ```bash
 cp docker/.env.example docker/.env
 cp adtechtracker.local/.env.example adtechtracker.local/.env
+```
+Перейти в директорию:
+```bash
+cd docker/
 ```
 Запустить контейнеры:
 ```bash
@@ -239,40 +254,64 @@ docker compose up -d --build
 ```
 Установить зависимости Composer:
 ```bash
-docker exec adtechtracker-php php composer install
+docker compose exec adtechtracker-php php composer install
 ```
 Установить зависимости Node.js:
 ```bash
-docker exec adtechtracker-node npm install
-```
-Cобрать для разработки:
-```bash
-docker exec adtechtracker-node npm run dev
-```
-Или собрать production-версию:
-```bash
-docker exec adtechtracker-node npm run build
+docker compose run --rm --user "$UID:$(id -g)" adtechtracker-node npm install
 ```
 Сгенерировать ключ приложения:
 ```bash
-docker exec adtechtracker-php php artisan key:generate
+docker compose exec adtechtracker-php php artisan key:generate
 ```
 Выполнить миграции и заполнить базу тестовыми данными:
 ```bash
-docker exec adtechtracker-php php artisan migrate --seed
+docker compose exec adtechtracker-php php artisan migrate --seed
 ```
+
+---
+
+### Либо использовать автоматическую установку:
+```bash
+cd final_project/docker
+./setup.sh
+```
+
+---
+
 Добавить в файл hosts запись:
 ```bash
 127.0.0.1 adtechtracker.local
+```
+Если используется виртуальная машина:
+```bash
+<VM IP address> adtechtracker.local
 ```
 Перейти на страницу приложения:
 ```bash
 http://adtechtracker.local
 ```
-Для просмотра почтовых сообщений перейти по адресу:
+Для доступа к PhpMyAdmin:
+```bash
+http://adtechtracker.local:81
+```
+Для просмотра почтовых сообщений Mailpit перейти по адресу:
 ```bash
 http://adtechtracker.local:8025
 ```
+
+---
+### Если после старта контейнеров, контейнер node завершается с ошибкой:
+```bash
+ENOSPC: System limit for number of file watchers reached
+```
+необходимо выполнить:
+```bash
+echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/99-inotify.conf
+echo fs.inotify.max_user_instances=1024 | sudo tee -a /etc/sysctl.d/99-inotify.conf
+sudo sysctl --system
+```
+---
 
 ### Полезные команды docker
 
@@ -292,14 +331,6 @@ docker compose up -d --build
 ```bash
 docker compose logs -f container_name
 ```
-
-## Проект разрабатывался и тестировался
-
-* Ubuntu 24.04 + Docker;
-* Windows 10 + Docker Desktop + WSL2 (Ubuntu);
-* Windows 10 + Oracle VirtualBox + Ubuntu Server 24.04 + Docker;
-
-Если запускать проект под Windows + Docker Desktop, работать будет, но в связи с особенностями работы WSL2 и большим количеством файлов в Laravel, будут значительные задержки при открытии страниц.
 
 ## Возможные направления развития проекта
 
